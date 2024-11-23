@@ -2,7 +2,6 @@
 name = "rss-post"
 version = "0.1.0"
 description = "Add your description here"
-readme = "README.md"
 authors = [
     { name = "Chapin Bryce", email = "mail@chapinb.com" }
 ]
@@ -14,15 +13,21 @@ dependencies = [
     "python-decouple>=3.8",
 ]
 
+[dependency-groups]
+dev = [
+    "pytest-watcher>=0.4.3",
+    "pytest>=8.3.3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rss_post"]
+
+[tool.uv]
+package = true
+
 [project.scripts]
 norwalk = "rss_post.norwalk_feeds:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[dependency-groups]
-dev = [
-    "pytest-watcher>=0.4.3",
-    "pytest>=8.3.3",
-]
