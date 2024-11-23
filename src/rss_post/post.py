@@ -17,8 +17,8 @@ class Post:
         self.text_builder.text(item_description)
         return self
 
-    def with_link(self, item_link):
-        self.text_builder.text(item_link)
+    def with_link(self, item_link, link_text="link"):
+        self.text_builder.link(link_text, item_link)
         return self
 
     def build(self):

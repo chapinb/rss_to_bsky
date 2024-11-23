@@ -14,7 +14,7 @@ def test_build_formatted_post():
         .from_feed(feed_title)
         .with_title(item_title)
         .with_description(item_description)
-        .with_link(item_link)
+        .with_link("Read more", item_link)
         .build()
     )
 
