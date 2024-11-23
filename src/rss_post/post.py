@@ -39,9 +39,9 @@ class Post:
             truncated = item_description[:max_length].rsplit(" ", 1)[0]
             self.post_length += len(truncated)
 
-            item_description = truncated + "... "
+            item_description = truncated + "...\n"
 
-        return item_description
+        return item_description + "\n"
 
     def with_link(self, item_link, link_text="link"):
         self.post_length += self.LINK_LENGTH
@@ -53,4 +53,4 @@ class Post:
 
     @staticmethod
     def remove_html_formatting(text: str) -> str:
-        return BeautifulSoup(text, "html.parser").get_text()
+        return " ".join(BeautifulSoup(text, "html.parser").stripped_strings)
