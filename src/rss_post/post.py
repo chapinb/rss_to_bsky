@@ -31,9 +31,11 @@ class Post:
         return self
 
     def truncate_description(self, item_description):
+        self.post_length += 1  # For the newline character
+
         if self.post_length + len(item_description) > self.MAX_POST_LENGTH:
             # Truncate the description if it exceeds the maximum post length
-            self.post_length += 4  # for the ellipsis
+            self.post_length += 3  # for the ellipsis
 
             max_length = self.MAX_POST_LENGTH - self.post_length
             truncated = item_description[:max_length].rsplit(" ", 1)[0]
