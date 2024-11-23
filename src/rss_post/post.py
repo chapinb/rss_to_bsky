@@ -35,7 +35,10 @@ class Post:
 
             max_length = self.MAX_POST_LENGTH - self.post_length
             truncated = item_description[:max_length].rsplit(" ", 1)[0]
+            self.post_length += len(truncated)
+
             item_description = truncated + "..."
+
         return item_description
 
     def with_link(self, item_link, link_text="link"):

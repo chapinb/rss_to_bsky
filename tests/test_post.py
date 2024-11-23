@@ -24,3 +24,12 @@ def test_build_formatted_post():
 def test_remove_html_formatting():
     html_text = "<p>Some text</p>"
     assert Post.remove_html_formatting(html_text) == "Some text"
+
+
+def test_truncate_description():
+    post = Post()
+    post.MAX_POST_LENGTH = 15
+
+    truncated = post.truncate_description("This is a long description")
+    assert truncated == "This is a..."
+    assert post.post_length == 12
