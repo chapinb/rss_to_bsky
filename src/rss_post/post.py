@@ -38,6 +38,7 @@ class Post:
         return item_description
 
     def with_link(self, item_link, link_text="link"):
+        self.post_length += self.LINK_LENGTH
         self.text_builder.link(link_text, item_link)
         return self
 
