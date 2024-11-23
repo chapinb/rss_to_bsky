@@ -27,7 +27,7 @@ class NorwalkFeeds:
             .with_link("Read more", item.link)
             .build()
             for item in items
-            if posting_filter(item.published, timedelta(hours=1))
+            if posting_filter(item.published, self.posting_frequency)
         ]
 
     def generate_without_title(
@@ -41,7 +41,7 @@ class NorwalkFeeds:
             .with_link("Read more", item.link)
             .build()
             for item in items
-            if posting_filter(item.published, timedelta(hours=1))
+            if posting_filter(item.published, self.posting_frequency)
         ]
 
     def get_committee_events(self) -> list[client_utils.TextBuilder]:
