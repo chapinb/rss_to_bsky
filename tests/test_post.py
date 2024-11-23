@@ -1,5 +1,7 @@
+from datetime import timedelta
 from atproto import client_utils
 
+from rss_post.norwalk_feeds import posting_filter
 from rss_post.post import Post
 
 
@@ -33,3 +35,10 @@ def test_truncate_description():
     truncated = post.truncate_description("This is a long description")
     assert truncated.strip() == "This is a..."
     assert post.post_length == 13
+
+
+def test_posting_filter():
+    pub_date = "Fri, 22 Nov 2024 09:07:54 -0500"
+    frequency = timedelta(days=7)
+
+    assert posting_filter(pub_date, frequency) is True

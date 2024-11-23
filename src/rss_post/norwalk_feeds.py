@@ -1,6 +1,7 @@
+from datetime import timedelta
 from atproto import client_utils
 
-from rss_post.post import Post
+from rss_post.post import Post, posting_filter
 from rss_post.read_rss import read_rss_items
 
 
@@ -16,6 +17,7 @@ def generate_calendar_events(
         .with_link("Read more", item.link)
         .build()
         for item in items
+        if posting_filter(item.published, timedelta(hours=1))
     ]
 
 
@@ -30,6 +32,7 @@ def generate_without_title(
         .with_link("Read more", item.link)
         .build()
         for item in items
+        if posting_filter(item.published, timedelta(hours=1))
     ]
 
 
