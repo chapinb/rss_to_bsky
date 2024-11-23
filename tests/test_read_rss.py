@@ -28,5 +28,5 @@ def test_read_rss_items():
     rss_data = get_arbitrary_rss_data()
     items = read_rss_items(rss_data)
     assert len(items) == 2
-    assert items[0]['title'] == 'Item 1'
-    assert items[1]['title'] == 'Item 2'
+    assert items[0]["title"] == "Item 1"
+    assert items[1]["title"] == "Item 2"
