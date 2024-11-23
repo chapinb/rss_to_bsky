@@ -1,8 +1,14 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
+
 from atproto import client_utils
 
-from rss_post.post import Post, posting_filter
+from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
+
+
+def posting_filter(item_pub_date: str, posting_frequency: timedelta) -> bool:
+    pub_date = datetime.strptime(item_pub_date, "%a, %d %b %Y %H:%M:%S %z")
+    return datetime.now(timezone.utc) - pub_date <= posting_frequency
 
 
 def generate_calendar_events(

@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta, timezone
-
 from atproto import client_utils
 from bs4 import BeautifulSoup
 
@@ -56,8 +54,3 @@ class Post:
     @staticmethod
     def remove_html_formatting(text: str) -> str:
         return " ".join(BeautifulSoup(text, "html.parser").stripped_strings)
-
-
-def posting_filter(item_pub_date: str, posting_frequency: timedelta) -> bool:
-    pub_date = datetime.strptime(item_pub_date, "%a, %d %b %Y %H:%M:%S %z")
-    return datetime.now(timezone.utc) - pub_date <= posting_frequency
