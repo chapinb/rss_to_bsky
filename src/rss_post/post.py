@@ -30,12 +30,11 @@ class Post:
     def truncate_description(self, item_description):
         if self.post_length + len(item_description) > self.MAX_POST_LENGTH:
             # Truncate the description if it exceeds the maximum post length
-            self.post_length += 3  # for the elipsis
+            self.post_length += 3  # for the ellipsis
 
-            item_description = item_description[
-                : self.MAX_POST_LENGTH - self.post_length
-            ]
-            item_description += "..."
+            max_length = self.MAX_POST_LENGTH - self.post_length
+            truncated = item_description[:max_length].rsplit(" ", 1)[0]
+            item_description = truncated + "..."
         return item_description
 
     def with_link(self, item_link, link_text="link"):
