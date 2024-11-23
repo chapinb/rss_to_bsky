@@ -23,7 +23,9 @@ class Post:
     def with_description(self, item_description, num_links: int = 0):
         self.post_length += num_links * self.LINK_LENGTH
 
-        item_description = self.truncate_description(item_description)
+        item_description = self.truncate_description(
+            self.remove_html_formatting(item_description)
+        )
 
         self.text_builder.text(item_description)
         return self
