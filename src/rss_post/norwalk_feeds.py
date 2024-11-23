@@ -1,7 +1,9 @@
+import argparse
 from datetime import datetime, timedelta, timezone
 
 from atproto import client_utils
 
+from rss_post.bsky import Bluesky, Stdout
 from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
 
@@ -55,3 +57,38 @@ class NorwalkFeeds:
             "City of Norwalk CT News",
             "https://www.norwalkct.gov/RSSFeed.aspx?ModID=1&CID=All-newsflash.xml",
         )
+
+
+def main():
+    cli_args = argparse.ArgumentParser()
+    cli_args.add_argument(
+        "posting_frequency",
+        type=int,
+        default=1,
+        help="Number of hours to consider for posting frequency",
+    )
+    cli_args.add_argument(
+        "-n",
+        "--dry-run",
+        action="store_true",
+        help="Print posts instead of sending them to the server",
+    )
+    args = cli_args.parse_args()
+
+    norwalk_feeds = NorwalkFeeds(timedelta(hours=args.posting_frequency))
+
+    if args.dry_run:
+        client = Stdout()
+    else:
+        client = Bluesky()
+
+    news = norwalk_feeds.get_news_flashes()
+    for news_flash in news:
+        client.post(news_flash)
+
+    for committee_event in norwalk_feeds.get_committee_events():
+        client.post(committee_event)
+
+
+if __name__ == "__main__":
+    main()

@@ -11,3 +11,9 @@ class Bluesky:
 
     def post(self, post: client_utils.TextBuilder):
         post = self.client.send_post(post)
+
+
+class Stdout:
+    # A dry-run class that prints the post to the console
+    def post(self, post: client_utils.TextBuilder):
+        print(post.build_text())
