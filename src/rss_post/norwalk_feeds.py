@@ -11,46 +11,47 @@ def posting_filter(item_pub_date: str, posting_frequency: timedelta) -> bool:
     return datetime.now(timezone.utc) - pub_date <= posting_frequency
 
 
-def generate_calendar_events(
-    feed_name: str, feed_url: str
-) -> list[client_utils.TextBuilder]:
-    items = read_rss_items(feed_url)
-    return [
-        Post()
-        .from_feed(feed_name)
-        .with_title(item.title)
-        .with_description(item.description)
-        .with_link("Read more", item.link)
-        .build()
-        for item in items
-        if posting_filter(item.published, timedelta(hours=1))
-    ]
+class NorwalkFeeds:
+    def __init__(self, posting_frequency: timedelta) -> None:
+        self.posting_frequency = posting_frequency
 
+    def generate_calendar_events(
+        self, feed_name: str, feed_url: str
+    ) -> list[client_utils.TextBuilder]:
+        items = read_rss_items(feed_url)
+        return [
+            Post()
+            .from_feed(feed_name)
+            .with_title(item.title)
+            .with_description(item.description)
+            .with_link("Read more", item.link)
+            .build()
+            for item in items
+            if posting_filter(item.published, timedelta(hours=1))
+        ]
 
-def generate_without_title(
-    feed_name: str, feed_url: str
-) -> list[client_utils.TextBuilder]:
-    items = read_rss_items(feed_url)
-    return [
-        Post()
-        .from_feed(feed_name)
-        .with_description(item.description)
-        .with_link("Read more", item.link)
-        .build()
-        for item in items
-        if posting_filter(item.published, timedelta(hours=1))
-    ]
+    def generate_without_title(
+        self, feed_name: str, feed_url: str
+    ) -> list[client_utils.TextBuilder]:
+        items = read_rss_items(feed_url)
+        return [
+            Post()
+            .from_feed(feed_name)
+            .with_description(item.description)
+            .with_link("Read more", item.link)
+            .build()
+            for item in items
+            if posting_filter(item.published, timedelta(hours=1))
+        ]
 
+    def get_committee_events(self) -> list[client_utils.TextBuilder]:
+        return self.generate_calendar_events(
+            "City of Norwalk CT Calendar",
+            "https://www.norwalkct.gov/RSSFeed.aspx?ModID=58&CID=Calendar-of-Agency-Board-Commission-Comm-47",
+        )
 
-def get_committee_events() -> list[client_utils.TextBuilder]:
-    return generate_calendar_events(
-        "City of Norwalk CT Calendar",
-        "https://www.norwalkct.gov/RSSFeed.aspx?ModID=58&CID=Calendar-of-Agency-Board-Commission-Comm-47",
-    )
-
-
-def get_news_flashes() -> list[client_utils.TextBuilder]:
-    return generate_without_title(
-        "City of Norwalk CT News",
-        "https://www.norwalkct.gov/RSSFeed.aspx?ModID=1&CID=All-newsflash.xml",
-    )
+    def get_news_flashes(self) -> list[client_utils.TextBuilder]:
+        return self.generate_without_title(
+            "City of Norwalk CT News",
+            "https://www.norwalkct.gov/RSSFeed.aspx?ModID=1&CID=All-newsflash.xml",
+        )
