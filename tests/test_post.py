@@ -19,3 +19,8 @@ def test_build_formatted_post():
     )
 
     assert isinstance(formatted_post, client_utils.TextBuilder)
+
+
+def test_remove_html_formatting():
+    html_text = "<p>Some text</p>"
+    assert Post.remove_html_formatting(html_text) == "Some text"

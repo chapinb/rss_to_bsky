@@ -1,4 +1,5 @@
 from atproto import client_utils
+from bs4 import BeautifulSoup
 
 
 class Post:
@@ -44,3 +45,7 @@ class Post:
 
     def build(self):
         return self.text_builder
+
+    @staticmethod
+    def remove_html_formatting(text: str) -> str:
+        return BeautifulSoup(text, "html.parser").get_text()
