@@ -31,5 +31,5 @@ def test_truncate_description():
     post.MAX_POST_LENGTH = 15
 
     truncated = post.truncate_description("This is a long description")
-    assert truncated == "This is a..."
-    assert post.post_length == 12
+    assert truncated == "This is a... "
+    assert post.post_length == 13
