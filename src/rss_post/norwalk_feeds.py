@@ -17,7 +17,7 @@ class NorwalkFeeds:
     def __init__(self, posting_frequency: timedelta) -> None:
         self.posting_frequency = posting_frequency
 
-    def generate_calendar_events(
+    def generate_with_title(
         self, feed_name: str, feed_url: str
     ) -> list[client_utils.TextBuilder]:
         items = read_rss_items(feed_url)
@@ -47,7 +47,7 @@ class NorwalkFeeds:
         ]
 
     def get_committee_events(self) -> list[client_utils.TextBuilder]:
-        return self.generate_calendar_events(
+        return self.generate_with_title(
             "City of Norwalk CT Calendar",
             "https://www.norwalkct.gov/RSSFeed.aspx?ModID=58&CID=Calendar-of-Agency-Board-Commission-Comm-47",
         )
@@ -56,6 +56,12 @@ class NorwalkFeeds:
         return self.generate_without_title(
             "City of Norwalk CT News",
             "https://www.norwalkct.gov/RSSFeed.aspx?ModID=1&CID=All-newsflash.xml",
+        )
+
+    def get_nancy_on_norwalk_stories(self) -> list[client_utils.TextBuilder]:
+        return self.generate_without_title(
+            "Nancy on Norwalk",
+            "https://www.nancyonnorwalk.com/feed/",
         )
 
 
@@ -88,6 +94,9 @@ def main():
 
     for committee_event in norwalk_feeds.get_committee_events():
         client.post(committee_event)
+
+    for nancy_on_norwalk_story in norwalk_feeds.get_nancy_on_norwalk_stories():
+        client.post(nancy_on_norwalk_story)
 
 
 if __name__ == "__main__":
