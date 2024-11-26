@@ -1,11 +1,13 @@
 import argparse
 from datetime import datetime, timedelta, timezone
 
+import pytz
 from atproto import client_utils
 
 from rss_post.bsky import Bluesky, Stdout
 from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
+from rss_post import norwalk_civic_clerk
 
 
 def posting_filter(item_pub_date: str, posting_frequency: timedelta) -> bool:
@@ -64,6 +66,19 @@ class NorwalkFeeds:
             "https://www.nancyonnorwalk.com/feed/",
         )
 
+    def get_todays_norwalk_meetings(self) -> list[client_utils.TextBuilder]:
+        meetings = norwalk_civic_clerk.get_todays_meetings()
+        return [
+            Post()
+            .from_feed("City of Norwalk CT Meetings")
+            .with_title(meeting["title"])
+            .with_description(meeting["when"])
+            .with_link("Agenda\n", meeting["agenda"])
+            .with_link("Zoom Link", meeting["where"])
+            .build()
+            for meeting in meetings
+        ]
+
 
 def main():
     cli_args = argparse.ArgumentParser()
@@ -97,6 +112,11 @@ def main():
 
     for nancy_on_norwalk_story in norwalk_feeds.get_nancy_on_norwalk_stories():
         client.post(nancy_on_norwalk_story)
+
+    if datetime.now(pytz.timezone("US/Eastern")).hour == 7:
+        # Only run if it is in the 7:00 AM hour.
+        for meeting in norwalk_feeds.get_todays_norwalk_meetings():
+            client.post(meeting)
 
 
 if __name__ == "__main__":
