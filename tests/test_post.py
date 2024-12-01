@@ -1,4 +1,5 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
+from unittest.mock import patch
 from atproto import client_utils
 
 from rss_post.norwalk_feeds import posting_filter
@@ -37,7 +38,10 @@ def test_truncate_description():
     assert post.post_length == 13
 
 
-def test_posting_filter():
+@patch("rss_post.norwalk_feeds.datetime")
+def test_posting_filter(mock_datetime):
+    mock_datetime.now.return_value = datetime(2024, 11, 28, 9, 7, 54, 0, timezone.utc)
+    mock_datetime.strptime = datetime.strptime
     pub_date = "Fri, 22 Nov 2024 09:07:54 -0500"
     frequency = timedelta(days=7)
 
