@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 class Post:
-    MAX_POST_LENGTH = 300
+    MAX_POST_LENGTH = 250
     LINK_LENGTH = 23
 
     def __init__(self):
