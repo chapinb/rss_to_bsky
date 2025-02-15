@@ -55,13 +55,13 @@ class NorwalkFeeds:
         )
 
     def get_news_flashes(self) -> list[client_utils.TextBuilder]:
-        return self.generate_without_title(
+        return self.generate_with_title(
             "City of Norwalk CT News",
             "https://www.norwalkct.gov/RSSFeed.aspx?ModID=1&CID=All-newsflash.xml",
         )
 
     def get_nancy_on_norwalk_stories(self) -> list[client_utils.TextBuilder]:
-        return self.generate_without_title(
+        return self.generate_with_title(
             "Nancy on Norwalk",
             "https://www.nancyonnorwalk.com/feed/",
         )
