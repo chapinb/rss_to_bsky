@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 
 
@@ -24,12 +24,14 @@ def get_todays_meetings():
     soup = BeautifulSoup(driver.page_source, "html.parser")
     driver.quit()
 
-    today = datetime.now().strftime("%b %d, %Y")
+    now = datetime.now()
+    today = now.strftime("%b %d, %Y")
+    tomorrow = (now + timedelta(days=1)).strftime("%b %d, %Y")
     meetings = []
 
     for meeting in soup.find_all("li", class_="cpp-MuiListItem-container"):
         date = meeting.find("h2").text.strip().replace("\n", " ")
-        if today in date:
+        if today in date or tomorrow in date:
             title = meeting.find("h3").text.strip()
             agenda = url.strip("/") + meeting.find("a")["href"]
             meeting_time = meeting.find("p").text.strip()
