@@ -138,6 +138,9 @@ def main():
     for nancy_on_norwalk_story in norwalk_feeds.get_nancy_on_norwalk_stories():
         client.post(nancy_on_norwalk_story)
 
+    for ct_mirror_story in norwalk_feeds.get_ct_mirror_stories():
+        client.post(ct_mirror_story)
+
     if datetime.now(pytz.timezone("US/Eastern")).hour == 7:
         # Only run if it is in the 7:00 AM hour.
         for meeting in norwalk_feeds.get_todays_norwalk_meetings():
