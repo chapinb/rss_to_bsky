@@ -8,6 +8,6 @@ def read_rss(url) -> FeedParserDict:
     return feed
 
 
-def read_rss_items(url) -> list[dict]:
+def read_rss_items(url) -> list[FeedParserDict]:
     feed = read_rss(url)
     return feed.entries
