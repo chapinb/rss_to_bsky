@@ -8,9 +8,9 @@ RUN apt-get update && apt-get install -y \
     wget \
     xvfb \
     && rm -rf /var/lib/apt/lists/* \
-    && wget -q https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.35.0-linux64.tar.gz \
-    && tar -xvzf geckodriver-v0.35.0-linux64.tar.gz -C /usr/local/bin \
-    && rm geckodriver-v0.35.0-linux64.tar.gz
+    && wget -q https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.36.0-linux64.tar.gz \
+    && tar -xvzf geckodriver-v0.36.0-linux64.tar.gz -C /usr/local/bin \
+    && rm geckodriver-v0.36.0-linux64.tar.gz
 
 # Set environment variables for Selenium
 ENV MOZ_HEADLESS=1
