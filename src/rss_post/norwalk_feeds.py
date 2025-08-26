@@ -79,6 +79,31 @@ class NorwalkFeeds:
             for meeting in meetings
         ]
 
+    def get_ct_mirror_stories(self) -> list[client_utils.TextBuilder]:
+        feed_name = "CT Mirror"
+        feed_url = "https://ctmirror.org/feed/"
+        items = read_rss_items(feed_url)
+        norwalk_items = []
+        for item in items:
+            if not posting_filter(item.published, self.posting_frequency):
+                continue
+            contents = "\n".join(content.value for content in item.content)
+            if not (
+                "norwalk" in item.title.lower()
+                or "norwalk" in item.description.lower()
+                or "norwalk" in contents.lower()
+            ):
+                continue
+            norwalk_items.append(
+                Post()
+                .from_feed(feed_name)
+                .with_title(item.title)
+                .with_description(item.description)
+                .with_link("Read more", item.link)
+                .build()
+            )
+        return norwalk_items
+
 
 def main():
     cli_args = argparse.ArgumentParser()
