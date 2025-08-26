@@ -35,7 +35,7 @@ def get_todays_meetings():
             title = meeting.find("h3").text.strip()
             agenda = url.strip("/") + meeting.find("a")["href"]
             meeting_time = meeting.find("p").text.strip()
-            meeting_location_tag = meeting.find("a", title="Go to Event Media")
+            meeting_location_tag = meeting.find("a", title="Go To Event Media")
             meeting_location = (
                 meeting_location_tag["href"] if meeting_location_tag else None
             )
