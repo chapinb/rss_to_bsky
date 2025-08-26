@@ -15,6 +15,9 @@ This project uses `uv` as the package manager and build tool.
 ### Running the Application
 - `uv run norwalk <hours>` - Run the main application (hours = posting frequency)
 - `uv run norwalk 24 --dry-run` - Run in dry-run mode (prints to console instead of posting)
+- `uv run norwalk 24 --dry-run --log-level DEBUG` - Run with detailed debug logging
+- `uv run norwalk 24 --log-level INFO` - Run with informational logging (default)
+- `uv run norwalk 24 --log-level WARNING` - Run with only warnings and errors
 
 ### Build and Package
 - `uv build` - Build the package
@@ -44,6 +47,8 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **Web Scraping**: `src/rss_post/norwalk_civic_clerk.py` - Selenium-based scraper for meeting information
 
+**Logging**: `src/rss_post/logging_config.py` - Centralized logging configuration with structured output
+
 ### Configuration
 
 Environment variables in `.env` file (template at `template.env`):
@@ -57,3 +62,5 @@ Environment variables in `.env` file (template at `template.env`):
 - Content filtering (CT Mirror posts filtered for "norwalk" mentions)
 - Schedule-aware posting (meetings only posted at 7 AM)
 - Adapter pattern for output destinations (Bluesky vs console)
+- Comprehensive logging throughout all components with configurable levels
+- Error handling and graceful degradation in RSS parsing and web scraping

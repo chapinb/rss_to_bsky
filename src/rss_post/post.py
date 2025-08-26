@@ -1,6 +1,10 @@
 from atproto import client_utils
 from bs4 import BeautifulSoup
 
+from rss_post.logging_config import get_logger
+
+logger = get_logger(__name__)
+
 
 class Post:
     MAX_POST_LENGTH = 250
@@ -34,7 +38,9 @@ class Post:
         self.post_length += 1  # For the newline character
 
         if self.post_length + len(item_description) > self.MAX_POST_LENGTH:
-            # Truncate the description if it exceeds the maximum post length
+            logger.debug(
+                f"Truncating description from {len(item_description)} chars (total would be {self.post_length + len(item_description)})"
+            )
             self.post_length += 3  # for the ellipsis
 
             max_length = self.MAX_POST_LENGTH - self.post_length
@@ -51,6 +57,7 @@ class Post:
         return self
 
     def build(self):
+        logger.debug(f"Built post with final length: {self.post_length}")
         return self.text_builder
 
     @staticmethod
