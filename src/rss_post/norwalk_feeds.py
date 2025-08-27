@@ -26,60 +26,37 @@ class NorwalkFeeds:
             f"Initialized NorwalkFeeds with posting frequency: {posting_frequency}"
         )
 
-    def generate_with_title(
-        self, feed_name: str, feed_url: str
-    ) -> list[client_utils.TextBuilder]:
-        logger.info(f"Processing feed: {feed_name} from {feed_url}")
+    def generate_with_embed_card(self, feed_name: str, feed_url: str) -> list[Post]:
+        logger.info(f"Processing feed with embed card: {feed_name} from {feed_url}")
         items = read_rss_items(feed_url)
         posts = [
             Post()
-            .from_feed(feed_name)
-            .with_title(item.title)
-            .with_description(item.description)
-            .with_link("Read more", item.link)
-            .build()
+            .with_embed_card(item.link, item.title, item.description)
             for item in items
             if posting_filter(item.published, self.posting_frequency)
         ]
         logger.info(f"Generated {len(posts)} posts from {feed_name}")
         return posts
 
-    def generate_without_title(
-        self, feed_name: str, feed_url: str
-    ) -> list[client_utils.TextBuilder]:
-        logger.info(f"Processing feed without title: {feed_name} from {feed_url}")
-        items = read_rss_items(feed_url)
-        posts = [
-            Post()
-            .from_feed(feed_name)
-            .with_description(item.description)
-            .with_link("Read more", item.link)
-            .build()
-            for item in items
-            if posting_filter(item.published, self.posting_frequency)
-        ]
-        logger.info(f"Generated {len(posts)} posts from {feed_name}")
-        return posts
-
-    def get_committee_events(self) -> list[client_utils.TextBuilder]:
-        return self.generate_with_title(
+    def get_committee_events(self) -> list[Post]:
+        return self.generate_with_embed_card(
             "City of Norwalk CT Calendar",
             "https://www.norwalkct.gov/RSSFeed.aspx?ModID=58&CID=Calendar-of-Agency-Board-Commission-Comm-47",
         )
 
-    def get_news_flashes(self) -> list[client_utils.TextBuilder]:
-        return self.generate_with_title(
+    def get_news_flashes(self) -> list[Post]:
+        return self.generate_with_embed_card(
             "City of Norwalk CT News",
             "https://www.norwalkct.gov/RSSFeed.aspx?ModID=1&CID=All-newsflash.xml",
         )
 
-    def get_nancy_on_norwalk_stories(self) -> list[client_utils.TextBuilder]:
-        return self.generate_with_title(
+    def get_nancy_on_norwalk_stories(self) -> list[Post]:
+        return self.generate_with_embed_card(
             "Nancy on Norwalk",
             "https://www.nancyonnorwalk.com/feed/",
         )
 
-    def get_todays_norwalk_meetings(self) -> list[client_utils.TextBuilder]:
+    def get_todays_norwalk_meetings(self) -> list[Post]:
         logger.info("Fetching today's Norwalk meetings")
         meetings = norwalk_civic_clerk.get_todays_meetings()
         posts = [
@@ -89,14 +66,12 @@ class NorwalkFeeds:
             .with_description(meeting["when"])
             .with_link("Agenda\n", meeting["agenda"])
             .with_link("Zoom Link", meeting["where"])
-            .build()
             for meeting in meetings
         ]
         logger.info(f"Generated {len(posts)} meeting posts")
         return posts
 
-    def get_ct_mirror_stories(self) -> list[client_utils.TextBuilder]:
-        feed_name = "CT Mirror"
+    def get_ct_mirror_stories(self) -> list[Post]:
         feed_url = "https://ctmirror.org/feed/"
         logger.info("Processing CT Mirror stories, filtering for Norwalk mentions")
         items = read_rss_items(feed_url)
@@ -113,12 +88,7 @@ class NorwalkFeeds:
                 continue
             logger.debug(f"Found Norwalk mention in CT Mirror story: {item.title}")
             norwalk_items.append(
-                Post()
-                .from_feed(feed_name)
-                .with_title(item.title)
-                .with_description(item.description)
-                .with_link("Read more", item.link)
-                .build()
+                Post().with_embed_card(item.link, item.title, item.description)
             )
         logger.info(
             f"Generated {len(norwalk_items)} CT Mirror posts with Norwalk mentions"

@@ -1,4 +1,5 @@
-from atproto import Client, client_utils
+from typing import Any, Optional
+from atproto import Client, client_utils, models
 from decouple import config
 
 from rss_post.logging_config import get_logger
@@ -15,11 +16,17 @@ class Bluesky:
         self.profile = self.client.login(username, config("BSKY_PASSWORD"))
         logger.info("Successfully logged in to Bluesky")
 
-    def post(self, post: client_utils.TextBuilder):
+    def post(self, post_obj: Any) -> None:
         try:
-            post_text = post.build_text()
+            text_builder: client_utils.TextBuilder = post_obj.build()
+            embed: Optional[models.AppBskyEmbedExternal.Main] = getattr(
+                post_obj, "embed", None
+            )
+
+            post_text: str = text_builder.build_text()
             logger.debug(f"Posting to Bluesky: {post_text[:50]}...")
-            response = self.client.send_post(post)
+
+            response = self.client.send_post(text_builder, embed=embed)
             logger.info(f"Successfully posted to Bluesky: {response.uri}")
         except Exception as e:
             logger.error(f"Failed to post to Bluesky: {e}")
@@ -27,10 +34,18 @@ class Bluesky:
 
 
 class Stdout:
-    def __init__(self):
+    def __init__(self) -> None:
         logger.info("Initializing dry-run mode (console output)")
 
-    def post(self, post: client_utils.TextBuilder):
-        post_text = post.build_text()
+    def post(self, post_obj: Any) -> None:
+        text_builder: client_utils.TextBuilder = post_obj.build()
+        embed: Optional[models.AppBskyEmbedExternal.Main] = getattr(
+            post_obj, "embed", None
+        )
+
+        post_text: str = text_builder.build_text()
         logger.debug(f"Dry-run post: {post_text[:50]}...")
         print(post_text)
+
+        if embed:
+            print(f"[EMBED CARD: {embed.external.title} - {embed.external.uri}]")

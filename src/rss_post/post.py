@@ -1,4 +1,4 @@
-from atproto import client_utils
+from atproto import client_utils, models
 from bs4 import BeautifulSoup
 
 from rss_post.logging_config import get_logger
@@ -13,6 +13,7 @@ class Post:
     def __init__(self):
         self.text_builder = client_utils.TextBuilder()
         self.post_length = 0
+        self.embed = None
 
     def from_feed(self, feed_title):
         self.text_builder.text(feed_title + "\n")
@@ -54,6 +55,16 @@ class Post:
     def with_link(self, link_text, item_link):
         self.post_length += self.LINK_LENGTH
         self.text_builder.link(link_text, item_link)
+        return self
+
+    def with_embed_card(self, url: str, title: str, description: str = ""):
+        """Add an embed card with external link to the post"""
+        self.embed = models.AppBskyEmbedExternal.Main(
+            external=models.AppBskyEmbedExternal.External(
+                uri=url, title=title, description=description
+            )
+        )
+        logger.debug(f"Added embed card for URL: {url}")
         return self
 
     def build(self):
