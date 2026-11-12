@@ -56,15 +56,18 @@ class NorwalkFeeds:
     def get_todays_norwalk_meetings(self) -> list[Post]:
         logger.info("Fetching today's Norwalk meetings")
         meetings = norwalk_civic_clerk.get_todays_meetings()
-        posts = [
-            Post()
-            .from_feed("City of Norwalk CT Meetings")
-            .with_title(meeting["title"])
-            .with_description(meeting["when"])
-            .with_link("Agenda\n", meeting["agenda"])
-            .with_link("Zoom Link", meeting["where"])
-            for meeting in meetings
-        ]
+        posts = []
+        for meeting in meetings:
+            post = (
+                Post()
+                .from_feed("City of Norwalk CT Meetings")
+                .with_title(meeting["title"])
+                .with_description(meeting["when"])
+                .with_link("Agenda\n", meeting["agenda"])
+            )
+            if meeting["where"]:
+                post.with_link("Zoom Link", meeting["where"])
+            posts.append(post)
         logger.info(f"Generated {len(posts)} meeting posts")
         return posts
 

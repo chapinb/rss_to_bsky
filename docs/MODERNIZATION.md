@@ -51,6 +51,7 @@ Findings from reviewing the code and the bot's last 100 posts:
 - Log a warning when the page yields no meeting entries so the next site change
   isn't silent.
 - Don't emit a broken link when a meeting has no media/Zoom link.
+- Decide "today" in US/Eastern rather than the container's (UTC) clock.
 
 ### Phase 4 — Stop duplicate posts
 - Record links already posted and skip them. This covers all three duplicate

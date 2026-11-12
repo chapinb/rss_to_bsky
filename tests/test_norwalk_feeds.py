@@ -1,6 +1,6 @@
 """Characterization tests for feed -> post generation using saved real feeds."""
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from unittest.mock import patch
 
 from rss_post.norwalk_feeds import NorwalkFeeds
@@ -65,7 +65,7 @@ def test_city_calendar_card_description_is_raw_html(freeze_feeds_now):
 
 
 def test_ct_mirror_only_posts_stories_mentioning_norwalk(freeze_feeds_now):
-    freeze_feeds_now(datetime(2026, 11, 12, 0, 0, tzinfo=timezone.utc))
+    freeze_feeds_now(datetime(2026, 11, 12, 0, 0, tzinfo=UTC))
     with feeds_from_fixture("ctmirror.xml"):
         posts = NorwalkFeeds(timedelta(days=7)).get_ct_mirror_stories()
 
@@ -77,7 +77,7 @@ def test_ct_mirror_only_posts_stories_mentioning_norwalk(freeze_feeds_now):
 
 
 def test_ct_mirror_respects_posting_window(freeze_feeds_now):
-    freeze_feeds_now(datetime(2026, 11, 12, 0, 0, tzinfo=timezone.utc))
+    freeze_feeds_now(datetime(2026, 11, 12, 0, 0, tzinfo=UTC))
     with feeds_from_fixture("ctmirror.xml"):
         posts = NorwalkFeeds(timedelta(hours=1)).get_ct_mirror_stories()
 
@@ -103,3 +103,21 @@ def test_meeting_posts_include_title_time_and_links():
     assert "Nov 10, 2026 at 7:30 PM EST" in text
     uris = [f.features[0].uri for f in builder.build_facets()]
     assert uris == [meeting["agenda"], meeting["where"]]
+
+
+def test_meeting_without_zoom_link_omits_it():
+    meeting = {
+        "title": "Defined Contribution (CANCELLED)",
+        "agenda": "https://norwalkct.portal.civicclerk.com/event/1387/files",
+        "when": "Nov 11, 2026 at 6:45 PM EST",
+        "where": None,
+    }
+    with patch(
+        "rss_post.norwalk_feeds.norwalk_civic_clerk.get_todays_meetings",
+        return_value=[meeting],
+    ):
+        posts = NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_meetings()
+
+    builder = posts[0].build()
+    assert "Zoom Link" not in builder.build_text()
+    assert [f.features[0].uri for f in builder.build_facets()] == [meeting["agenda"]]

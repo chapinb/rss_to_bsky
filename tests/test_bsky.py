@@ -7,8 +7,10 @@ from rss_post.post import Post
 
 
 def test_stdout_prints_text_and_embed_card(capsys):
-    post = Post().from_feed("Feed").with_embed_card(
-        "https://example.com/a", "A title", "A description"
+    post = (
+        Post()
+        .from_feed("Feed")
+        .with_embed_card("https://example.com/a", "A title", "A description")
     )
     Stdout().post(post)
 
