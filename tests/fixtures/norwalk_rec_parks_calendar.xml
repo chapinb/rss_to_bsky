@@ -1,0 +1,19 @@
+<?xml version="1.0"?><rss version="2.0" xmlns:calendarEvent="https://www.norwalkct.gov/Calendar.aspx"><channel>
+	<title>City of Norwalk - Calendar - Recreation &amp; Parks</title>
+	<link>https://www.norwalkct.gov/Calendar.aspx</link>
+	<lastBuildDate>Thu, 12 Nov 2026 08:37:17 -0500</lastBuildDate>
+	<description>City of Norwalk - Get the latest events</description>
+	<language>en-us</language>
+	<item>
+		<title>Thanksgiving 101: Holiday Prep Workshop</title>
+		<link>https://www.norwalkct.gov/Calendar.aspx?EID=17222</link>
+		<pubDate>Tue, 20 Oct 2026 12:45:08 -0500</pubDate>
+		<description>&lt;strong&gt;Event date:&lt;/strong&gt; November 14, 2026 &lt;br&gt;&lt;strong&gt;Event Time: &lt;/strong&gt;10:00 AM - 12:30 PM&lt;br&gt;&lt;strong&gt;Location:&lt;/strong&gt; &lt;br&gt;328 Flax hill rd.&lt;br&gt;Norwalk, CT 06854</description>
+		<calendarEvent:EventDates> November 14, 2026 </calendarEvent:EventDates>
+		<calendarEvent:EventTimes>10:00 AM - 12:30 PM</calendarEvent:EventTimes>
+		<calendarEvent:Location>328 Flax hill rd.Norwalk, CT 06854</calendarEvent:Location>
+		
+		<guid isPermaLink="false">https://www.norwalkct.gov/Calendar.aspx?EID=17222/639280971080000000</guid>
+		<enclosure url="https://www.norwalkct.gov/DocumentCenter/View/42835" length="0" type="image/png" />
+	</item>
+</channel></rss>

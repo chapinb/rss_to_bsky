@@ -2,10 +2,19 @@ import argparse
 import sys
 from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
+from functools import partial
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from rss_post import norwalk_boe, norwalk_civic_clerk, norwalk_library, norwalk_oyster
+import httpx
+
+from rss_post import (
+    norwalk_boe,
+    norwalk_city_calendar,
+    norwalk_civic_clerk,
+    norwalk_library,
+    norwalk_oyster,
+)
 from rss_post.bsky import Bluesky, Stdout
 from rss_post.dedup import (
     CANCELLED,
@@ -33,6 +42,9 @@ CITY_SEAL = Path(__file__).parent / "assets" / "city_seal.png"
 # A bit over an hour so hourly runs hit it even when one starts a few minutes
 # late; a second run inside the window skips the reminder already sent.
 REMINDER_WINDOW = timedelta(minutes=75)
+# At most this many events a day from each city calendar (#13 plans a weekly
+# look-ahead for the rest).
+CITY_EVENTS_PER_DAY = 2
 
 
 def published_at(item) -> datetime | None:
@@ -89,6 +101,8 @@ def meeting_post(meeting: dict, day: date) -> Post:
 class NorwalkFeeds:
     def __init__(self, posting_frequency: timedelta) -> None:
         self.posting_frequency = posting_frequency
+        # Norwalk Oyster's events for a day, read once a run (see _oyster_event_names).
+        self._oyster_names: tuple[date, list[str]] | None = None
         logger.info(
             f"Initialized NorwalkFeeds with posting frequency: {posting_frequency}"
         )
@@ -269,6 +283,59 @@ class NorwalkFeeds:
         logger.info(f"Generated {len(posts)} Norwalk Public Library event posts")
         return posts
 
+    def get_todays_city_calendar_events(
+        self, calendar: str, feed_url: str, now: datetime | None = None
+    ) -> list[Post]:
+        """Posts for today's events on a city calendar that haven't started yet.
+
+        Events Norwalk Oyster also posts today are left to it. The first
+        ``CITY_EVENTS_PER_DAY`` of the rest (by start time) are chosen before
+        dropping started ones, so later runs pick the same events and the cap
+        holds for the day; posted ones are skipped by their link.
+        """
+        now = now or datetime.now(EASTERN)
+        today = now.astimezone(EASTERN).date()
+        events = norwalk_city_calendar.get_events_on(feed_url, today)
+        oyster = self._oyster_event_names(today)
+        events = [
+            event
+            for event in events
+            if not any(norwalk_city_calendar.same_event(event.name, n) for n in oyster)
+        ][:CITY_EVENTS_PER_DAY]
+        posts = []
+        for event in events:
+            if event.starts_at is not None and event.starts_at < now:
+                logger.info(f"Skipping event that has started: {event.name}")
+                continue
+            details = ", ".join(filter(None, [event.when, event.place]))
+            headline = f"Today: {event.name}" + (f" ({details})" if details else "")
+            posts.append(
+                Post()
+                .with_headline(headline)
+                .with_embed_card(
+                    event.url,
+                    event.name,
+                    " · ".join(filter(None, [calendar, event.when, event.place])),
+                    thumb_url=event.image,
+                )
+            )
+        logger.info(f"Generated {len(posts)} {calendar} event posts")
+        return posts
+
+    def _oyster_event_names(self, day: date) -> list[str]:
+        """Names of the Norwalk Oyster events posted on ``day``, read once a run.
+
+        Best effort: if Norwalk Oyster can't be read, nothing is filtered.
+        """
+        if self._oyster_names is None or self._oyster_names[0] != day:
+            try:
+                names = [e.name for e in norwalk_oyster.get_events_on(day)]
+            except (httpx.HTTPError, ValueError) as e:
+                logger.warning(f"Could not read Norwalk Oyster events to skip ({e})")
+                names = []
+            self._oyster_names = (day, names)
+        return self._oyster_names[1]
+
     def get_ct_mirror_stories(self) -> list[Post]:
         feed_url = "https://ctmirror.org/feed/"
         logger.info("Processing CT Mirror stories, filtering for Norwalk mentions")
@@ -361,6 +428,20 @@ def main():
                 norwalk_feeds.get_todays_norwalk_library_events,
             )
         )
+        for calendar, feed_url in [
+            ("Norwalk Recreation & Parks", norwalk_city_calendar.REC_PARKS_URL),
+            ("City of Norwalk", norwalk_city_calendar.MAIN_CITY_URL),
+        ]:
+            sources.append(
+                (
+                    f"today's {calendar} calendar events",
+                    partial(
+                        norwalk_feeds.get_todays_city_calendar_events,
+                        calendar,
+                        feed_url,
+                    ),
+                )
+            )
     else:
         logger.info(f"Skipping meetings and events (before {MEETINGS_HOUR} AM)")
 
