@@ -1,7 +1,12 @@
-from unittest.mock import MagicMock
+from datetime import timedelta
+from unittest.mock import MagicMock, patch
 
+import httpx
+from libmuni.civicclerk import CivicClerkClient
+
+from rss_post import norwalk_civic_clerk
 from rss_post.dedup import SeenPosts
-from rss_post.norwalk_feeds import publish
+from rss_post.norwalk_feeds import NorwalkFeeds, publish
 from rss_post.post import Post
 
 
@@ -89,3 +94,23 @@ def test_cancellation_of_a_posted_item_is_posted():
 
     assert publish(client, sources, seen) == (1, 0)
     assert client.post.call_args.args[0].embed.external.title == "Board (CANCELLED)"
+
+
+def test_unreadable_meetings_count_as_a_failure():
+    client = MagicMock()
+    civic_clerk = CivicClerkClient(
+        "norwalkct",
+        http_client=httpx.Client(
+            transport=httpx.MockTransport(lambda request: httpx.Response(503))
+        ),
+        min_request_interval=0,
+    )
+    feeds = NorwalkFeeds(timedelta(hours=1))
+    with (
+        patch.object(norwalk_civic_clerk, "CivicClerkClient", return_value=civic_clerk),
+        patch.object(norwalk_civic_clerk.time, "sleep"),
+    ):
+        result = publish(client, [("meetings", feeds.get_todays_norwalk_meetings)])
+
+    assert result == (0, 1)
+    client.post.assert_not_called()

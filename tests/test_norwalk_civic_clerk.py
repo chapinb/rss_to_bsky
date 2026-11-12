@@ -2,10 +2,12 @@
 
 import json
 from datetime import datetime
+from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
 import httpx
-from libmuni.civicclerk import CivicClerkClient
+import pytest
+from libmuni.civicclerk import APIStatusError, CivicClerkClient, NetworkError
 
 from rss_post.norwalk_civic_clerk import format_when, get_todays_meetings
 from tests.conftest import FIXTURES
@@ -60,16 +62,52 @@ def test_parses_meetings():
     assert finance["where"] == "https://norwalkct-org.zoom.us/j/83292194046"
 
 
-def test_api_failure_yields_no_meetings():
-    client = fake_client(lambda request: httpx.Response(503))
-    assert get_todays_meetings(NOV_11_7AM, client) == []
+@pytest.fixture(autouse=True)
+def no_sleep():
+    with patch("rss_post.norwalk_civic_clerk.time.sleep") as sleep:
+        yield sleep
 
 
-def test_network_failure_yields_no_meetings():
+def test_api_failure_raises_after_retries():
+    requests = []
+
+    def handler(request):
+        requests.append(request)
+        return httpx.Response(503)
+
+    with pytest.raises(APIStatusError):
+        get_todays_meetings(NOV_11_7AM, fake_client(handler))
+    assert len(requests) == 3
+
+
+def test_network_failure_raises_after_retries(no_sleep):
     def handler(request):
         raise httpx.ConnectError("unreachable", request=request)
 
-    assert get_todays_meetings(NOV_11_7AM, fake_client(handler)) == []
+    with pytest.raises(NetworkError):
+        get_todays_meetings(NOV_11_7AM, fake_client(handler))
+    assert [c.args[0] for c in no_sleep.call_args_list] == [2.0, 4.0]
+
+
+def test_transient_failure_is_retried():
+    responses = [httpx.Response(502), httpx.Response(200, json=EVENTS)]
+
+    meetings = get_todays_meetings(
+        NOV_11_7AM, fake_client(lambda request: responses.pop(0))
+    )
+    assert meetings == get_todays_meetings(NOV_11_7AM, serve_events())
+
+
+def test_client_error_is_not_retried():
+    requests = []
+
+    def handler(request):
+        requests.append(request)
+        return httpx.Response(400)
+
+    with pytest.raises(APIStatusError):
+        get_todays_meetings(NOV_11_7AM, fake_client(handler))
+    assert len(requests) == 1
 
 
 def test_format_when_uses_daylight_time_in_summer():

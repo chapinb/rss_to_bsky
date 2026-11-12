@@ -4,10 +4,17 @@ Uses the public CivicClerk API via ``libmuni`` rather than scraping the
 JavaScript-rendered portal.
 """
 
+import time
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from libmuni.civicclerk import CivicClerkClient, CivicClerkError, Event
+from libmuni.civicclerk import (
+    APIStatusError,
+    CivicClerkClient,
+    CivicClerkError,
+    Event,
+    NetworkError,
+)
 
 from rss_post.logging_config import get_logger
 
@@ -16,6 +23,18 @@ logger = get_logger(__name__)
 TENANT = "norwalkct"
 PORTAL_URL = f"https://{TENANT}.portal.civicclerk.com"
 EASTERN = ZoneInfo("America/New_York")
+
+ATTEMPTS = 3
+BACKOFF_SECONDS = 2.0
+
+
+def is_transient(error: CivicClerkError) -> bool:
+    """Whether retrying might help: network failures, rate limits and 5xx."""
+    if isinstance(error, NetworkError):
+        return True
+    if isinstance(error, APIStatusError):
+        return error.status_code == 429 or error.status_code >= 500
+    return False
 
 
 def format_when(starts_at: datetime) -> str:
@@ -39,7 +58,12 @@ def meeting_from_event(event: Event) -> dict:
 def get_todays_meetings(
     now: datetime | None = None, client: CivicClerkClient | None = None
 ) -> list[dict]:
-    """Return meetings scheduled for today or tomorrow (US/Eastern)."""
+    """Return meetings scheduled for today or tomorrow (US/Eastern).
+
+    Network failures, rate limits and server errors are retried. If the
+    meetings still can't be read, the ``CivicClerkError`` is raised so the run
+    reports a failure instead of looking like a day with no meetings.
+    """
     now = now or datetime.now(EASTERN)
     today, tomorrow = now.date(), (now + timedelta(days=1)).date()
     logger.info(f"Reading {TENANT} meetings for {today} and {tomorrow}")
@@ -47,10 +71,19 @@ def get_todays_meetings(
     owns_client = client is None
     client = client or CivicClerkClient(TENANT)
     try:
-        events = list(client.iter_events(from_date=today, to_date=tomorrow))
-    except CivicClerkError as e:
-        logger.error(f"Failed to read meetings: {e}")
-        return []
+        for attempt in range(1, ATTEMPTS + 1):
+            try:
+                events = list(client.iter_events(from_date=today, to_date=tomorrow))
+                break
+            except CivicClerkError as e:
+                if attempt == ATTEMPTS or not is_transient(e):
+                    raise
+                delay = BACKOFF_SECONDS * attempt
+                logger.warning(
+                    f"Attempt {attempt}/{ATTEMPTS} to read meetings failed ({e}); "
+                    f"retrying in {delay}s"
+                )
+                time.sleep(delay)
     finally:
         if owns_client:
             client.close()
