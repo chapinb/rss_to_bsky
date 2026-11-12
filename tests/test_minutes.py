@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 import httpx
 from atproto import models
 
-from rss_post import norwalk_civic_clerk, summarize
+from rss_post import minutes_digest, norwalk_civic_clerk, summarize
 from rss_post.dedup import PostRef, SeenPosts, keys_in_record, reply_key
 from rss_post.norwalk_civic_clerk import get_recent_minutes
 from rss_post.norwalk_feeds import (
@@ -496,17 +496,22 @@ def test_real_llm_client_summarizes_the_minutes():
     assert "SUSTAINABILITY" in body["messages"][1]["content"]
 
 
-def test_long_minutes_are_cut_before_asking():
+def test_long_minutes_are_cut_to_their_decisions_before_asking():
+    # Full Planning & Zoning minutes (35,937 chars as plain text), served as
+    # if they were the Shellfish Commission's.
+    pz = (FIXTURES / "civicclerk_minutes_long" / "16321.txt").read_bytes()
     runs = Runs()
     runs.llm = LLM(httpx.Response(200, json=llm_answer()))
-    runs.texts = {16369: "Motion passed.\r\n" * 5000}
+    runs.texts = {16369: pz.decode("utf-8")}
     runs.run(datetime(2026, 11, 6, 12, tzinfo=EASTERN), summaries=True)
     [request] = runs.llm.requests
     sent = json.loads(request.content)["messages"][1]["content"]
     opening, closing = summarize.untrusted_tags(summarize.untrusted_nonce())
     assert sent.startswith(f"{opening}\n")
     assert sent.endswith(f"\n{closing}")
-    assert len(sent) - len(opening) - len(closing) - 2 == summarize.MAX_INPUT_CHARS
+    assert len(sent) < minutes_digest.TARGET_CHARS * 1.2
+    # The Manresa Wilds approvals, past the first 20,000 chars of the minutes.
+    assert sent.count("be APPROVED [conditions omitted] Vote: 9-0.") == 3
 
 
 def test_bad_llm_key_skips_minutes_summaries_without_failing_the_run():
