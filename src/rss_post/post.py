@@ -26,6 +26,8 @@ class Post:
         # Image the feed supplied for the card; adapters fall back to the
         # linked page's og:image when this is None.
         self.thumb_url: str | None = None
+        # The item this post is about, used to skip items already posted.
+        self.link: str | None = None
 
     def from_feed(self, feed_title):
         self.text_builder.text(feed_title + "\n")
@@ -96,6 +98,7 @@ class Post:
                 description=self.card_description(description),
             )
         )
+        self.link = url
         self.thumb_url = thumb_url
         logger.debug(f"Added embed card for URL: {url} (thumb: {thumb_url})")
         return self

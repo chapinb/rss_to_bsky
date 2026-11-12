@@ -1,9 +1,10 @@
 """Characterization tests for feed -> post generation using saved real feeds."""
 
 from datetime import UTC, datetime, timedelta, timezone
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
-from rss_post.norwalk_feeds import NorwalkFeeds
+from rss_post.dedup import SeenPosts
+from rss_post.norwalk_feeds import NorwalkFeeds, publish
 from rss_post.read_rss import read_rss_items
 from tests.conftest import FIXTURES
 
@@ -38,21 +39,27 @@ def test_city_calendar_posts_recent_items_as_embed_cards(freeze_feeds_now):
     assert housing.build().build_text() == "Housing Authority Special Meeting"
 
 
-def test_city_calendar_accepts_future_dated_items(freeze_feeds_now):
-    """Known bug (see docs/MODERNIZATION.md, Phase 4).
-
-    Items dated after "now" have a negative age and pass the window check.
-    The city feed labels EDT times as -0500, so in summer every new item
-    looks an hour in the future and is posted on two consecutive runs.
+def test_future_dated_city_items_are_posted_once(freeze_feeds_now):
+    """The city feed labels EDT times as -0500, so in summer new items look an
+    hour in the future and pass two consecutive hourly windows. The second run
+    skips them because they are already posted.
     """
-    freeze_feeds_now(datetime(2026, 11, 5, 12, 0, tzinfo=EST))
-    with feeds_from_fixture("norwalk_calendar.xml"):
-        posts = NorwalkFeeds(timedelta(hours=24)).get_committee_events()
+    client = MagicMock()
+    seen = SeenPosts()
+    future = "https://www.norwalkct.gov/Calendar.aspx?EID=17281"
 
-    assert "https://www.norwalkct.gov/Calendar.aspx?EID=17281" in [
-        card(p).uri for p in posts
-    ]
-    assert len(posts) == 3
+    for now in (
+        datetime(2026, 11, 5, 12, 0, tzinfo=EST),
+        datetime(2026, 11, 5, 13, 0, tzinfo=EST),
+    ):
+        freeze_feeds_now(now)
+        with feeds_from_fixture("norwalk_calendar.xml"):
+            feeds = NorwalkFeeds(timedelta(hours=24))
+            publish(client, [("calendar", feeds.get_committee_events)], seen)
+
+    posted = [c.args[0].link for c in client.post.call_args_list]
+    assert posted.count(future) == 1
+    assert len(posted) == len(set(posted)) == 3
 
 
 def test_city_calendar_card_description_is_plain_text(freeze_feeds_now):

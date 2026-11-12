@@ -1,0 +1,2905 @@
+{
+ "feed": [
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3n244htmeer2g",
+    "cid": "bafyreihtiml3z7jow4p6n2oilxpkw5kexugjhi3u3yxbds3wo63moko2qm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-12T09:05:06.509677+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 From January to June of this year, Democratic city council members and Mayor Barbara Smyth have met behind closed doors 12 times. Connecticut&#8217;s Freedom of Information Act (FOIA) exempts certain political caucuses from its open-meetings requirements. Under the exemption, members of the same public body who belong to the same political party [&#8230;]",
+       "title": "Who is on the Norwalk City Council? A state hearing may decide",
+       "uri": "https://www.norwalkcurrent.com/who-is-on-the-norwalk-city-council-a-state-hearing-may-decide/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-12T09:05:06.975Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3n23z4mzriv27",
+    "cid": "bafyreidg2575ippeg3cf5pzke6eixz45uol6wyqzjlomcueesgz2ghzuim",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-12T08:05:09.240532+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 The state&#8217;s fourth commemoration of World Remembrance Day for Road Traffic Victims will be held in Norwalk Saturday at City Hall. Organized by Watch For Me CT, a partnership between the state Department of Transportation\u2019s Highway Safety Office and Connecticut Children\u2019s Injury Prevention Center, the event, which will begin at 1 p.m., [&#8230;]",
+       "title": "\u2018Safety Not Speed:\u2019 Norwalk event to remember crash victims, call for change",
+       "uri": "https://www.norwalkcurrent.com/safety-not-speed-norwalk-event-to-remember-crash-victims-call-for-change/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-12T08:05:09.975Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3n23vraecyx2b",
+    "cid": "bafyreia7grs2nbnmrqdkw2e6egycuwp5hvl44b3x3saup7jf557mcc5g5m",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-12T07:05:05.671100+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Some heroes never say the words &#8220;I&#8217;m a veteran.&#8221; On Wednesday, Norwalk took a little time to say thank you anyway. Veterans, their families and city leaders filled City Hall for the annual Veterans Day ceremony. There were flags, music and a few tears. Guest speaker Bob King, an Army veteran who [&#8230;]",
+       "title": "Songs, silence and a neighbor\u2019s lesson mark Veterans Day in Norwalk",
+       "uri": "https://www.norwalkcurrent.com/songs-silence-and-a-neighbors-lesson-mark-veterans-day-in-norwalk/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-12T07:05:06.373Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3n23sfwvyg72b",
+    "cid": "bafyreig73vgri6vokh5z3xv4mjfm54jgkfpbqcnu7dqjakw56e33we2zqu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-12T06:05:05.437811+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Norwalk Public Library hosted its 10th annual Author Celebration on Saturday, Nov. 7, at its Main Library. Co-sponsored with Connecticut Book Festivals, this year\u2019s event drew 70 authors and 150 visitors. Luca DiMatteo opened the event by introducing Library Director Sherelle Harris, who joined state Sen. Bob Duff and state Rep. Dominique [&#8230;]",
+       "title": "New panels, ribbon-cutting mark 10th Norwalk Author Celebration",
+       "uri": "https://www.norwalkcurrent.com/new-panels-ribbon-cutting-mark-10th-norwalk-author-celebration/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-12T06:05:06.072Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzzzfyqxtr2y",
+    "cid": "bafyreihoajqxroifihuy6skjc7ycpzsvqf2rl2j3qqaaummgnhcr5qtsra",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-11T13:05:04.088558+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "As the leaves fall this season, here is a gentle reminder of the City of Norwalk's Leaf Blower Ordinance.",
+       "title": "Leaf Blower Ordinance Reminder",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2759"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-11T13:05:04.275Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzzzfypzjs2f",
+    "cid": "bafyreie4vitrjnhwowdckjyvmh7bbior5g7lobbqmnbb5tcj5vgc366nma",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-11T13:05:04.057013+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Please join the Park Norwalk team on November 18 for a public hearing on Residential Parking.",
+       "title": "Public Hearing on Residential Parking",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2760"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-11T13:05:04.274Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzzlyvcd462w",
+    "cid": "bafyreidf6j22jvymr7qy7eo7l5g6qwhesfagsxy3yxx7ks66ibrnld3sle",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-11T09:05:05.608001+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 In 1789, Thomas Jefferson wrote, \u201cWherever the people are well-informed, they can be trusted with their own government.\u201d Now that the contentious midterm elections are behind us and the 2028 presidential election cycle begins, it\u2019s fair to ask what Norwalk schools do to create \u201cwell-informed\u201d citizens. The answer is, quite a lot. [&#8230;]",
+       "title": "Schools aim to turn teens into informed citizens",
+       "uri": "https://www.norwalkcurrent.com/schools-aim-to-turn-teens-into-informed-citizens/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-11T09:05:05.877Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzziqkjb2a2j",
+    "cid": "bafyreihirhogtdin5krlvrsoh6vjoljv3tovvkwpokw7v4aanj7vndju3a",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-11T08:06:44.620520+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Students celebrated selflessness, service and sacrifice during a Veterans Day Assembly at Marvin Elementary School Tuesday honoring those who have served in the armed forces. Patriotic signs and artwork adorned the walls of the school&#8217;s gym as hundreds of students, many dressed in red, white and blue, filed in to show their [&#8230;]",
+       "title": "\u2018We owe them all:\u2019 Norwalk students salute veterans at Marvin Elementary School",
+       "uri": "https://www.norwalkcurrent.com/we-owe-them-all-norwalk-students-salute-veterans-at-marvin-elementary-school/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-11T08:06:44.970Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzzfcdacic2t",
+    "cid": "bafyreibizvjb7lyxhtfnhpwbovcjmhhm26buw6jko7qkfsz74q234ybw3m",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-11T07:05:06.021526+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "For veterans with mild traumatic brain injury, a restaurant can feel like a battlefield Imagine sitting down with your family at a restaurant. Conversations at your table overlap with those of patrons seated nearby. Utensils clink on plates. Waitstaff weave between tables. Music plays overhead. Many people might find the bustle of such a scene [&#8230;]",
+       "title": "For veterans with mild traumatic brain injury, a restaurant or other noisy environment can feel like a\u00a0battlefield",
+       "uri": "https://www.norwalkcurrent.com/for-veterans-with-mild-traumatic-brain-injury-a-restaurant-or-other-noisy-environment-can-feel-like-a-battlefield/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-11T07:05:06.278Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzydrgipxz2i",
+    "cid": "bafyreibenm6u5fjv5kwrdnkwrtxjvsdnw4l4nk2ohvrshenw66flnlvdxu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-10T21:05:05.537773+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"683\" src=\"https://ctmirror.org/wp-content/uploads/2025/05/2025_0530_SR_Session_254-1024x683.jpg\" width=\"1024\" /></figure>State Sen. Rob Sampson of Wolcott will lead the GOP Senate caucus of just three members, including Sens. Eric Berthel and Henri Martin.",
+       "title": "Sen. Rob Sampson to lead smallest GOP caucus in CT history",
+       "uri": "https://ctmirror.org/2026/11/10/sen-rob-sampson-to-lead-smallest-gop-caucus-in-ct-history/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-10T21:05:05.972Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzyag4jq5u2v",
+    "cid": "bafyreifstgddp2xvej2mzttgqc75dkxlxmwuyc7t7tlayoitldacepk6nu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-10T20:05:04.763941+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 18, 2026 <br /><strong>Event Time: </strong>07:00 PM - 11:59 PM",
+       "title": "Special Meeting  Recreation ,Parks & Cultural Affairs Nov.18 2026",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17281"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-10T20:05:05.270Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzx3jzavc52v",
+    "cid": "bafyreig636nid4fndjkuuwujkm7s4ak5uwwjd6rqjar3wxvdp5u3aernh4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-10T09:05:07.097521+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 The city has asked a judge to dismiss eight of the 12 counts of a federal lawsuit filed by a Greek Orthodox church against the Planning and Zoning Commission over its decision denying the church a modification of a special permit to rent out its community center and its use of live [&#8230;]",
+       "title": "City responds to federal suit filed by Greek Orthodox church",
+       "uri": "https://www.norwalkcurrent.com/city-responds-to-federal-suit-filed-by-greek-orthodox-church/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-10T09:05:07.276Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzwyc6bcz32v",
+    "cid": "bafyreibwbdvj3fcypv7rnab4lh4n5ccfog4mspqky666rbss4iu3okbrhi",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-10T08:07:02.665633+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 A sidewalk about 5 feet wide. A wall on one side. Cars rushing by on the other. That is what residents faced Monday under Interstate 95 on West Avenue, and many called it the scariest part of a city walking tour. The Wall Street Revitalization Tour began around 1 p.m. in the [&#8230;]",
+       "title": "Residents walk West Avenue with city, point to tight sidewalks and fast traffic",
+       "uri": "https://www.norwalkcurrent.com/residents-walk-west-avenue-with-city-point-to-tight-sidewalks-and-fast-traffic/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-10T08:07:03.072Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzwutg6mgl2o",
+    "cid": "bafyreibwn34krb3nk4etjwbss5zfufqs26km6a53btat7nwgoaz2hn563u",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-10T07:05:06.447322+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 City staff showed an early concept plan Monday that would add sidewalks, even out the road, and replace a traffic light with a roundabout on Wilson Avenue in Rowayton. Norwalk&#8217;s Transportation, Mobility and Parking team held the open house from 5 to 6:30 p.m. at Rowayton Elementary School, 1 Roton Ave. Residents [&#8230;]",
+       "title": "Parents question Wilson Avenue roundabout plan in Rowayton",
+       "uri": "https://www.norwalkcurrent.com/parents-question-wilson-avenue-roundabout-plan-in-rowayton/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-10T07:05:07.175Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzvjamvaiu2q",
+    "cid": "bafyreigkrrvcg4zz7wn4ciioojjjkwilj3d2p4q7bvwpwlhj5ye62fvura",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-09T18:05:05.049855+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "The City of Norwalk will host an Enforcement Panel on Monday, November 16.",
+       "title": "Enforcement Panel on November 16",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2757"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-09T18:05:05.377Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzul33fwoe2s",
+    "cid": "bafyreieabaet7pogttynfpjidahy5a7ikkem3e34lwlbhuif77dckgmphe",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-09T09:05:06.694536+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "In this episode of Community Ties, we talk with Marc Alan, live sound engineer and chairman of Norwalk&#8217;s Arts and Culture Commission, about his creative journey, his career in music and production, and what brought him to this new chapter of community leadership. Marc shares how his work behind the scenes of live performances has [&#8230;]",
+       "title": "Community Ties: Connecting Sound, Art & Community Leadership with Marc Alan",
+       "uri": "https://www.norwalkcurrent.com/community-ties-connecting-sound-art-community-leadership-with-marc-alan/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-09T09:05:07.281Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzul33f3fo2s",
+    "cid": "bafyreigd5gzwdotrxoyduvxw6yth7wzgalqaxjx54iquboy5x7qjswdndq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-09T09:05:06.665013+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Eleven Flock automated license plate readers (ALPRs) placed throughout the city could soon be taken down \u2014 replaced by cameras from a different vendor. The City Council&#8217;s Public Safety and General Government Committee voted unanimously Thursday to approve a five-year, $5.5 million contract with Axon Enterprise Inc. for the purchase of the [&#8230;]",
+       "title": "Norwalk police look to ditch Flock for new ALPR vendor",
+       "uri": "https://www.norwalkcurrent.com/norwalk-police-look-to-ditch-flock-for-new-alpr-vendor/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-09T09:05:07.280Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzuhwr63pm2q",
+    "cid": "bafyreiefq4fuhfmfjww5ji4oww5kowygok3tpkciqapjqxfffletwwhfoi",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-09T08:09:00.491388+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Join in creating the Norwalk student policy on AI and screen time at the NPS Community Forum to be held on Nov. 10 at 6 p.m. in the Community Room at City Hall, 125 East Avenue, Norwalk. Be prepared to join in the back-and-forth conversation. We in Norwalk are joining a statewide, national and even [&#8230;]",
+       "title": "Letter to the Editor: Resources for Norwalk\u2019s discussion on AI and screen time",
+       "uri": "https://www.norwalkcurrent.com/letter-to-the-editor-resources-for-norwalks-discussion-on-ai-and-screen-time/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-09T08:09:00.874Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzueeiugxb2j",
+    "cid": "bafyreigdls7d23l5xkgw4w4hbj3g47ug5klvjseq5bvbsotcgsms7lryiq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-09T07:05:06.598221+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 A big team of Scouts, city workers and local boaters spent Saturday, Oct. 24, cleaning up Grassy Island. They pulled out about 3,000 pounds of trash. Jeff Mangels of the Harbor Management Commission shared the results in a thank-you letter to volunteers and partners. Dominik Dziejma, of Troop 222, led the cleanup [&#8230;]",
+       "title": "Scouts and city crews haul 3,000 pounds of junk off Grassy Island",
+       "uri": "https://www.norwalkcurrent.com/scouts-and-city-crews-haul-3000-pounds-of-junk-off-grassy-island/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-09T07:05:06.871Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzuazanm2x26",
+    "cid": "bafyreif3jlathzp4yzhdnurktwupkozoqzjjkl5ei5yxgtofmlwvdd6x6e",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-09T06:05:07.660187+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Monday: November 9 COMMISSION ON GENDER EQUITY Time: 7 p.m. Location: Zoom Members will pick up old business on the commission\u2019s plan, a social media update, and the 2026-2027 executive board. New business includes an award program and a community partner spotlight. The meeting closes with open discussion of community events and commissioners\u2019 concerns. Tuesday: [&#8230;]",
+       "title": "Speak Up: City Meeting for the Week of Nov. 9",
+       "uri": "https://www.norwalkcurrent.com/speak-up-city-meeting-for-the-week-of-nov-9/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-09T06:05:07.879Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzs5xhyjqz2q",
+    "cid": "bafyreib2qstdexpt2ff34mmoxhboeh3srhnydlhq3qt2njtpoqjtfx5dm4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-08T10:05:07.499163+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"335\" src=\"https://ctmirror.org/wp-content/uploads/2026/11/union-station-pipe-dream.jpg\" width=\"600\" /></figure>How many promises have we been given about fixing Connecticut's  transportation woes? How many have been kept? I checked.",
+       "title": "CT transit: The good, bad and unfinished",
+       "uri": "https://ctmirror.org/2026/11/08/ct-transit-the-good-bad-and-unfinished/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-08T10:05:08.475Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzs5xhxndq2d",
+    "cid": "bafyreib2ixkjjc4qr5t4tmphe4xlmqfoja7rthciczaxtwevxjxxvva3qq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-08T10:05:07.469061+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"797\" src=\"https://ctmirror.org/wp-content/uploads/2026/09/VOUCHER-SEGREGATION-0908-SG-03-1024x797.jpg\" width=\"1024\" /></figure>Advocates say the Section-8 system has led to significant housing segregation, where most voucher holders have to live in cheaper areas.",
+       "title": "Data shows little change in CT housing voucher segregation",
+       "uri": "https://ctmirror.org/2026/11/08/ct-section-8-housing-voucher-segregation/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-08T10:05:08.472Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzpxkeseaz2n",
+    "cid": "bafyreihq35xmkgrjnianncflhpgu2ax7x4fl3gezzsozfnniy6frpukzmq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-07T13:05:06.066020+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Please be advised paving in the Wall Street area will take place overnight the evening of November 9 until the morning of November 10.",
+       "title": "Paving Advisory: Wall Street/East Wall Street",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2756"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-07T13:05:06.272Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzofb3jkpf2h",
+    "cid": "bafyreib47s7umhchh3furb655doqeshl2n2kcnrvtysnimmti7hdojz3ui",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T22:05:07.265265+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"683\" src=\"https://ctmirror.org/wp-content/uploads/2026/11/AMP_Bridgeport-Arts-Trail_W_26-6536-1024x683.jpg\" width=\"1024\" /></figure>This weekend, the Bridgeport Art Trail will feature more than 200 artists, spanning 30+ sites, multiple studios, stores and galleries.",
+       "title": "Bridgeport Art Trail rolls into its 18th year",
+       "uri": "https://ctmirror.org/2026/11/06/bridgeport-art-trail-rolls-into-its-18th-year/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T22:05:07.670Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mznr5fr3ag2j",
+    "cid": "bafyreicphr7yntom5ngobibeu7asoaitthqyvdcy4d7qmjgqdccm7yt2nm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T16:05:08.939106+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Name tags might have helped. House and Senate Democrats welcomed 37 new legislators-elect Thursday as they met for the first time since Tuesday\u2019s Democratic rout to endorse their top leaders, the necessary first step towards readying the Connecticut General Assembly for the term that opens on Jan. 6. House Democrats met at the Capitol in [&#8230;]",
+       "title": "Democrats endorse Matt Ritter, Bob Duff to lead General Assembly",
+       "uri": "https://www.norwalkcurrent.com/democrats-endorse-matt-ritter-bob-duff-to-lead-general-assembly/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T16:05:09.280Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mznkgqm2lr2n",
+    "cid": "bafyreihu6viyxdcgxeozwn4patrz3fci7tsdn63gpq7uuz2ho6rwyuddmm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T14:05:06.105123+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 10, 2026 <br /><strong>Event Time: </strong>06:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Bike/Walk Commission Special Meeting",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17276"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T14:05:06.269Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzn4zqguug24",
+    "cid": "bafyreifsuzvt5b6nu5ksnmjtskinmpmvuvjnext4erdkvqtecpib43xfqq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T10:05:11.060563+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"768\" src=\"https://ctmirror.org/wp-content/uploads/2026/11/POST-ELECTION-1104-SG-14-1024x768.jpg\" width=\"1024\" /></figure>Legislators have talked about taxing Connecticut\u2019s wealthy to finance relief for the poor and middle class, but it\u2019s only been talk \u2014 so far.",
+       "title": "Blue wave in CT legislature may test Lamont on taxing the rich",
+       "uri": "https://ctmirror.org/2026/11/06/blue-wave-in-ct-legislature-may-test-lamont-on-taxing-the-rich/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T10:05:11.275Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzmzodmwve2d",
+    "cid": "bafyreig5so3klziycybqlyis6si7rgabsfooqdecy5m7yfo7jscld5qetu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T09:05:07.323284+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 A years-long effort to renovate and expand the aging Fire Station 4 on Westport Avenue could begin construction early next year. The City Council&#8217;s Land Use and Building Management Committee voted unanimously Wednesday to approve an updated plan to expand and renovate the station as a result of higher construction costs. The [&#8230;]",
+       "title": "Land use committee approves updated Fire Station 4 renovation plan",
+       "uri": "https://www.norwalkcurrent.com/land-use-committee-approves-updated-fire-station-4-renovation-plan/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T09:05:07.773Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzmwf3tvj32o",
+    "cid": "bafyreid6rj5yxepv5yw7tjcq5qt3wu6ceapl5odsbobnhcno5w3ksi5wqu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T08:06:15.953818+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 \u201cAlways&#8230;Patsy Cline\u201d is returning to Norwalk for Music Theatre of Connecticut&#8217;s (MTC) 40th anniversary season, nearly a decade after the show sold out most performances during its 2018 run, according to MTC. The musical play, written by Ted Swindley, is the true story of country singer Patsy Cline\u2019s friendship with Louise Seger, [&#8230;]",
+       "title": "Music Theatre of Connecticut brings \u2018Always\u2026Patsy Cline\u2019 back to Norwalk",
+       "uri": "https://www.norwalkcurrent.com/music-theatre-of-connecticut-brings-always-patsy-cline-back-to-norwalk/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T08:06:16.171Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzmwf3t72b2h",
+    "cid": "bafyreibmzrkiqx7kxxjev7b5vnzsecpjdaswdpdnxmkdx3prapm2cmhyzi",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T08:06:15.908129+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "New Name. New Look. Same Trusted Local News.Help Us Keep the Story Going! Local news matters. It keeps us informed, connects our neighbors, holds decision-makers accountable, and gives our community a voice. At Norwalk Current (formerly NancyOnNorwalk), our name may have changed, but our commitment to independent, community-focused journalism remains stronger than ever. This week, [&#8230;]",
+       "title": "100 Voices for Local News: Will You Be One of Them?",
+       "uri": "https://www.norwalkcurrent.com/100-voices-for-local-news-will-you-be-one-of-them/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T08:06:16.170Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzmsxr32gr2m",
+    "cid": "bafyreic5ucgbpacopiwpa5oesuyygnltudv72szfc5kizzmumtvxzc72hm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T07:05:07.220887+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 The Norwalk Health Department is encouraging residents to get outside and explore their neighborhoods through its NorWALKer program, which advocates for pedestrian safety and more active lifestyles. In partnership with the Norwalk River Valley Trail, the department is hosting free guided community walks on Mondays. The walks begin at 10 a.m. at [&#8230;]",
+       "title": "Norwalk Health Department continues NorWALKer community walks in November",
+       "uri": "https://www.norwalkcurrent.com/norwalk-health-department-continues-norwalker-community-walks-in-november/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T07:05:07.577Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzmsxr237i2z",
+    "cid": "bafyreidl3jup54jpbeg2quow5652infqrlwfmfhkmy5ntomsdzuc5e42fq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T07:05:07.188784+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Friday: November 6, 2026 Jump to: Friday &#124; Saturday &#124; Sunday Music With Deirdre Time:\u00a010:30 a.m. to 11 a.m. &#38; 11:15 a.m. to 11:45 a.m. Location:&#160;1 Belden Avenue, Norwalk,&#160;CT&#160;06850 Cost: Free \ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66 \u267f\ud83d\udd01 The Norwalk Public Library hosts Music with Deirdre, a lively, interactive music program where little ones clap and sing along with Ms. [&#8230;]",
+       "title": "Norwalk Lineup: Fun things to do the Weekend of Nov. 6",
+       "uri": "https://www.norwalkcurrent.com/norwalk-lineup-fun-things-to-do-the-weekend-of-nov-6/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T07:05:07.574Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzmpmguv5t2p",
+    "cid": "bafyreigcy23ny2wwx2gvtgbbzskqcannr6ifp6yavlzaniv325ugmdcaea",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T06:05:06.201076+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Norwalk Public Library will host its 10th Annual Norwalk Author Celebration on Saturday, Nov. 7, from 10 a.m. to 4 p.m. at the main library, 1 Belden Ave. The event brings together local authors and readers for discussions, readings, and book signings. Visitors can discover new books, meet local writers and learn [&#8230;]",
+       "title": "Norwalk Public Library to host 10th Norwalk Author Celebration",
+       "uri": "https://www.norwalkcurrent.com/norwalk-public-library-to-host-10th-norwalk-author-celebration/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T06:05:06.377Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzmc7df7g22d",
+    "cid": "bafyreihimcpn6gfhf5htktrx77ygnm474pzmngwugehi77rmcwkmebxc4a",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T02:05:07.688162+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"768\" src=\"https://ctmirror.org/wp-content/uploads/2026/11/BECC1AF4-4E35-4883-8ED3-7EA3CC57DABC-1024x768.jpg\" width=\"1024\" /></figure>CT House and Senate Democrats welcomed 37 new legislators-elect Thursday as they met for the first time to endorse their top leaders.",
+       "title": "Democrats endorse Matt Ritter, Bob Duff to lead General Assembly",
+       "uri": "https://ctmirror.org/2026/11/05/democrats-endorse-matt-ritter-bob-duff-to-lead-general-assembly/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T02:05:07.873Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzm3ioupo727",
+    "cid": "bafyreichi7ce3tvdozfz4kacwjwyao7ubsodbiv3isommyffd5562iv5xe",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-06T00:05:05.532305+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 10, 2026 <br /><strong>Event Time: </strong>06:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Bike/Walk Commission Special Meeting",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17276"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-06T00:05:05.680Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzlrgtyjsu2v",
+    "cid": "bafyreigcxvupinlxdtgibdbqmwyqpqumrjyplqfqh3rv2vb327hnwh5xsq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-05T21:05:06.373080+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 10, 2026 <br /><strong>Event Time: </strong>06:00 PM - 11:59 PM",
+       "title": "One Time Event",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17276"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-05T21:05:06.584Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzkj7gfvhl2i",
+    "cid": "bafyreifwmrgycqqq47mrcbvzo4aay2535wnyegflxfesbfan47umvym7ca",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-05T09:05:07.574571+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 A measure of how many Norwalkers voted in Tuesday&#8217;s election: A precise figure for turnout won&#8217;t be available until days afterward. Roughly 32,000 voters cast ballots in the election, or about 60% of those eligible, Republican Registrar of Voters Diana Paladino Christopher said Wednesday afternoon. That&#8217;s an increase of nearly 10% compared [&#8230;]",
+       "title": "Early voting, same-day registration drives Norwalk turnout surge",
+       "uri": "https://www.norwalkcurrent.com/early-voting-same-day-registration-drives-norwalk-turnout-surge/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-05T09:05:08.573Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzkfxwq4bg27",
+    "cid": "bafyreibvkns7t6ieiah6qfkjywkix5q3cfagesnzdi3cwddrshct3yndhy",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-05T08:07:15.004936+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 The Bike/Walk Commission\u2019s meeting on Nov. 2 was postponed because the commission lacked a quorum. The meeting agenda said they were supposed to hear the 2026 annual report, discuss plans and budget for 2027 and discuss commissioner onboarding and the Community Speaker Program. Greg Pacelli, the transportation planner in Norwalk\u2019s Transportation, Mobility [&#8230;]",
+       "title": "Bike/Walk Commission lacks quorum, postpones meeting",
+       "uri": "https://www.norwalkcurrent.com/bike-walk-commission-lacks-quorum-postpones-meeting/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-05T08:07:15.179Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzk75kgl5c2d",
+    "cid": "bafyreihvdpkrvgngs43k2t27wggly3vg6dld6xe6xoaeb4puekoujss53y",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-05T06:05:07.265217+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "If your home isn\u2019t in a federally designated flood zone, flooding might seem like someone else\u2019s problem. No one requires you to buy flood insurance, and the map suggests you\u2019re in the clear. But reality may be very different. Mounting evidence reveals that significantly more homes are at risk of flooding than is indicated by [&#8230;]",
+       "title": "Not in a FEMA flood zone? Your home could still be at risk \u2013 and you could suffer more than your\u00a0neighbor",
+       "uri": "https://www.norwalkcurrent.com/not-in-a-fema-flood-zone-your-home-could-still-be-at-risk-and-you-could-suffer-more-than-your-neighbor/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-05T06:05:07.445Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzjedakeis2f",
+    "cid": "bafyreihfw3wzhfixfc4ritiofcr3snmjroqk6yn266klpcnmrgpgdsdd7m",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T22:05:07.207484+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"768\" src=\"https://ctmirror.org/wp-content/uploads/2026/11/POST-ELECTION-1104-SG-15-1024x768.jpg\" width=\"1024\" /></figure>CT Democrats celebrated Gov. Ned Lamont's landslide reelection and Republicans' stunning General Assembly losses.",
+       "title": "CT Dems say blue wave presents opportunities \u2014 and challenges",
+       "uri": "https://ctmirror.org/2026/11/04/ct-dems-say-blue-wave-presents-opportunities-and-challenges/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T22:05:07.378Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzjed6wovr2d",
+    "cid": "bafyreihhaz3o7zi6laxvxpruzb3y5wv37nmbskpzviqkpen5zk4vgh3ptu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T22:05:05.516279+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Paving will take place between Wednesday, November 4 and Thursday morning, November 5.",
+       "title": "Paving Advisory: Wall Street/East Wall Street",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2753"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T22:05:05.680Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzjed6w3ca27",
+    "cid": "bafyreia7ecu4skdotxvabd3jk4sri2vvf36ykg7edgtgd6ro6xhzweujaa",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T22:05:05.496919+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Join the City of Norwalk for a ceremony honoring our Veterans on Wednesday, November 11.",
+       "title": "Veteran's Day Commemoration",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2754"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T22:05:05.678Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzjed6vayz2d",
+    "cid": "bafyreifi3mefsowm2fsofqxclwwz7ovyvuvmyxuez6jiw4ysk5ki7bu5ra",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T22:05:05.467999+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Join the City of Norwalk to commemorate World Day of Remembrance for Road Traffic Victims on November 14.",
+       "title": "World Day of Remembrance for Road Traffic Victims",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2755"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T22:05:05.676Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzjaxwuk6527",
+    "cid": "bafyreidg6jtspitwdujpxg3nbcjoswn43obnmai7phdvr27qhschqbsfdy",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T21:05:06.727650+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 18, 2026 <br /><strong>Event Time: </strong>05:30 PM - 06:30 PM<br /><strong>Location:</strong> <br />Norwalk, CT 06851-5125",
+       "title": "Housing Authority Special Meeting",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17270"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T21:05:06.975Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzjaxwtple2r",
+    "cid": "bafyreid3enf4ws77iifppzd52iku7yjmmk7ivzulubo7v4hkureaepe3iu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T21:05:06.698212+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 12, 2026 <br /><strong>Event Time: </strong>05:30 PM - 06:30 PM<br /><strong>Location:</strong> <br />Norwalk, CT 06851-5125",
+       "title": "Housing Authority (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17059"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T21:05:06.974Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mziww25as223",
+    "cid": "bafyreibz35wm3glyvkpizj7paqjmt5fwt22esoos44v4suwgyf2c3tj2yq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T18:05:05.624896+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 9, 2026 <br /><strong>Event Time: </strong>02:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Hybrid via Zoom and Room 125<br />125 East Avenue, 1st Floor<br />Norwalk, CT 06851",
+       "title": "Blight Hearings",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17255"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T18:05:05.877Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mziq7hrail26",
+    "cid": "bafyreiezfuibbszxi3s76tqiodhjo5i5h6h4guaaofku67r37yyxtjfrre",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T16:05:05.713529+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 11, 2026 <br /><strong>Event Time: </strong>06:45 PM - 11:59 PM<br /><strong>Location:</strong> <br />Hybrid via Zoom and Room 220<br />125 East Avenue, 2nd Floor<br />Norwalk, CT 06851",
+       "title": "Defined Contribution (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17267"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T16:05:05.889Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mziq7hqm6p2i",
+    "cid": "bafyreibnywckg2gor6lix4gvrn3wvel5gl5no37qavldclfmii6cxozss4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T16:05:05.693100+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 11, 2026 <br /><strong>Event Time: </strong>06:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Hybrid via Zoom and Room 220",
+       "title": "Pension Board of Trustees (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17265"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T16:05:05.887Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mziq7hppj72d",
+    "cid": "bafyreiarovgshjhbybzkeq6oknxyxlus4fe56fqex6ddvnoyqmz7keao5i",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T16:05:05.662337+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 9, 2026 <br /><strong>Event Time: </strong>02:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Hybrid via Zoom and Room 125<br />125 East Avenue, 1st Floor<br />Norwalk, CT 06851",
+       "title": "Blight Hearings",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17255"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T16:05:05.886Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzhyqi264d2y",
+    "cid": "bafyreifjwxqye3aouelhoez3lvyxxz3k2x66wdc6u53bvajpgudro5gyq4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T09:05:06.626808+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Norwalk Democrats gathered at Paella on Tuesday night to watch the results of the 2026 midterm elections, with several local races hanging in the balance. The watch party brought together a packed crowd of people, including Mayor Barbara Smyth and several members of the Norwalk City Council, who gathered to support the [&#8230;]",
+       "title": "Norwalk Democrats celebrate strong showing in state legislative races",
+       "uri": "https://www.norwalkcurrent.com/norwalk-democrats-celebrate-strong-showing-in-state-legislative-races/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T09:05:06.870Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzhvf6jruw2a",
+    "cid": "bafyreibjsi5f3jhksmduqb6upgcucyhuw4dxmcyfxi7zw2v436fl5nftra",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T08:05:06.331387+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 The atmosphere was subdued at the Republican Town Committee&#8217;s election night party at the Norwalk Inn, where about 25 people gathered after polls closed. A brief cheer broke out when Ryan Fazio appeared for a few seconds during a news broadcast on a big screen at the front of the room, but [&#8230;]",
+       "title": "\u2018We live in a blue city:\u2019 Norwalk Republicans vow comeback despite defeats",
+       "uri": "https://www.norwalkcurrent.com/we-live-in-a-blue-city-norwalk-republicans-vow-to-come-back-despite-defeats/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T08:05:06.475Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzhrzwsv5523",
+    "cid": "bafyreiaplt4quaoktlzrwguxrr4ipphzibqsvx7r6zijaavsjonmnrqzku",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T07:05:07.916880+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "This story has been updated. Democratic candidates in Connecticut\u2019s U.S. House races declared victory Tuesday night as the party made widespread gains nationally, likely retaking control of the House, in an election cycle dominated by an unpopular president. Connecticut\u2019s House delegation is slated to remain all blue next year, with four Democratic incumbents holding their [&#8230;]",
+       "title": "Luke Bronin elected to Congress, CT Dems celebrate sweep in U.S. House races",
+       "uri": "https://www.norwalkcurrent.com/luke-bronin-elected-to-congress-ct-dems-celebrate-sweep-in-u-s-house-races/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T07:05:08.279Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzhoom4te327",
+    "cid": "bafyreicfibm4uldm6t5gjyjbmq2rdi3te7ajffbotm3o7xncmbn63drktu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T06:05:06.379390+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "I stood behind an elderly gentleman about to put his ballot into the machine to be counted. He asked the poll worker, \u201cHow does this work?\u201d pointing to the machine. She gave him instructions about how to feed his ballot in. \u201cHow long have they had this?\u201d he asked, clearly skeptical. \u201cAbout a year,\u201d she [&#8230;]",
+       "title": "Letter to the Editor: Trust in Norwalk\u2019s voting process",
+       "uri": "https://www.norwalkcurrent.com/letter-to-the-editor-trust-in-norwalks-voting-process/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T06:05:06.575Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzhhxzcec52g",
+    "cid": "bafyreiclzdidt2uo7xobs6zbmpf2bpgoqy7onfkvvjouiebzacfes4kbii",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T04:05:05.986834+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"683\" src=\"https://ctmirror.org/wp-content/uploads/2026/11/ELECTION-NIGHT-SG-1103-16-1024x683.jpg\" width=\"1024\" /></figure>The Democratic incumbents benefitted from campaigns that prioritized affordability and opposing many policies of President Donald Trump.",
+       "title": "Democrats poised to keep CT\u2019s constitutional offices",
+       "uri": "https://ctmirror.org/2026/11/03/ct-elections-underticket-democrats/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T04:05:06.188Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzhemqogoq2f",
+    "cid": "bafyreigeap2zkuilpj57ose2fbzidttiizd7ssmdvegaegwkq7pyxffypa",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T03:05:06.621832+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Gov. Ned Lamont, a Democrat buoyed by Connecticut\u2019s extraordinary string of budget surpluses after a lost decade of chronic fiscal crisis, won a third term Tuesday over Republican Ryan Fazio in a midterm election dominated by the policies and unpopularity of President Donald Trump. The Associated Press called the race for Lamont shortly after 9:15 [&#8230;]",
+       "title": "Gov. Ned Lamont defeats Ryan Fazio, winning 3rd term",
+       "uri": "https://www.norwalkcurrent.com/gov-ned-lamont-defeats-ryan-fazio-winning-3rd-term/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T03:05:06.876Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzh5w6esbh2i",
+    "cid": "bafyreighk4zjie6xz2nyvy42xvbgtzoip4jmihlwdx3hg2s4r4fevmwzeu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T01:05:06.782648+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"768\" src=\"https://ctmirror.org/wp-content/uploads/2026/11/HARTFORD-SAME-DAY-VOTE-1103-SG-05-1024x768.jpg\" width=\"1024\" /></figure>Connecticut\u2019s yearlong campaign for governor drew to a close today as voters went to the polls in all 169 cities and towns.",
+       "title": "Polls close in Connecticut, and residents await results",
+       "uri": "https://ctmirror.org/2026/11/03/polls-open-today-as-ct-decides-on-governor-general-assembly/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T01:05:06.976Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzh5w66ih62d",
+    "cid": "bafyreicesek4kgnm4dok3kwhq4jrnxamaaczshl73obcxurojbax5mqj5e",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T01:05:06.573363+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Voters across Connecticut are picking the state\u2019s leaders today, and Norwalk Current is tracking the results as they come in. This page shows live numbers for the statewide races, including governor and the other top offices on the ballot. All results are unofficial and will update as more votes are counted. Keep [&#8230;]",
+       "title": "Connecticut Election Night 2026: Live Statewide Results",
+       "uri": "https://www.norwalkcurrent.com/connecticut-election-night-2026-live-statewide-results/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T01:05:06.773Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzh5w65pw22v",
+    "cid": "bafyreihvufubesqwnzurrs3kif5ejeciqfn2ups7lc4czxtsqua7u3v2j4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-04T01:05:06.549771+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Norwalk voters are choosing their state lawmakers today, and Norwalk Current is tracking the results as they come in. This page shows live numbers for the State Senate and House of Representatives races that include Norwalk. Some of these districts also cover neighboring towns, so the vote totals you see may include [&#8230;]",
+       "title": "Connecticut Election Night 2026: Live State Senate and House Results",
+       "uri": "https://www.norwalkcurrent.com/connecticut-election-night-2026-live-state-senate-and-house-results/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-04T01:05:06.770Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzgn5qvmsn27",
+    "cid": "bafyreig3mjhtcq3cjirxdx2hqxdkfpv5a5yjbdnpumprhjaciwwwd44hbu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-03T20:05:07.481429+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"683\" src=\"https://ctmirror.org/wp-content/uploads/2026/11/Election_Nov32026-9-1024x683.jpeg\" width=\"1024\" /></figure>Connecticut\u2019s yearlong campaign for governor draws to a close today as voters go to the polls in all 169 cities and towns.",
+       "title": "Polls open today as CT decides on governor, General Assembly",
+       "uri": "https://ctmirror.org/2026/11/03/polls-open-today-as-ct-decides-on-governor-general-assembly/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-03T20:05:07.673Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzg7qkjr7h2f",
+    "cid": "bafyreifeg4qrkplmbyhb5y6z7bsdfuggw2c3qtjir7dojvc5yoxnxpt7ny",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-03T16:05:05.950780+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>06:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Aquifer Protection Agency (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17264"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-03T16:05:06.092Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzflmvb2eo2i",
+    "cid": "bafyreicjymzy7q3jdwsadm4navkgbyxw374mrhvpoloqghafm5fza4ydtm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-03T10:05:08.142231+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"683\" src=\"https://ctmirror.org/wp-content/uploads/2025/01/2025_0108_SR_SessionFirstDay_503-1024x683.jpg\" width=\"1024\" /></figure>Connecticut\u2019s yearlong campaign for governor draws to a close today as voters go to the polls in all 169 cities and towns.",
+       "title": "Polls open today as CT decides on governor, General Assembly",
+       "uri": "https://ctmirror.org/2026/11/03/polls-open-today-as-ct-decides-on-governor-general-assembly/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-03T10:05:08.371Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mze4ord7fl23",
+    "cid": "bafyreihlkwqn6l3jyl3ert7ulpre5spfnuemyedncsbds3oc4o7kkoj6me",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-02T20:05:05.263546+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 5, 2026 <br /><strong>Event Time: </strong>07:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Economic and Community Development (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17262"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-02T20:05:05.475Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzcuqti6js2g",
+    "cid": "bafyreicrtuhsmnxh34bp43x32ff7snaj72cbpjdtese76cuvhrvi7owbxq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-02T08:10:24.928878+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Election Day is tomorrow, Nov. 3, and Norwalk voters will pick a governor, a member of Congress, a state senator, a state representative, and several other state leaders. Polls will be open from 6 a.m. to 8 p.m. Anyone in line by 8 p.m. can still vote. On Election Day, you must [&#8230;]",
+       "title": "Norwalk Election Day guide: Where to vote, what is on your ballot",
+       "uri": "https://www.norwalkcurrent.com/norwalk-election-day-guide-where-to-vote-what-is-on-your-ballot/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-02T08:10:25.673Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzcr42zuii2v",
+    "cid": "bafyreibfeo6474qmzjo4wyq2dqpkrby5ld25u2eezzeegfyc4wcfbmaymu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-02T07:05:07.008109+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 The turkeys of Norwalk are in trouble, and they need a plan before Thanksgiving! City Recreation &#38; Parks has one: put local students in charge of helping them hide. The department is bringing back its annual Turkey in Disguise art contest for 2026. Students get a plain paper turkey and a big [&#8230;]",
+       "title": "Turkeys need disguises, and Norwalk kids are on the case",
+       "uri": "https://www.norwalkcurrent.com/turkeys-need-disguises-and-norwalk-kids-are-on-the-case/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-02T07:05:07.173Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzcnqro6v62d",
+    "cid": "bafyreie4dh7x42xjypmpnpd7im7au76u63uxixwrj5qaw5x2vtiytscyhq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-02T06:05:06.867469+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Monday: November 2 BIKE/WALK COMMISSION Time: 6 p.m. Location: Zoom The group will plan its World Day of Remembrance event on Nov. 14, including the program, volunteers and supplies, and review how the Walk, Bike &#38; Roll to School event went. Members will also hear a report from their education subcommittee on Board of Education [&#8230;]",
+       "title": "Speak Up: City Meeting for the Week of Nov. 2",
+       "uri": "https://www.norwalkcurrent.com/speak-up-city-meeting-for-the-week-of-nov-2/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-02T06:05:07.170Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mzckfi33dy2d",
+    "cid": "bafyreiawud2qdbxzbmx4smrovtepmzfas5c3exkqcjlqfgbjpjnbcogmye",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-11-02T05:05:06.479929+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Recently on a walk in our neighborhood my wife and I encountered many \u00a0illegal immigrants including one who was shot dead by an ICE officer. Be careful, the others warned us.\u00a0 The real monsters are wearing uniforms and carrying guns and will be watching you when you head to the polls next week.\u00a0\u00a0 But don\u2019t [&#8230;]",
+       "title": "Letter to the Editor: The real monsters",
+       "uri": "https://www.norwalkcurrent.com/letter-to-the-editor-the-real-monsters/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-11-02T05:05:06.676Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4ondkqvf2y",
+    "cid": "bafyreign5fca524fnvi5zfzcvidg37f62ofu7dqjefet6ly5cerng4gmvm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T21:05:06.725869+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<figure><img alt=\"\" class=\"attachment-rss-image-size size-rss-image-size wp-post-image\" height=\"682\" src=\"https://ctmirror.org/wp-content/uploads/2026/08/AP26240664813426.jpg\" width=\"1024\" /></figure>About 17% of CT's active registered voters had cast ballots by Thursday, but residents still have many ways to vote. Here's what to know.",
+       "title": "5 things to know about CT\u2019s 2026 elections if you haven\u2019t voted yet",
+       "uri": "https://ctmirror.org/2026/10/30/5-things-to-know-about-cts-2026-elections-if-you-havent-voted-yet/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T21:05:07.278Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4onc2tpj2d",
+    "cid": "bafyreifwd3cxmxbgtslw6hecb5rmfblp47lnhieejmbocalcmy5vb44ehi",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T21:05:05.156595+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>07:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Recreation, Parks & Cultural Affairs Committee Special Meeting (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17256"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T21:05:05.479Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4onbzzwu27",
+    "cid": "bafyreif437et5jchew6s2h6pltwsiq3bjjm6xasnz3igf4ph773cjxyw3m",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T21:05:05.129889+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>06:45 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Recreation, Parks & Cultural Affairs Committee Public Hearing (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17257"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T21:05:05.477Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4lbz7ore2f",
+    "cid": "bafyreicaf4ad5dlh43hrghqggaef6optgkvfinncbeg72ewu4o33kuh34m",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T20:05:05.551241+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>07:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Recreation, Parks & Cultural Affairs Committee Special Meeting (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17256"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T20:05:05.791Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4lbz6xdz27",
+    "cid": "bafyreiavgawlpjlnhilwnnl6t3y5jvc26mlxbidt4ilywre2bcj45hqb3y",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T20:05:05.528454+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>06:45 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Recreation, Parks & Cultural Affairs Committee Public Hearing (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17257"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T20:05:05.789Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4ba5oxlx27",
+    "cid": "bafyreidedln62ypuh6jk24m5w6avqnobv7kkgdzkjo765m42hg37vm5waq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T17:05:05.724659+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 5, 2026 <br /><strong>Event Time: </strong>07:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Public Safety and General Government Committee Special Meeting",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17254"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T17:05:05.879Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4ba5offs2i",
+    "cid": "bafyreiezwhg2p2gehcqhyrj5pewn62hlpns5u623hbxa2qeapnzlgxmodi",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T17:05:05.706526+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 5, 2026 <br /><strong>Event Time: </strong>02:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Hybrid via Zoom and Room 125<br />125 East Avenue, 1st Floor<br />Norwalk, CT 06851",
+       "title": "Blight Hearings",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17255"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T17:05:05.878Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4ba5nteq23",
+    "cid": "bafyreid3t3e7ujmu4kly733eb4cjzmcxj2k56sf4cog6kfzzcmyuqatnji",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T17:05:05.688255+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>07:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Recreation, Parks & Cultural Affairs Committee Special Meeting",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17256"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T17:05:05.873Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz4ba5mzss2y",
+    "cid": "bafyreigeov435dlypbiptgfryu4dcc5wqdclluqmd3vo43rpsckimaexi4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T17:05:05.659845+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>06:45 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Recreation, Parks & Cultural Affairs Committee Public Hearing",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17257"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T17:05:05.872Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz45uug4r627",
+    "cid": "bafyreib6ithll7kfzfkprth5fngz3xvrpmmcpuqwk7j3dj4b3ncqcahvjq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T16:05:05.670069+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 5, 2026 <br /><strong>Event Time: </strong>07:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Public Safety and General Government Committee Special Meeting",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17254"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T16:05:06.176Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz45uufdhe2i",
+    "cid": "bafyreifdzcpdritncx5vlqfcy7wlwpqp5qbtc2fl45hfxx24lu62fgbtfu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T16:05:05.641427+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 5, 2026 <br /><strong>Event Time: </strong>02:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Hybrid via Zoom and Room 125<br />125 East Avenue, 1st Floor<br />Norwalk, CT 06851",
+       "title": "Blight Hearings",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17255"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T16:05:06.174Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz45uuekuy23",
+    "cid": "bafyreidqrsq5qqcnwz4contfxk5r4ejnzsvd2i2tv3i2uufwdieytiy4sq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T16:05:05.618076+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>07:00 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Recreation, Parks & Cultural Affairs Committee Special Meeting",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17256"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T16:05:06.172Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz45uudofr2d",
+    "cid": "bafyreid6umoeej6xd3j3vyvy24c4lhlappwgi2rm7v7np3gwugmculhfay",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T16:05:05.587731+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 4, 2026 <br /><strong>Event Time: </strong>06:45 PM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Recreation, Parks & Cultural Affairs Committee Public Hearing",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17257"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T16:05:06.170Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz3d2lqdst26",
+    "cid": "bafyreigjvqzcwmlsfc374yjpbkjyjyx4swkstoki3qrvh5wwowxtq77nq4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T08:05:06.865093+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Republican gubernatorial candidate Ryan Fazio gave detailed answers on taxes, electric bills and property tax caps at a town hall at the Norwalk Inn on Thursday. He was less specific on how much his plans would save Norwalk, how common fraud is in state programs and the city&#8217;s own electric system. Fazio, [&#8230;]",
+       "title": "Fazio pitches tax cuts and a property tax cap at Norwalk town hall",
+       "uri": "https://www.norwalkcurrent.com/fazio-pitches-tax-cuts-and-a-property-tax-cap-at-norwalk-town-hall/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T08:05:07.074Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz37wfewup2d",
+    "cid": "bafyreien6or3qjae3ax7ummizoyr5rcjwhuaryqf7y74ih62oiq2denriu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T07:09:04.725203+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Construction of the first phase of the Manresa Wilds, its 28-acre Northern Forest of walking trails and an outdoor classroom, is 40% finished, with an opening targeted for late summer or early fall next year. Workers have been busy on the site for months following the approval of the first phase of [&#8230;]",
+       "title": "Manresa executive director talks next steps as Northern Forest takes shape",
+       "uri": "https://www.norwalkcurrent.com/manresa-executive-director-talks-next-steps-as-northern-forest-takes-shape/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T07:09:04.973Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mz34dyzoft2g",
+    "cid": "bafyreicnoqzpntky2ftz5qkxntvomrveiqdi7hlxfxdhyfbv25xlikgndm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-30T06:05:06.589225+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Friday: October 30, 2026 Jump to: Friday &#124; Saturday &#124; Sunday Perspectives: America at 250 Time:\u00a09 a.m. to 5 p.m. Location:&#160;Center for Contemporary Printmaking, 299 West Avenue, Norwalk, CT 06850 Cost: Free \ud83d\udd1e \u2614 \ud83d\udd01 The Boston Printmakers mark 250 years since American independence with new prints by their members. The artists look at the [&#8230;]",
+       "title": "Norwalk Lineup: Fun things to do the Weekend of Oct. 30",
+       "uri": "https://www.norwalkcurrent.com/norwalk-lineup-fun-things-to-do-the-weekend-of-oct-30/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-30T06:05:06.871Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myznfx5s6q2d",
+    "cid": "bafyreifee3ka7if4crdjfldkek3lpinppwguk2f4swuu7l65djzrfdx75a",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-29T16:05:05.880997+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 2, 2026 <br /><strong>Event Time: </strong>06:30 PM - 11:59 PM<br /><strong>Location:</strong> <br />Zoom",
+       "title": "Board of Estimate & Taxation (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17253"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-29T16:05:06.082Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myzk2nqxwx26",
+    "cid": "bafyreiesoi6zshbljycbldjlo4uonavhjuiyfptqpkwetjhkafodgs57wu",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-29T15:05:05.699050+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> November 2, 2026 <br /><strong>Event Time: </strong>06:30 PM - 11:59 PM<br /><strong>Location:</strong> <br />Zoom",
+       "title": "Board of Estimate & Taxation (CANCELLED)",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17253"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-29T15:05:06.289Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myyslng7kp2g",
+    "cid": "bafyreigquaxb47yfol25mottqqpmsy4hotonmkeucugb3nzsdybcsslfjq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-29T08:05:05.968085+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 A former superintendent of recreation for the city has filed a lawsuit alleging she was fired in retaliation for blowing the whistle on department employees being paid for hours they weren&#8217;t on the job and raising concerns about excessive heat at city-run summer camps. The former official, Elsa Mekonen, is seeking her [&#8230;]",
+       "title": "Former Recreation and Parks official sues city alleging unlawful termination",
+       "uri": "https://www.norwalkcurrent.com/former-recreation-and-parks-official-sues-city-alleging-unlawful-termination/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-29T08:05:06.270Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myyphvu62n2a",
+    "cid": "bafyreibzlrp5ae2vbmeqaascbsrg4ieu4pee5a3ycz4ac5nikigg3manmy",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-29T07:09:19.345030+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 There is hope. There is help. Those six simple words, along with information to connect with support, adorn public spaces throughout the city thanks to an annual $40,000 CDC Comprehensive Suicide Prevention grant first awarded to Norwalk in September 2023 and now entering its fourth year. During that time, the city has [&#8230;]",
+       "title": "CDC grant helping Health Department deliver resources to those in crisis",
+       "uri": "https://www.norwalkcurrent.com/cdc-grant-helping-health-department-deliver-resources-to-those-in-crisis/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-29T07:09:20.373Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myylv3pctl2d",
+    "cid": "bafyreic6hjyqgksdzvfn3bcs5sfpirv53c6qjqwe2zpmxsqi75cn4vkd44",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-29T06:05:06.746340+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 The Norwalk Parking Authority heard an update on its proposed Residential Parking Program Wednesday night, after the first public comment period closed Oct. 9; no changes or decisions were announced. The program would let residents petition for permit-only parking on their streets. Nearly 40 residents sent written comments for Wednesday\u2019s meeting. East [&#8230;]",
+       "title": "Residents split on Norwalk\u2019s proposed permit parking plan",
+       "uri": "https://www.norwalkcurrent.com/residents-split-on-norwalks-proposed-permit-parking-plan/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-29T06:05:07.083Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myxacc22jw2y",
+    "cid": "bafyreidyhfdeq2ycfykkntt4ftn5arcsjsbyh2mdh4idv5x74csafwbj6i",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T17:05:04.957188+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Planning and Zoning Department and Conservation Department will be CLOSING EARLY on Thursday, October 29th, 2026 at 2:30PM.",
+       "title": "Office Closing Early",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2749"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T17:05:05.178Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myx4wzgbkk2y",
+    "cid": "bafyreic2flb52si77odpe66urx3um3auycv5pr3cmf4hres572q5x6flbi",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T16:05:05.591333+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Planning and Zoning Department and Conservation Department will be CLOSING EARLY on Thursday, October 29th, 2026 at 2:30PM.",
+       "title": "Office Closing Early",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2749"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T16:05:05.987Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mywzlprd6t2v",
+    "cid": "bafyreid7ugjz7yblfgsfbmogwfiqqkfnxqu7unyr63ys57iq54px3muxz4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T15:05:05.143669+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Get updates on weekend closures for the East Norwalk Train Station.",
+       "title": "East Norwalk Train Station Weekend Closures",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2748"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T15:05:05.575Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mywzlpqgvd27",
+    "cid": "bafyreigd6lpbadq3if6nubh66wcqlcw2qvohhhzdomu5lc2tliw6f76swm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T15:05:05.114613+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "UPDATE: The 2026 Fall Curbside Yard Waste Collection dates have been pushed back by one week.",
+       "title": "2026 Fall Curbside Yard Waste Collection",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2752"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T15:05:05.570Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mywwagorjq2v",
+    "cid": "bafyreigtujntamm2afk7t46t77e7f7q3rkytjwtbste4ioxe3x34v6j2zq",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T14:05:05.298530+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Get updates on weekend closures for the East Norwalk Train Station.",
+       "title": "East Norwalk Train Station Weekend Closures",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2748"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T14:05:05.477Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mywwagntbs2i",
+    "cid": "bafyreieoztrpewsdefvtgx3bl2ximmhzormuzui6bibvdhewyz3snbkeku",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T14:05:05.267265+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "UPDATE: The 2026 Fall Curbside Yard Waste Collection dates have been pushed back by one week.",
+       "title": "2026 Fall Curbside Yard Waste Collection",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2752"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T14:05:05.475Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3mywc4quy3w23",
+    "cid": "bafyreifpcewhv7baaeohjf2v77plphqsm3crtsn4iqz4nemuzc7m6u7zay",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T08:05:06.935744+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 The City Council on Tuesday approved a nearly $250,000 contract for new lights at Calf Pasture Beach and voted to accept a series of grants targeting those driving under the influence and not wearing seatbelts. The 41 LED fixtures and poles, to be installed around walkways at Calf Pasture Beach and Shady [&#8230;]",
+       "title": "City Council funds Calf Pasture Beach lights, accepts grants targeting impaired driving",
+       "uri": "https://www.norwalkcurrent.com/city-council-funds-calf-pasture-beach-lights-accepts-grants-targeting-impaired-driving/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T08:05:07.171Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myw77gf76g2d",
+    "cid": "bafyreiafpfheq4zu5svjgbnouo4gymna3aplu7qk72y5eugj2ad6iz2dfm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T07:12:55.338640+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Norwalk had staked and ordered 308 trees so far in 2026, below the 1,100-tree annual target in the city\u2019s Tree Master Plan, according to a report at Tuesday\u2019s Urban Forestry Commission meeting. Commission members discussed ways to coordinate planting with city projects and better involve the urban forestry team in reviewing plans. [&#8230;]",
+       "title": "Tree commission to review Norwalk\u2019s master plan as planting falls short",
+       "uri": "https://www.norwalkcurrent.com/tree-commission-to-review-norwalks-master-plan-as-planting-falls-short/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T07:12:56.475Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myw3g5sbin2d",
+    "cid": "bafyreibdwzwmpkyliplhq67defsg7dm3225ka5jhvmen6m2g45w7axjvay",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T06:05:06.273933+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Former ADA Transition Committee Chair Carol Frank resigned from her position due to scheduling conflicts at the committee\u2019s special meeting on Oct. 21. The committee elected Derick Demarche and James McClellan as co-chairs. \u201cI\u2019m disabled myself and I really feel it&#8217;s really important to firmly advocate for people with disabilities so that [&#8230;]",
+       "title": "ADA Transition Committee elects new leadership",
+       "uri": "https://www.norwalkcurrent.com/ada-transition-committee-elects-new-leadership/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T06:05:06.675Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myvy2vbr4h2v",
+    "cid": "bafyreidqvpvx5zoy2ntqxq3rgjsaxsudbbngw2syza5yc3v3mhd7xpe7pm",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-28T05:05:07.019760+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "NORWALK, Conn. \u2014 Ryan Fazio, the Republican and Independent nominee for governor, will hold a Fairfield County town hall in Norwalk on Thursday. The event is set for Oct. 29 at The Norwalk Inn, 99 East Ave. Doors open at 6 p.m. Fazio is 36, a state senator and a former commodities trader. He has [&#8230;]",
+       "title": "Norwalk native Ryan Fazio brings governor campaign town hall to Norwalk Inn Thursday",
+       "uri": "https://www.norwalkcurrent.com/norwalk-native-ryan-fazio-brings-governor-campaign-town-hall-to-norwalk-inn-thursday/"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-28T05:05:07.375Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myv5ajxwch2d",
+    "cid": "bafyreidr6gcx7tzwevfvw6j3ml222jfse24lnjwrq7kpups77x7ntqrege",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-27T21:05:05.462198+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Weekly Community Walks Are Held Along the Norwalk River Valley Trail (NRVT)",
+       "title": "The NHD Encourages Residents to Become NorWALKERS this Fall",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2751"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-27T21:05:05.669Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myuzvau6oo2i",
+    "cid": "bafyreigadl6bdkyyk7777fxmgtvqd2ybpb3cxk7gryeqinstrftuujpbq4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-27T20:05:05.580899+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "Weekly Community Walks Are Held Along the Norwalk River Valley Trail (NRVT)",
+       "title": "The NHD Encourages Residents to Become NorWALKERS this Fall",
+       "uri": "https://www.norwalkct.gov/CivicAlerts.aspx?aid=2751"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-27T20:05:05.894Z"
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:pkxyy5ijalg5eonk7cmwahhk/app.bsky.feed.post/3myumi4ih3q2v",
+    "cid": "bafyreic3hukl55a4n4hnsdnaaa66lu2bahibrh7jokgkfq2ucm4yij2pw4",
+    "author": {
+     "did": "did:plc:pkxyy5ijalg5eonk7cmwahhk",
+     "handle": "norwalkctevents.bsky.social"
+    },
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2026-10-27T16:05:06.147804+00:00",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "$type": "app.bsky.embed.external#external",
+       "description": "<strong>Event date:</strong> October 27, 2026 <br /><strong>Event Time: </strong>08:00 AM - 11:59 PM<br /><strong>Location:</strong> <br />Virtual via Zoom",
+       "title": "Board of Health",
+       "uri": "https://www.norwalkct.gov/Calendar.aspx?EID=17245"
+      }
+     },
+     "facets": [],
+     "langs": [
+      "en"
+     ],
+     "text": ""
+    },
+    "indexedAt": "2026-10-27T16:05:06.572Z"
+   }
+  }
+ ],
+ "cursor": "2026-10-27T16:05:06.147Z"
+}
