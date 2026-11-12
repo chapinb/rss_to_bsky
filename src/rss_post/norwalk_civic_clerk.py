@@ -5,8 +5,8 @@ JavaScript-rendered portal.
 """
 
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
-import pytz
 from libmuni.civicclerk import CivicClerkClient, CivicClerkError, Event
 
 from rss_post.logging_config import get_logger
@@ -15,12 +15,12 @@ logger = get_logger(__name__)
 
 TENANT = "norwalkct"
 PORTAL_URL = f"https://{TENANT}.portal.civicclerk.com"
-EASTERN = pytz.timezone("US/Eastern")
+EASTERN = ZoneInfo("America/New_York")
 
 
 def format_when(starts_at: datetime) -> str:
     """Format a naive local start time, e.g. ``Nov 11, 2026 at 6:00 PM EST``."""
-    local = EASTERN.localize(starts_at)
+    local = starts_at.replace(tzinfo=EASTERN)
     hour = local.hour % 12 or 12
     return (
         f"{local:%b} {local.day}, {local.year} at {hour}:{local:%M %p} {local.tzname()}"

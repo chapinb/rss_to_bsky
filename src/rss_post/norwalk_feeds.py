@@ -1,7 +1,6 @@
 import argparse
 from datetime import UTC, datetime, timedelta
-
-import pytz
+from zoneinfo import ZoneInfo
 
 from rss_post import norwalk_civic_clerk
 from rss_post.bsky import Bluesky, Stdout
@@ -156,7 +155,7 @@ def main():
         client.post(ct_mirror_story)
         total_posts += 1
 
-    current_hour = datetime.now(pytz.timezone("US/Eastern")).hour
+    current_hour = datetime.now(ZoneInfo("America/New_York")).hour
     logger.info(f"Current hour (Eastern): {current_hour}")
     if current_hour == 7:
         logger.info("Processing today's meetings (7 AM hour)...")

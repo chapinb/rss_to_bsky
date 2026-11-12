@@ -2,9 +2,9 @@
 
 import json
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import httpx
-import pytz
 from libmuni.civicclerk import CivicClerkClient
 
 from rss_post.norwalk_civic_clerk import format_when, get_todays_meetings
@@ -13,7 +13,7 @@ from tests.conftest import FIXTURES
 # Response of GET https://norwalkct.api.civicclerk.com/v1/Events for
 # 2026-11-11..2026-11-12, captured 2026-11-12.
 EVENTS = json.loads((FIXTURES / "civicclerk_events.json").read_text("utf-8"))
-NOV_11_7AM = pytz.timezone("US/Eastern").localize(datetime(2026, 11, 11, 7, 0))
+NOV_11_7AM = datetime(2026, 11, 11, 7, 0, tzinfo=ZoneInfo("America/New_York"))
 
 
 def fake_client(handler) -> CivicClerkClient:
