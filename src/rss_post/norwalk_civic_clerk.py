@@ -13,6 +13,7 @@ from libmuni.civicclerk import (
     CivicClerkClient,
     CivicClerkError,
     Event,
+    EventLocation,
     NetworkError,
 )
 
@@ -46,13 +47,27 @@ def format_when(starts_at: datetime) -> str:
     )
 
 
+def format_location(location: EventLocation | None) -> str | None:
+    """A meeting's location on one line.
+
+    For example ``Room 220, 125 East Avenue, Norwalk, CT 06851``; ``address1``
+    is often free text such as ``Virtual via Zoom``.
+    """
+    if location is None:
+        return None
+    region = " ".join(filter(None, [location.state, location.zip_code]))
+    parts = [location.address1, location.address2, location.city, region]
+    return ", ".join(part.strip() for part in parts if part and part.strip()) or None
+
+
 def meeting_from_event(event: Event) -> dict:
     return {
         "title": (event.name or "Meeting").strip(),
         "agenda": f"{PORTAL_URL}/event/{event.id}/files",
         "when": format_when(event.starts_at),
         "starts_at": event.starts_at.replace(tzinfo=EASTERN),
-        "where": event.virtual_meeting_url,
+        "location": format_location(event.location),
+        "zoom": event.virtual_meeting_url,
     }
 
 
@@ -101,5 +116,5 @@ if __name__ == "__main__":
         print(f"Title: {meeting['title']}")
         print(f"Agenda: {meeting['agenda']}")
         print(f"When: {meeting['when']}")
-        print(f"Where: {meeting['where']}")
+        print(f"Zoom: {meeting['zoom']}")
         print()

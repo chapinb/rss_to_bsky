@@ -1,7 +1,8 @@
 import argparse
 import sys
 from collections.abc import Callable
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from rss_post import norwalk_civic_clerk, norwalk_oyster
@@ -17,6 +18,11 @@ logger = get_logger(__name__)
 EASTERN = ZoneInfo("America/New_York")
 # Meetings and events go out from the first successful run at or after this hour (Eastern).
 MEETINGS_HOUR = 7
+# The city's circular emblem ("The City of Norwalk, Est. 1651, Inc. 1913", from
+# the norwalkct.gov homepage SVG), centered on a 1200x628 card so Bluesky's
+# ~1.91:1 thumbnail crop keeps the ring text. Used for meeting cards: the
+# CivicClerk portal is rendered by JavaScript and has no og:image of its own.
+CITY_SEAL = Path(__file__).parent / "assets" / "city_seal.png"
 
 
 def published_at(item) -> datetime | None:
@@ -48,6 +54,26 @@ def card_post(item) -> Post:
             thumb_url=image_from_item(item),
         )
     )
+
+
+def meeting_post(meeting: dict, day: date) -> Post:
+    """The meeting's name and time, a card for its agenda, and its Zoom link.
+
+    Keyed by the agenda link and ``day``, so it goes out at most once a day.
+    """
+    details = " · ".join(filter(None, [meeting["when"], meeting["location"]]))
+    post = (
+        Post()
+        .with_headline(f"{meeting['title']}\n{meeting['when']}")
+        .with_embed_card(
+            meeting["agenda"], meeting["title"], details, thumb_url=CITY_SEAL
+        )
+        # After the card, which keys the post by its link but not the day.
+        .keyed_by(meeting["agenda"], day)
+    )
+    if meeting["zoom"]:
+        post.with_link("\nJoin on Zoom", meeting["zoom"])
+    return post
 
 
 class NorwalkFeeds:
@@ -102,17 +128,7 @@ class NorwalkFeeds:
             if meeting["starts_at"] < now:
                 logger.info(f"Skipping meeting that has started: {meeting['title']}")
                 continue
-            post = (
-                Post()
-                .from_feed("City of Norwalk CT Meetings")
-                .with_title(meeting["title"])
-                .with_description(meeting["when"])
-                .with_link("Agenda\n", meeting["agenda"])
-                .keyed_by(meeting["agenda"], now.astimezone(EASTERN).date())
-            )
-            if meeting["where"]:
-                post.with_link("Zoom Link", meeting["where"])
-            posts.append(post)
+            posts.append(meeting_post(meeting, now.astimezone(EASTERN).date()))
         logger.info(f"Generated {len(posts)} meeting posts")
         return posts
 

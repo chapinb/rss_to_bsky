@@ -58,10 +58,18 @@ def test_parses_meetings():
         "agenda": "https://norwalkct.portal.civicclerk.com/event/1122/files",
         "when": "Nov 11, 2026 at 6:00 PM EST",
         "starts_at": datetime(2026, 11, 11, 18, 0, tzinfo=EASTERN),
-        "where": None,
+        "location": "Hybrid via Zoom and Room 220",
+        "zoom": None,
     }
+    defined = next(m for m in meetings if m["title"].startswith("Defined"))
+    assert defined["location"] == (
+        "Hybrid via Zoom and Room 220, 125 East Avenue, 2nd Floor, Norwalk, CT 06851"
+    )
+    sustainability = next(m for m in meetings if "Sustainability" in m["title"])
+    assert sustainability["location"] is None
     finance = next(m for m in meetings if m["title"] == "Finance & Claims Committee")
-    assert finance["where"] == "https://norwalkct-org.zoom.us/j/83292194046"
+    assert finance["location"] == "Virtual via Zoom"
+    assert finance["zoom"] == "https://norwalkct-org.zoom.us/j/83292194046"
 
 
 @pytest.fixture(autouse=True)

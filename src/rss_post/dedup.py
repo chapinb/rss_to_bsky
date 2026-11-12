@@ -73,14 +73,18 @@ def daily_key(key: str, day: date) -> str:
 def keys_in_record(record, posted: datetime | None = None) -> set[str]:
     """Keys of what a post record points at: its link card and any links in its text.
 
-    Links in the text also get a daily key for the Eastern day the record was
-    posted (``posted``), using the text to tell whether it is a cancellation.
+    Each link also gets a daily key for the Eastern day the record was posted
+    (``posted``), using the card's title, or for links in the text the text,
+    to tell whether it is a cancellation.
     """
     keys = set()
+    day = posted.astimezone(EASTERN).date() if posted is not None else None
     external = getattr(getattr(record, "embed", None), "external", None)
     if external is not None:
-        keys.add(post_key(external.uri, external.title or ""))
-    day = posted.astimezone(EASTERN).date() if posted is not None else None
+        key = post_key(external.uri, external.title or "")
+        keys.add(key)
+        if day is not None:
+            keys.add(daily_key(key, day))
     for facet in getattr(record, "facets", None) or []:
         for feature in facet.features:
             uri = getattr(feature, "uri", None)

@@ -1,5 +1,6 @@
 import re
 from datetime import date
+from pathlib import Path
 
 from atproto import client_utils, models
 from bs4 import BeautifulSoup
@@ -24,9 +25,9 @@ class Post:
         self.text_builder = client_utils.TextBuilder()
         self.post_length = 0
         self.embed = None
-        # Image the feed supplied for the card; adapters fall back to the
-        # linked page's og:image when this is None.
-        self.thumb_url: str | None = None
+        # Image the feed supplied for the card (a URL, or a packaged image
+        # file); adapters fall back to the linked page's og:image when None.
+        self.thumb_url: str | Path | None = None
         # The item this post is about, used to skip items already posted.
         self.link: str | None = None
         self.title: str | None = None
@@ -93,7 +94,7 @@ class Post:
         url: str,
         title: str,
         description: str = "",
-        thumb_url: str | None = None,
+        thumb_url: str | Path | None = None,
     ):
         """Add an embed card with external link to the post"""
         self.embed = models.AppBskyEmbedExternal.Main(

@@ -65,7 +65,9 @@ def test_published_keys_reads_cards_from_saved_history():
         client_returning(feed), "did:plc:x", since=datetime(2026, 10, 1, tzinfo=UTC)
     )
 
-    assert len(links) == 83
+    # Each card's link, and the link as posted that (Eastern) day, for meetings.
+    assert len({link for link in links if " on " not in link}) == 83
+    assert len(links) == 168
     assert normalize_link("https://www.norwalkct.gov/Calendar.aspx?EID=17255") in links
 
 

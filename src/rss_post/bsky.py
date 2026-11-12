@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any
 
 from atproto import Client, client_utils, models
@@ -10,7 +11,7 @@ from rss_post.logging_config import get_logger
 logger = get_logger(__name__)
 
 
-def _thumbnail_url(post_obj: Any) -> str | None:
+def _thumbnail_url(post_obj: Any) -> str | Path | None:
     embed = getattr(post_obj, "embed", None)
     if embed is None:
         return None
