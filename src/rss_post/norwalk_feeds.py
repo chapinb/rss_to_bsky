@@ -11,6 +11,7 @@ import httpx
 
 from rss_post import (
     lookahead,
+    minutes_digest,
     norwalk_boe,
     norwalk_city_calendar,
     norwalk_civic_clerk,
@@ -88,6 +89,16 @@ You summarize City of Norwalk, Connecticut public meeting minutes for residents.
 From the minutes the user sends, write 2 or 3 short bullet points on what the \
 meeting decided or acted on (motions and how they were voted, approvals, \
 denials and recommendations), most important first.
+
+Most important means most impact on residents: zoning changes and rezonings, \
+large developments, new rules or policies, budgets and major spending come \
+before single-property approvals (a house, a pool, a deck) and routine \
+contracts. Items continued or tabled to a later meeting are not decisions; \
+mention them only if nothing was decided.
+
+Long minutes may arrive shortened: "…" marks text left out, \
+"[conditions omitted]" marks a resolution's conditions left out, and \
+"Vote: 8-0, 1 abstaining." is the recorded vote (in favor-opposed).
 
 Rules:
 - Use only what the minutes say. Do not guess reasons, positions or effects, \
@@ -540,7 +551,13 @@ class NorwalkFeeds:
                 f"minutes of {title}: {preview}…"
             )
             return None
-        summary = summarize.summarize(text, MINUTES_SUMMARY_INSTRUCTIONS)
+        condensed = minutes_digest.condense(text)
+        if len(condensed) < len(text):
+            logger.info(
+                f"Minutes of {title} cut to their decisions: "
+                f"{len(text)} -> {len(condensed)} chars"
+            )
+        summary = summarize.summarize(condensed, MINUTES_SUMMARY_INSTRUCTIONS)
         summary = summary and fit_bullets(summary, MINUTES_SUMMARY_MAX_CHARS)
         if summary is None:
             logger.info(f"No minutes summary for {title}")
