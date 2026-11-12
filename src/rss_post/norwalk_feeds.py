@@ -1,4 +1,6 @@
 import argparse
+import sys
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
@@ -11,8 +13,20 @@ from rss_post.read_rss import read_rss_items
 logger = get_logger(__name__)
 
 
-def posting_filter(item_pub_date: str, posting_frequency: timedelta) -> bool:
-    pub_date = datetime.strptime(item_pub_date, "%a, %d %b %Y %H:%M:%S %z")
+def published_at(item) -> datetime | None:
+    """The item's publish time in UTC, as normalized by feedparser."""
+    parsed = item.get("published_parsed") or item.get("updated_parsed")
+    if parsed is None:
+        return None
+    return datetime(*parsed[:6], tzinfo=UTC)
+
+
+def posting_filter(item, posting_frequency: timedelta) -> bool:
+    """Whether a feed item was published within the posting window."""
+    pub_date = published_at(item)
+    if pub_date is None:
+        logger.warning(f"Skipping item without a usable date: {item.get('link')}")
+        return False
     return datetime.now(UTC) - pub_date <= posting_frequency
 
 
@@ -27,9 +41,9 @@ class NorwalkFeeds:
         logger.info(f"Processing feed with embed card: {feed_name} from {feed_url}")
         items = read_rss_items(feed_url)
         posts = [
-            Post().with_embed_card(item.link, item.title, item.description)
+            Post().with_embed_card(item.link, item.title, item.get("description", ""))
             for item in items
-            if posting_filter(item.published, self.posting_frequency)
+            if posting_filter(item, self.posting_frequency)
         ]
         logger.info(f"Generated {len(posts)} posts from {feed_name}")
         return posts
@@ -76,18 +90,19 @@ class NorwalkFeeds:
         items = read_rss_items(feed_url)
         norwalk_items = []
         for item in items:
-            if not posting_filter(item.published, self.posting_frequency):
+            if not posting_filter(item, self.posting_frequency):
                 continue
-            contents = "\n".join(content.value for content in item.content)
-            if not (
-                "norwalk" in item.title.lower()
-                or "norwalk" in item.description.lower()
-                or "norwalk" in contents.lower()
-            ):
+            text = "\n".join(
+                [item.get("title", ""), item.get("description", "")]
+                + [content.value for content in item.get("content", [])]
+            )
+            if "norwalk" not in text.lower():
                 continue
             logger.debug(f"Found Norwalk mention in CT Mirror story: {item.title}")
             norwalk_items.append(
-                Post().with_embed_card(item.link, item.title, item.description)
+                Post().with_embed_card(
+                    item.link, item.title, item.get("description", "")
+                )
             )
         logger.info(
             f"Generated {len(norwalk_items)} CT Mirror posts with Norwalk mentions"
@@ -132,42 +147,57 @@ def main():
         client = Bluesky()
         logger.info("Using Bluesky client for posting")
 
-    total_posts = 0
-
-    logger.info("Processing news flashes...")
-    news = norwalk_feeds.get_news_flashes()
-    for news_flash in news:
-        client.post(news_flash)
-        total_posts += 1
-
-    logger.info("Processing committee events...")
-    for committee_event in norwalk_feeds.get_committee_events():
-        client.post(committee_event)
-        total_posts += 1
-
-    logger.info("Processing Nancy on Norwalk stories...")
-    for nancy_on_norwalk_story in norwalk_feeds.get_nancy_on_norwalk_stories():
-        client.post(nancy_on_norwalk_story)
-        total_posts += 1
-
-    logger.info("Processing CT Mirror stories...")
-    for ct_mirror_story in norwalk_feeds.get_ct_mirror_stories():
-        client.post(ct_mirror_story)
-        total_posts += 1
-
+    sources: list[tuple[str, Callable[[], list[Post]]]] = [
+        ("news flashes", norwalk_feeds.get_news_flashes),
+        ("committee events", norwalk_feeds.get_committee_events),
+        ("Nancy on Norwalk stories", norwalk_feeds.get_nancy_on_norwalk_stories),
+        ("CT Mirror stories", norwalk_feeds.get_ct_mirror_stories),
+    ]
     current_hour = datetime.now(ZoneInfo("America/New_York")).hour
     logger.info(f"Current hour (Eastern): {current_hour}")
     if current_hour == 7:
-        logger.info("Processing today's meetings (7 AM hour)...")
-        for meeting in norwalk_feeds.get_todays_norwalk_meetings():
-            client.post(meeting)
-            total_posts += 1
+        sources.append(("today's meetings", norwalk_feeds.get_todays_norwalk_meetings))
     else:
         logger.info("Skipping meetings (not 7 AM hour)")
 
+    total_posts, failures = publish(client, sources)
+    if failures:
+        logger.error(
+            f"Completed with {failures} failure(s). Total posts processed: {total_posts}"
+        )
+        sys.exit(1)
     logger.info(
         f"Application completed successfully. Total posts processed: {total_posts}"
     )
+
+
+def publish(client, sources) -> tuple[int, int]:
+    """Post everything from each source, isolating failures.
+
+    A source that raises, or a post that fails to send, is logged and
+    skipped so the remaining sources and posts still go out.
+
+    Returns:
+        The number of posts sent and the number of failures.
+    """
+    total_posts = failures = 0
+    for name, get_posts in sources:
+        logger.info(f"Processing {name}...")
+        try:
+            posts = get_posts()
+        except Exception:
+            logger.exception(f"Failed to read {name}")
+            failures += 1
+            continue
+        for post in posts:
+            try:
+                client.post(post)
+            except Exception:
+                logger.exception(f"Failed to send a post from {name}")
+                failures += 1
+                continue
+            total_posts += 1
+    return total_posts, failures
 
 
 if __name__ == "__main__":
