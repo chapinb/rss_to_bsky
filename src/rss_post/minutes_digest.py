@@ -131,7 +131,9 @@ def shorten_motion(motion: str) -> str:
     if conditions := CONDITIONS.search(motion):
         motion = motion[: conditions.start()].rstrip(" ,;:") + " [conditions omitted]"
     if len(motion) > MOTION_HEAD_CHARS + MOTION_TAIL_CHARS:
-        outcomes = [m for m in OUTCOME.finditer(motion) if m.start() > MOTION_HEAD_CHARS]
+        outcomes = [
+            m for m in OUTCOME.finditer(motion) if m.start() > MOTION_HEAD_CHARS
+        ]
         end = outcomes[-1].end() if outcomes else len(motion)
         start = max(MOTION_HEAD_CHARS, end - MOTION_TAIL_CHARS)
         tail = motion[start : end + 30].split(" ", 1)[-1]

@@ -50,7 +50,9 @@ def test_every_motion_is_kept_with_its_outcome_and_vote():
                             "Commission meeting on November 4, 2026. Vote: 8-0.")  # fmt: skip
     westmere = kept[1]
     assert "1 Westmere Avenue" in westmere
-    assert westmere.endswith("be APPROVED [conditions omitted] Vote: 8-0, 1 abstaining.")
+    assert westmere.endswith(
+        "be APPROVED [conditions omitted] Vote: 8-0, 1 abstaining."
+    )
     rezoning, master_plan = kept[3], kept[4]
     assert "rezone 125-acres of Manresa Island" in rezoning
     assert rezoning.endswith("be APPROVED [conditions omitted] Vote: 9-0.")
@@ -87,14 +89,18 @@ def test_a_motion_can_start_mid_line():
 def test_a_hearing_keeps_the_start_and_end_of_its_discussion():
     condensed = condense(LONG[2943])
     assert "Atty Liz Suchy began the presentation" in condensed
-    assert "WHEREAS, the Commission closed the public hearing on February 4" in condensed
+    assert (
+        "WHEREAS, the Commission closed the public hearing on February 4" in condensed
+    )
 
 
 def test_motions_without_a_vote_record_end_at_their_sentence():
     condensed = condense(LONG[16373])
     assert motions(condensed) == [
-        "** MR. DELLINGER MADE A MOTION TO ACCEPT THE OCTOBER 14, 2026 REGULAR "
-        "MEETING MINUTES.",
+        (
+            "** MR. DELLINGER MADE A MOTION TO ACCEPT THE OCTOBER 14, 2026 REGULAR "
+            "MEETING MINUTES."
+        ),
         "** MOTION PASSED (MR. LOPEZ ABSTAINED).",
         "** MR. DELLINGER MADE A MOTION TO ADJOURN.",
         "** MOTION PASSED UNANIMOUSLY.",
