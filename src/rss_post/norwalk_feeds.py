@@ -17,6 +17,10 @@ logger = get_logger(__name__)
 EASTERN = ZoneInfo("America/New_York")
 # Meetings and events go out from the first successful run at or after this hour (Eastern).
 MEETINGS_HOUR = 7
+# The city's logo from the norwalkct.gov site header (484x84 PNG, ~12 KB), for
+# meeting cards: the CivicClerk portal is rendered by JavaScript and has no
+# og:image of its own.
+CITY_LOGO_URL = "https://www.norwalkct.gov/ImageRepository/Document?documentID=39211"
 
 
 def published_at(item) -> datetime | None:
@@ -59,7 +63,9 @@ def meeting_post(meeting: dict, day: date) -> Post:
     post = (
         Post()
         .with_headline(f"{meeting['title']}\n{meeting['when']}")
-        .with_embed_card(meeting["agenda"], meeting["title"], details)
+        .with_embed_card(
+            meeting["agenda"], meeting["title"], details, thumb_url=CITY_LOGO_URL
+        )
         # After the card, which keys the post by its link but not the day.
         .keyed_by(meeting["agenda"], day)
     )
