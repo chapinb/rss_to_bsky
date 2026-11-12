@@ -503,7 +503,10 @@ def test_long_minutes_are_cut_before_asking():
     runs.run(datetime(2026, 11, 6, 12, tzinfo=EASTERN), summaries=True)
     [request] = runs.llm.requests
     sent = json.loads(request.content)["messages"][1]["content"]
-    assert len(sent) == summarize.MAX_INPUT_CHARS
+    opening, closing = summarize.untrusted_tags(summarize.untrusted_nonce())
+    assert sent.startswith(f"{opening}\n")
+    assert sent.endswith(f"\n{closing}")
+    assert len(sent) - len(opening) - len(closing) - 2 == summarize.MAX_INPUT_CHARS
 
 
 def test_bad_llm_key_skips_minutes_summaries_without_failing_the_run():

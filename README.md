@@ -60,7 +60,17 @@ the defaults use Google Gemini:
 LLM_API_KEY=<API key>                # unset: no summaries, nothing else changes
 LLM_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
 LLM_MODEL=gemini-3.5-flash-lite
+LLM_UNTRUSTED_NONCE=<random string>  # optional; see below
 ```
+
+Agendas and minutes come from outside the bot and could contain text aimed at
+the LLM (prompt injection). They are sent wrapped in
+`<untrusted_{nonce}>…</untrusted_{nonce}>` tags, and the instructions tell the
+model that everything inside is data, never instructions. Copies of the tags
+inside the text are removed so it can't close the wrapper early, and an answer
+that repeats the nonce is discarded. Set `LLM_UNTRUSTED_NONCE` to 8–64 letters,
+digits, `_` or `-` (e.g. `openssl rand -hex 16`) and keep it secret; unset or
+invalid, a random nonce is made for each run.
 
 The LLM is asked once per meeting post, i.e. normally once per meeting (under
 the post the day before), and never for agendas that aren't published yet or
