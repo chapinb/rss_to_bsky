@@ -1,81 +1,69 @@
-from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
-from bs4 import BeautifulSoup
+"""Today's and tomorrow's City of Norwalk meetings from CivicClerk.
+
+Uses the public CivicClerk API via ``libmuni`` rather than scraping the
+JavaScript-rendered portal.
+"""
+
 from datetime import datetime, timedelta
-import time
+from zoneinfo import ZoneInfo
+
+from libmuni.civicclerk import CivicClerkClient, CivicClerkError, Event
 
 from rss_post.logging_config import get_logger
 
 logger = get_logger(__name__)
 
+TENANT = "norwalkct"
+PORTAL_URL = f"https://{TENANT}.portal.civicclerk.com"
+EASTERN = ZoneInfo("America/New_York")
 
-def get_todays_meetings():
-    url = "https://norwalkct.portal.civicclerk.com/"
-    logger.info(f"Reading meetings from: {url}")
 
+def format_when(starts_at: datetime) -> str:
+    """Format a naive local start time, e.g. ``Nov 11, 2026 at 6:00 PM EST``."""
+    local = starts_at.replace(tzinfo=EASTERN)
+    hour = local.hour % 12 or 12
+    return (
+        f"{local:%b} {local.day}, {local.year} at {hour}:{local:%M %p} {local.tzname()}"
+    )
+
+
+def meeting_from_event(event: Event) -> dict:
+    return {
+        "title": (event.name or "Meeting").strip(),
+        "agenda": f"{PORTAL_URL}/event/{event.id}/files",
+        "when": format_when(event.starts_at),
+        "where": event.virtual_meeting_url,
+    }
+
+
+def get_todays_meetings(
+    now: datetime | None = None, client: CivicClerkClient | None = None
+) -> list[dict]:
+    """Return meetings scheduled for today or tomorrow (US/Eastern)."""
+    now = now or datetime.now(EASTERN)
+    today, tomorrow = now.date(), (now + timedelta(days=1)).date()
+    logger.info(f"Reading {TENANT} meetings for {today} and {tomorrow}")
+
+    owns_client = client is None
+    client = client or CivicClerkClient(TENANT)
     try:
-        # Set up Selenium WebDriver for Firefox
-        firefox_options = Options()
-        firefox_options.add_argument("--headless")  # Run in headless mode
-        service = Service(
-            "/usr/local/bin/geckodriver"
-        )  # Update with the path to your geckodriver
-        driver = webdriver.Firefox(service=service, options=firefox_options)
-        logger.debug("Firefox WebDriver initialized")
-
-        driver.get(url)
-        logger.info("Loading page...")
-        time.sleep(5)  # Wait for JavaScript to load the content
-
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-        driver.quit()
-        logger.debug("Page loaded and WebDriver closed")
-
-        now = datetime.now()
-        today = now.strftime("%b %d, %Y")
-        tomorrow = (now + timedelta(days=1)).strftime("%b %d, %Y")
-        logger.info(f"Looking for meetings on {today} or {tomorrow}")
-        meetings = []
-
-        meeting_elements = soup.find_all("li", class_="cpp-MuiListItem-container")
-        logger.debug(f"Found {len(meeting_elements)} meeting elements")
-
-        for meeting in meeting_elements:
-            try:
-                date = meeting.find("h2").text.strip().replace("\n", " ")
-                if today in date or tomorrow in date:
-                    title = meeting.find("h3").text.strip()
-                    agenda = url.strip("/") + meeting.find("a")["href"]
-                    meeting_time = meeting.find("p").text.strip()
-                    meeting_location_tag = meeting.find("a", title="Go To Event Media")
-                    meeting_location = (
-                        meeting_location_tag["href"] if meeting_location_tag else None
-                    )
-
-                    meeting_info = {
-                        "title": title,
-                        "agenda": agenda,
-                        "when": date + " at " + meeting_time,
-                        "where": meeting_location,
-                    }
-                    meetings.append(meeting_info)
-                    logger.info(f"Found meeting: {title} on {date}")
-            except Exception as e:
-                logger.warning(f"Failed to parse meeting element: {e}")
-                continue
-
-        logger.info(f"Successfully read {len(meetings)} meetings")
-        return meetings
-
-    except Exception as e:
+        events = list(client.iter_events(from_date=today, to_date=tomorrow))
+    except CivicClerkError as e:
         logger.error(f"Failed to read meetings: {e}")
         return []
+    finally:
+        if owns_client:
+            client.close()
+
+    meetings = [meeting_from_event(event) for event in events]
+    for meeting in meetings:
+        logger.info(f"Found meeting: {meeting['title']} on {meeting['when']}")
+    logger.info(f"Successfully read {len(meetings)} meetings")
+    return meetings
 
 
 if __name__ == "__main__":
-    meetings = get_todays_meetings()
-    for meeting in meetings:
+    for meeting in get_todays_meetings():
         print(f"Title: {meeting['title']}")
         print(f"Agenda: {meeting['agenda']}")
         print(f"When: {meeting['when']}")

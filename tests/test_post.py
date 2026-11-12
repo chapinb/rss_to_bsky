@@ -1,5 +1,7 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
+
+import feedparser
 from atproto import client_utils
 
 from rss_post.norwalk_feeds import posting_filter
@@ -38,11 +40,37 @@ def test_truncate_description():
     assert post.post_length == 13
 
 
-@patch("rss_post.norwalk_feeds.datetime")
-def test_posting_filter(mock_datetime):
-    mock_datetime.now.return_value = datetime(2024, 11, 28, 9, 7, 54, 0, timezone.utc)
-    mock_datetime.strptime = datetime.strptime
-    pub_date = "Fri, 22 Nov 2024 09:07:54 -0500"
-    frequency = timedelta(days=7)
+def parse_item(item_xml: str):
+    feed = f"""<?xml version="1.0"?><rss version="2.0"><channel>
+        <title>t</title><item><link>https://example.com/a</link>{item_xml}</item>
+        </channel></rss>"""
+    return feedparser.parse(feed).entries[0]
 
-    assert posting_filter(pub_date, frequency) is True
+
+def item_published(published: str):
+    return parse_item(f"<pubDate>{published}</pubDate>")
+
+
+@patch("rss_post.norwalk_feeds.datetime", wraps=datetime)
+def test_posting_filter(mock_datetime):
+    mock_datetime.now.return_value = datetime(2024, 11, 28, 9, 7, 54, 0, UTC)
+    item = item_published("Fri, 22 Nov 2024 09:07:54 -0500")
+
+    assert posting_filter(item, timedelta(days=7)) is True
+    assert posting_filter(item, timedelta(days=5)) is False
+
+
+def test_posting_filter_skips_items_without_a_date():
+    item = parse_item("")
+    assert posting_filter(item, timedelta(days=7)) is False
+
+
+@patch("rss_post.norwalk_feeds.datetime", wraps=datetime)
+def test_posting_filter_falls_back_to_updated_date(mock_datetime):
+    mock_datetime.now.return_value = datetime(2024, 11, 28, 0, 0, 0, 0, UTC)
+    feed = """<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom">
+        <title>t</title><entry><title>e</title>
+        <updated>2024-11-27T12:00:00Z</updated></entry></feed>"""
+    item = feedparser.parse(feed).entries[0]
+    assert "published_parsed" not in item
+    assert posting_filter(item, timedelta(days=1)) is True

@@ -33,9 +33,9 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **Feed Processing**: `NorwalkFeeds` class handles multiple RSS sources:
 - City of Norwalk calendar events and news flashes  
-- Nancy on Norwalk blog posts
+- Norwalk Current stories (formerly Nancy on Norwalk)
 - CT Mirror stories (filtered for Norwalk mentions)
-- City meeting schedules via web scraping
+- City meeting schedules via the CivicClerk API (libmuni)
 
 **Post Building**: `src/rss_post/post.py:Post` - Builder pattern for constructing social media posts with length constraints (250 chars), HTML stripping, and link formatting
 
@@ -45,7 +45,7 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **RSS Processing**: `src/rss_post/read_rss.py` - Thin wrapper around feedparser library
 
-**Web Scraping**: `src/rss_post/norwalk_civic_clerk.py` - Selenium-based scraper for meeting information
+**Meetings**: `src/rss_post/norwalk_civic_clerk.py` - Today's meetings from the CivicClerk API via `libmuni`
 
 **Logging**: `src/rss_post/logging_config.py` - Centralized logging configuration with structured output
 
@@ -63,4 +63,4 @@ Environment variables in `.env` file (template at `template.env`):
 - Schedule-aware posting (meetings only posted at 7 AM)
 - Adapter pattern for output destinations (Bluesky vs console)
 - Comprehensive logging throughout all components with configurable levels
-- Error handling and graceful degradation in RSS parsing and web scraping
+- Per-source and per-post error isolation; the run exits 1 if anything failed
