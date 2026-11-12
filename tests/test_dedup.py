@@ -115,7 +115,8 @@ def test_published_keys_includes_links_in_text_and_skips_reposts():
         client_returning(page), "did:plc:x", since=datetime(2026, 11, 1, tzinfo=UTC)
     )
 
-    assert links == {"https://a.example/1"}
+    # The link, and the link as posted on Nov 12 (Eastern), for meetings.
+    assert links == {"https://a.example/1", "https://a.example/1 on 2026-11-12"}
 
 
 def replay_saved_history():

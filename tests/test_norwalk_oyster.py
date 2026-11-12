@@ -156,3 +156,26 @@ def test_network_error_then_success(no_sleep):
         side_effect=[httpx.ConnectError("down"), ok],
     ):
         assert norwalk_oyster.fetch(url) is ok
+
+
+def test_events_that_have_started_are_skipped(oyster_site):
+    # The Pro Tour starts at 10:00 AM; the orchestra at 7:30 PM.
+    now = datetime(2026, 11, 7, 11, 0, tzinfo=EST)
+    posts = NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_oyster_events(now)
+
+    assert [p.embed.external.title for p in posts] == [
+        "American Chamber Orchestra - 2026-2027 Season Opener"
+    ]
+
+
+def test_event_times_without_am_pm_are_not_treated_as_started():
+    event = norwalk_oyster.Event(
+        name="Talk", url="https://example.org", day=date(2026, 11, 7), time="7:00"
+    )
+    assert event.starts_at is None
+    timed = norwalk_oyster.Event(
+        name="Talk", url="https://example.org", day=date(2026, 11, 7), time="7:00 PM"
+    )
+    assert timed.starts_at == datetime(
+        2026, 11, 7, 19, 0, tzinfo=norwalk_oyster.EASTERN
+    )

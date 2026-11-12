@@ -9,12 +9,17 @@ account has posted recently and skips any item whose link is among them.
 The one change worth a second post is a cancellation: an item is keyed by its
 link and whether its title says it is cancelled, so "Board Meeting" and later
 "Board Meeting (CANCELLED)" both go out, but each only once.
+
+Meetings are posted the day before and again on the day, so a meeting post is
+keyed by its agenda link and the (Eastern) day it was posted: it goes out at
+most once a day, however many runs see it.
 """
 
 import re
 from collections.abc import Iterable
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from zoneinfo import ZoneInfo
 
 from atproto import Client
 
@@ -28,6 +33,8 @@ PAGE_SIZE = 100
 MAX_PAGES = 20
 
 PUBLIC_APPVIEW = "https://public.api.bsky.app/xrpc"
+
+EASTERN = ZoneInfo("America/New_York")
 
 CANCELLED = re.compile(r"\bcancell?ed\b", re.IGNORECASE)
 
@@ -58,17 +65,29 @@ def post_key(link: str, title: str = "") -> str:
     return f"{key} cancelled" if CANCELLED.search(title) else key
 
 
-def keys_in_record(record) -> set[str]:
-    """Keys of what a post record points at: its link card and any links in its text."""
+def daily_key(key: str, day: date) -> str:
+    """``key`` for a post that may go out once per day."""
+    return f"{key} on {day.isoformat()}"
+
+
+def keys_in_record(record, posted: datetime | None = None) -> set[str]:
+    """Keys of what a post record points at: its link card and any links in its text.
+
+    Links in the text also get a daily key for the Eastern day the record was
+    posted (``posted``), using the text to tell whether it is a cancellation.
+    """
     keys = set()
     external = getattr(getattr(record, "embed", None), "external", None)
     if external is not None:
         keys.add(post_key(external.uri, external.title or ""))
+    day = posted.astimezone(EASTERN).date() if posted is not None else None
     for facet in getattr(record, "facets", None) or []:
         for feature in facet.features:
             uri = getattr(feature, "uri", None)
             if uri:
                 keys.add(post_key(uri))
+                if day is not None:
+                    keys.add(daily_key(post_key(uri, record.text or ""), day))
     return keys
 
 
@@ -100,7 +119,7 @@ def published_keys(
                 reached_since = True
                 continue
             posts += 1
-            keys.update(keys_in_record(record))
+            keys.update(keys_in_record(record, created_at))
         cursor = response.cursor
         if reached_since or not cursor or not response.feed:
             break
@@ -127,8 +146,13 @@ class SeenPosts:
         if link is None:
             return None
         embed = getattr(post, "embed", None)
-        title = embed.external.title if embed is not None else ""
-        return post_key(link, title or "")
+        if embed is not None:
+            title = embed.external.title
+        else:
+            title = getattr(post, "title", None)
+        key = post_key(link, title or "")
+        day = getattr(post, "day", None)
+        return daily_key(key, day) if day is not None else key
 
     def is_new(self, post) -> bool:
         key = self.key(post)

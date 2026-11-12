@@ -66,8 +66,9 @@ Done phases note what actually shipped where it differs from the plan.
   real run would post.
 - If the history can't be read, the run posts nothing and exits 1 rather
   than risk reposting.
-- Meeting posts (no link card) are not deduplicated, on purpose: tomorrow's
-  meetings are posted the day before and again on the day.
+- Meeting posts are keyed by agenda link plus the Eastern day they were
+  posted, so tomorrow's meetings go out the day before and again on the day,
+  but at most once a day (plus once more if cancelled).
 - Replaying the bot's real Oct 27 – Nov 12 history (`tests/fixtures/
   bsky_author_feed.json`) keeps 83 of 100 posts: 81 distinct links plus the
   cancellations of EID=17256 and 17257, dropping the 17 repeats.
@@ -95,6 +96,9 @@ Done phases note what actually shipped where it differs from the plan.
   retried (norwalkct.gov resets ~1 in 6 connections).
 - CivicClerk network errors, 429s and 5xx are retried too; if meetings still
   can't be read the source fails (exit 1) instead of posting nothing silently.
+- Meetings are read by every run from 7 AM Eastern, not only the 7 AM run, so
+  a failed or missed 7 AM run is caught up by the next one; meetings already
+  posted that day, and meetings that have started, are skipped.
 - Dates from feedparser's normalized `published_parsed`/`updated_parsed`;
   undated items are skipped.
 

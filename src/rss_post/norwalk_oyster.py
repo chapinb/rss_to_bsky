@@ -11,12 +11,15 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import date, datetime
 from urllib.parse import quote
+from zoneinfo import ZoneInfo
 
 import httpx
 
 from rss_post.logging_config import get_logger
 
 logger = get_logger(__name__)
+
+EASTERN = ZoneInfo("America/New_York")
 
 SITE_URL = "https://norwalkoyster.com"
 EVENTS_URL = f"{SITE_URL}/directory/norwalk-city-directory/project/data.json"
@@ -51,6 +54,16 @@ class Event:
         if self.time and self.end_time:
             return f"{self.time} – {self.end_time}"
         return self.time
+
+    @property
+    def starts_at(self) -> datetime | None:
+        """The start time in Eastern, or ``None`` if the time is missing or
+        ambiguous (the calendar has times like ``7:00`` with no AM/PM)."""
+        try:
+            start = datetime.strptime(self.time, "%I:%M %p")
+        except ValueError:
+            return None
+        return datetime.combine(self.day, start.time(), tzinfo=EASTERN)
 
 
 @dataclass(frozen=True)

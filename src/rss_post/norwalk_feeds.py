@@ -15,6 +15,8 @@ from rss_post.read_rss import read_rss_items
 logger = get_logger(__name__)
 
 EASTERN = ZoneInfo("America/New_York")
+# Meetings and events go out from the first successful run at or after this hour (Eastern).
+MEETINGS_HOUR = 7
 
 
 def published_at(item) -> datetime | None:
@@ -85,17 +87,28 @@ class NorwalkFeeds:
             "https://www.norwalkcurrent.com/feed/",
         )
 
-    def get_todays_norwalk_meetings(self) -> list[Post]:
+    def get_todays_norwalk_meetings(self, now: datetime | None = None) -> list[Post]:
+        """Posts for today's and tomorrow's meetings that haven't started yet.
+
+        Each is keyed by its agenda link and today's date, so later runs the
+        same day skip what an earlier run posted, and tomorrow's meetings are
+        posted again on the day.
+        """
+        now = now or datetime.now(EASTERN)
         logger.info("Fetching today's Norwalk meetings")
-        meetings = norwalk_civic_clerk.get_todays_meetings()
+        meetings = norwalk_civic_clerk.get_todays_meetings(now)
         posts = []
         for meeting in meetings:
+            if meeting["starts_at"] < now:
+                logger.info(f"Skipping meeting that has started: {meeting['title']}")
+                continue
             post = (
                 Post()
                 .from_feed("City of Norwalk CT Meetings")
                 .with_title(meeting["title"])
                 .with_description(meeting["when"])
                 .with_link("Agenda\n", meeting["agenda"])
+                .keyed_by(meeting["agenda"], now.astimezone(EASTERN).date())
             )
             if meeting["where"]:
                 post.with_link("Zoom Link", meeting["where"])
@@ -116,10 +129,20 @@ class NorwalkFeeds:
         logger.info(f"Generated {len(posts)} Norwalk Oyster newsletter posts")
         return posts
 
-    def get_todays_norwalk_oyster_events(self) -> list[Post]:
-        today = datetime.now(EASTERN).date()
+    def get_todays_norwalk_oyster_events(
+        self, now: datetime | None = None
+    ) -> list[Post]:
+        """Posts for today's top-rated events that haven't started yet.
+
+        Each event has its own page per date, so later runs the same day skip
+        what an earlier run posted by its link.
+        """
+        now = now or datetime.now(EASTERN)
         posts = []
-        for event in norwalk_oyster.get_events_on(today):
+        for event in norwalk_oyster.get_events_on(now.astimezone(EASTERN).date()):
+            if event.starts_at is not None and event.starts_at < now:
+                logger.info(f"Skipping event that has started: {event.name}")
+                continue
             details = ", ".join(filter(None, [event.when, event.venue]))
             headline = f"Today: {event.name}" + (f" ({details})" if details else "")
             posts.append(
@@ -198,7 +221,9 @@ def main():
     ]
     current_hour = datetime.now(EASTERN).hour
     logger.info(f"Current hour (Eastern): {current_hour}")
-    if current_hour == 7:
+    # Every run from 7 AM on reads the meetings; the ones already posted today
+    # are skipped, so a failed or missed 7 AM run is caught up by the next one.
+    if current_hour >= MEETINGS_HOUR:
         sources.append(("today's meetings", norwalk_feeds.get_todays_norwalk_meetings))
         sources.append(
             (
@@ -207,7 +232,7 @@ def main():
             )
         )
     else:
-        logger.info("Skipping meetings and events (not 7 AM hour)")
+        logger.info(f"Skipping meetings and events (before {MEETINGS_HOUR} AM)")
 
     try:
         seen = SeenPosts(client.published_keys())
