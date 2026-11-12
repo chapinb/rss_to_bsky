@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from rss_post.dedup import SeenLinks
+from rss_post.dedup import SeenPosts
 from rss_post.norwalk_feeds import publish
 from rss_post.post import Post
 
@@ -50,7 +50,7 @@ def test_skips_links_already_posted():
         )
     ]
 
-    assert publish(client, sources, SeenLinks(["https://x.example/old"])) == (1, 0)
+    assert publish(client, sources, SeenPosts(["https://x.example/old"])) == (1, 0)
     assert client.post.call_args.args[0].link == "https://x.example/new"
 
 
@@ -71,3 +71,21 @@ def test_failed_post_is_not_marked_as_posted():
     sources = [("a", lambda: [post]), ("b", lambda: [post])]
 
     assert publish(client, sources) == (1, 1)
+
+
+def test_cancellation_of_a_posted_item_is_posted():
+    client = MagicMock()
+    url = "https://x.example/meeting"
+    seen = SeenPosts([url])
+    sources = [
+        (
+            "a",
+            lambda: [
+                Post().with_embed_card(url, "Board"),
+                Post().with_embed_card(url, "Board (CANCELLED)"),
+            ],
+        ),
+    ]
+
+    assert publish(client, sources, seen) == (1, 0)
+    assert client.post.call_args.args[0].embed.external.title == "Board (CANCELLED)"

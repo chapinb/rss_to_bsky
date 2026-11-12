@@ -3,7 +3,7 @@
 from datetime import UTC, datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
-from rss_post.dedup import SeenLinks
+from rss_post.dedup import SeenPosts
 from rss_post.norwalk_feeds import NorwalkFeeds, publish
 from rss_post.read_rss import read_rss_items
 from tests.conftest import FIXTURES
@@ -45,7 +45,7 @@ def test_future_dated_city_items_are_posted_once(freeze_feeds_now):
     skips them because they are already posted.
     """
     client = MagicMock()
-    seen = SeenLinks()
+    seen = SeenPosts()
     future = "https://www.norwalkct.gov/Calendar.aspx?EID=17281"
 
     for now in (

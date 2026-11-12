@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 
 from rss_post import norwalk_civic_clerk
 from rss_post.bsky import Bluesky, Stdout
-from rss_post.dedup import SeenLinks
+from rss_post.dedup import SeenPosts
 from rss_post.logging_config import get_logger, setup_logging
 from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
@@ -163,12 +163,12 @@ def main():
         logger.info("Skipping meetings (not 7 AM hour)")
 
     try:
-        seen = SeenLinks(client.published_links())
+        seen = SeenPosts(client.published_keys())
     except Exception:
         # Posting without the history would repeat everything still in the
         # window, so skip this run; the next one picks up where this left off
         # as long as its window covers the gap.
-        logger.exception("Failed to read already-posted links; not posting")
+        logger.exception("Failed to read the account's recent posts; not posting")
         sys.exit(1)
 
     total_posts, failures = publish(client, sources, seen)
@@ -182,18 +182,19 @@ def main():
     )
 
 
-def publish(client, sources, seen: SeenLinks | None = None) -> tuple[int, int]:
+def publish(client, sources, seen: SeenPosts | None = None) -> tuple[int, int]:
     """Post everything new from each source, isolating failures.
 
-    Posts whose link is in ``seen`` are skipped, and each link posted is
-    added to it, so an item in two feeds goes out once. A source that raises,
+    Posts already in ``seen`` (same link, same cancellation status) are
+    skipped, and each post sent is added to it, so an item in two feeds goes
+    out once. A source that raises,
     or a post that fails to send, is logged and skipped so the remaining
     sources and posts still go out.
 
     Returns:
         The number of posts sent and the number of failures.
     """
-    seen = seen if seen is not None else SeenLinks()
+    seen = seen if seen is not None else SeenPosts()
     total_posts = failures = 0
     for name, get_posts in sources:
         logger.info(f"Processing {name}...")

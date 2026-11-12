@@ -58,17 +58,22 @@ Done phases note what actually shipped where it differs from the plan.
   Bluesky (no storage needed) and skips feed items whose link is among them,
   and items already posted earlier in the same run. Links are compared after
   normalizing scheme, `www.`, trailing slash, fragment and `utm_*` parameters.
+- Cancellations still go out: an item is keyed by its link plus whether its
+  title says "cancelled"/"canceled", so a meeting is posted once when
+  announced and once more when cancelled. Other edits (new date, new title)
+  are not reposted.
 - Dry runs read the same history from the public AppView, so they show what a
   real run would post.
 - If the history can't be read, the run posts nothing and exits 1 rather
   than risk reposting.
-- Meeting posts (no link card) are not deduplicated: tomorrow's meetings are
-  posted the day before and again on the day, as before.
+- Meeting posts (no link card) are not deduplicated, on purpose: tomorrow's
+  meetings are posted the day before and again on the day.
 - Replaying the bot's real Oct 27 – Nov 12 history (`tests/fixtures/
-  bsky_author_feed.json`) drops all 19 duplicate posts out of 100.
-- Follow-up: with dedup in place the posting window can be wider than the run
-  interval (e.g. run hourly with `norwalk 6`), so a failed run or outage is
-  caught up by the next one instead of losing posts.
+  bsky_author_feed.json`) keeps 83 of 100 posts: 81 distinct links plus the
+  cancellations of EID=17256 and 17257, dropping the 17 repeats.
+- Follow-up, after a day or two in production: widen the posting window
+  beyond the run interval (e.g. run hourly with `norwalk 6`) so a failed run
+  or outage is caught up by the next one instead of losing posts.
 
 ### Phase 5 — Security patches ✅
 - Lockfile-only patch of flagged packages; the rest (cryptography, h11) were

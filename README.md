@@ -13,7 +13,7 @@ Every run posts new items from these sources to Bluesky:
 
 RSS items are posted as link cards when they were published within the last
 `<hours>` hours and the account hasn't already posted that link in the last 30
-days. Run the bot at least once every `<hours>` hours; a window longer than
+days (a cancellation of an already-posted item is posted again, once). Run the bot at least once every `<hours>` hours; a window longer than
 the run interval is safe and lets a run catch up after a failed one.
 
 ## Running
