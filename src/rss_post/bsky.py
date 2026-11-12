@@ -1,7 +1,10 @@
+import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeVar
 
 from atproto import Client, client_utils, models
+from atproto.exceptions import NetworkError, RequestException
 from decouple import config
 
 from rss_post import media
@@ -13,6 +16,49 @@ from rss_post.dedup import (
 from rss_post.logging_config import get_logger
 
 logger = get_logger(__name__)
+
+T = TypeVar("T")
+
+# Waits between attempts at the login and the history read, which the whole
+# run depends on: a brief outage (a 503 for a few seconds) shouldn't cost the
+# run, and the hour's news with it. About a minute in all, well inside the
+# hourly schedule.
+RETRY_DELAYS = (5.0, 15.0, 45.0)
+
+
+def is_transient(error: Exception) -> bool:
+    """Whether retrying might help: network failures, timeouts and 5xx.
+
+    A 429 isn't retried: the login limits are per 5 minutes and per day, so a
+    retry a few seconds later fails again and spends more of the budget.
+    Bad credentials (401) and bad requests (400) aren't either.
+    """
+    if isinstance(error, NetworkError):  # Includes timeouts, 409, 413, 502.
+        return True
+    if isinstance(error, RequestException):
+        response = error.response
+        return response is not None and response.status_code >= 500
+    return False
+
+
+def with_retries(what: str, call: Callable[[], T]) -> T:
+    """``call()``, retrying transient failures after each of ``RETRY_DELAYS``.
+
+    The last error, or the first one that isn't transient, is raised.
+    """
+    attempts = len(RETRY_DELAYS) + 1
+    for attempt, delay in enumerate(RETRY_DELAYS, start=1):
+        try:
+            return call()
+        except Exception as e:
+            if not is_transient(e):
+                raise
+            logger.warning(
+                f"Attempt {attempt}/{attempts} to {what} failed ({e}); "
+                f"retrying in {delay:g}s"
+            )
+            time.sleep(delay)
+    return call()
 
 
 def _thumbnail_url(post_obj: Any) -> str | Path | None:
@@ -30,7 +76,10 @@ class Bluesky:
         self.client = Client()
         username = config("BSKY_USERNAME")
         logger.info(f"Logging in to Bluesky as {username}")
-        self.profile = self.client.login(username, config("BSKY_PASSWORD"))
+        password = config("BSKY_PASSWORD")
+        self.profile = with_retries(
+            "log in to Bluesky", lambda: self.client.login(username, password)
+        )
         logger.info("Successfully logged in to Bluesky")
 
     def attach_thumbnail(self, post_obj: Any) -> None:
@@ -52,7 +101,10 @@ class Bluesky:
             logger.warning(f"Posting card without thumbnail: {e}")
 
     def published_posts(self) -> dict[str, PostRef]:
-        return published_posts(self.client, self.profile.did)
+        return with_retries(
+            "read the account's recent posts",
+            lambda: published_posts(self.client, self.profile.did),
+        )
 
     def post(self, post_obj: Any) -> PostRef:
         """Send the post (as a reply, if it is one); return where it was created."""

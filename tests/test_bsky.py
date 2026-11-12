@@ -3,8 +3,15 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from atproto import models
+from atproto.exceptions import (
+    BadRequestError,
+    NetworkError,
+    RateLimitExceededError,
+    RequestException,
+    UnauthorizedError,
+)
 
-from rss_post.bsky import Bluesky, Stdout
+from rss_post.bsky import RETRY_DELAYS, Bluesky, Stdout
 from rss_post.dedup import PostRef, keys_in_record
 from rss_post.post import Post
 
@@ -173,3 +180,75 @@ def test_stdout_returns_distinct_refs_so_dry_runs_can_thread():
     first = stdout.post(Post().with_title("a"))
     second = stdout.post(Post().with_text("b").reply_to(first))
     assert first != second
+
+
+def _status_error(cls, status_code):
+    return cls(SimpleNamespace(status_code=status_code, content=None, headers={}))
+
+
+@patch("rss_post.bsky.time.sleep")
+@patch("rss_post.bsky.config", return_value="x")
+@patch("rss_post.bsky.Client")
+def test_bluesky_login_retries_server_errors(mock_client_cls, _config, sleep):
+    client = mock_client_cls.return_value
+    profile = SimpleNamespace(did="did:plc:me")
+    client.login.side_effect = [
+        _status_error(RequestException, 503),
+        NetworkError(),
+        profile,
+    ]
+
+    assert Bluesky().profile is profile
+    assert client.login.call_count == 3
+    assert [c.args[0] for c in sleep.call_args_list] == list(RETRY_DELAYS[:2])
+
+
+@patch("rss_post.bsky.time.sleep")
+@patch("rss_post.bsky.config", return_value="x")
+@patch("rss_post.bsky.Client")
+def test_bluesky_login_gives_up_after_last_attempt(mock_client_cls, _config, sleep):
+    client = mock_client_cls.return_value
+    client.login.side_effect = _status_error(RequestException, 503)
+
+    with pytest.raises(RequestException):
+        Bluesky()
+    assert client.login.call_count == len(RETRY_DELAYS) + 1
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        _status_error(UnauthorizedError, 401),
+        _status_error(BadRequestError, 400),
+        _status_error(RateLimitExceededError, 429),
+    ],
+)
+@patch("rss_post.bsky.time.sleep")
+@patch("rss_post.bsky.config", return_value="x")
+@patch("rss_post.bsky.Client")
+def test_bluesky_login_does_not_retry_client_errors(
+    mock_client_cls, _config, sleep, error
+):
+    client = mock_client_cls.return_value
+    client.login.side_effect = error
+
+    with pytest.raises(type(error)):
+        Bluesky()
+    client.login.assert_called_once()
+    sleep.assert_not_called()
+
+
+@patch("rss_post.bsky.time.sleep")
+@patch("rss_post.bsky.config", return_value="x")
+@patch("rss_post.bsky.Client")
+def test_bluesky_history_read_retries_server_errors(mock_client_cls, _config, sleep):
+    client = mock_client_cls.return_value
+    client.login.return_value = SimpleNamespace(did="did:plc:me")
+    client.get_author_feed.side_effect = [
+        _status_error(RequestException, 500),
+        SimpleNamespace(feed=[], cursor=None),
+    ]
+
+    assert Bluesky().published_posts() == {}
+    assert client.get_author_feed.call_count == 2
+    sleep.assert_called_once_with(RETRY_DELAYS[0])
