@@ -102,49 +102,93 @@ def test_ct_mirror_respects_posting_window(freeze_feeds_now):
     assert posts == []
 
 
-def test_meeting_posts_include_title_time_and_links():
+def meeting_posts(meeting: dict, now: datetime):
+    with patch(
+        "rss_post.norwalk_feeds.norwalk_civic_clerk.get_todays_meetings",
+        return_value=[meeting],
+    ):
+        return NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_meetings(now)
+
+
+def test_meeting_posts_have_an_agenda_card_and_zoom_link():
     meeting = {
         "title": "City Council",
         "agenda": "https://norwalkct.portal.civicclerk.com/event/1049/files",
         "when": "Nov 10, 2026 at 7:30 PM EST",
         "starts_at": datetime(2026, 11, 10, 19, 30, tzinfo=EASTERN),
-        "where": "https://norwalkct-org.zoom.us/j/89654026934",
+        "location": "Council Chambers, 125 East Avenue, Norwalk, CT 06851",
+        "zoom": "https://norwalkct-org.zoom.us/j/89654026934",
     }
-    with patch(
-        "rss_post.norwalk_feeds.norwalk_civic_clerk.get_todays_meetings",
-        return_value=[meeting],
-    ):
-        posts = NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_meetings(
-            datetime(2026, 11, 10, 7, tzinfo=EASTERN)
-        )
+    [post] = meeting_posts(meeting, datetime(2026, 11, 10, 7, tzinfo=EASTERN))
 
-    builder = posts[0].build()
-    text = builder.build_text()
-    assert text.startswith("City of Norwalk CT Meetings\nCity Council\n")
-    assert "Nov 10, 2026 at 7:30 PM EST" in text
-    uris = [f.features[0].uri for f in builder.build_facets()]
-    assert uris == [meeting["agenda"], meeting["where"]]
+    builder = post.build()
+    assert builder.build_text() == (
+        "City Council\nNov 10, 2026 at 7:30 PM EST\nJoin on Zoom"
+    )
+    assert [f.features[0].uri for f in builder.build_facets()] == [meeting["zoom"]]
+    assert card(post).uri == meeting["agenda"]
+    assert card(post).title == "City Council"
+    assert card(post).description == (
+        "Nov 10, 2026 at 7:30 PM EST · "
+        "Council Chambers, 125 East Avenue, Norwalk, CT 06851"
+    )
+    # Still keyed by the agenda link and the day, not just the card's link.
+    assert SeenPosts.key(post) == (
+        "https://norwalkct.portal.civicclerk.com/event/1049/files on 2026-11-10"
+    )
 
 
-def test_meeting_without_zoom_link_omits_it():
+def test_meeting_without_zoom_link_or_location_omits_them():
     meeting = {
         "title": "Defined Contribution (CANCELLED)",
         "agenda": "https://norwalkct.portal.civicclerk.com/event/1387/files",
         "when": "Nov 11, 2026 at 6:45 PM EST",
         "starts_at": datetime(2026, 11, 11, 18, 45, tzinfo=EASTERN),
-        "where": None,
+        "location": None,
+        "zoom": None,
     }
-    with patch(
-        "rss_post.norwalk_feeds.norwalk_civic_clerk.get_todays_meetings",
-        return_value=[meeting],
-    ):
-        posts = NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_meetings(
-            datetime(2026, 11, 11, 7, tzinfo=EASTERN)
-        )
+    [post] = meeting_posts(meeting, datetime(2026, 11, 11, 7, tzinfo=EASTERN))
 
-    builder = posts[0].build()
-    assert "Zoom Link" not in builder.build_text()
-    assert [f.features[0].uri for f in builder.build_facets()] == [meeting["agenda"]]
+    builder = post.build()
+    assert builder.build_text() == (
+        "Defined Contribution (CANCELLED)\nNov 11, 2026 at 6:45 PM EST"
+    )
+    assert builder.build_facets() == []
+    assert card(post).description == "Nov 11, 2026 at 6:45 PM EST"
+    assert SeenPosts.key(post) == (
+        "https://norwalkct.portal.civicclerk.com/event/1387/files cancelled"
+        " on 2026-11-11"
+    )
+
+
+def test_meeting_posted_earlier_today_as_text_is_not_posted_again_as_a_card():
+    # Before agenda cards, the agenda was a link in the post's text.
+    agenda = "https://norwalkct.portal.civicclerk.com/event/984/files"
+    now = datetime(2026, 11, 12, 9, tzinfo=EASTERN)
+    old_text = "City of Norwalk CT Meetings\nFinance & Claims Committee\nAgenda\n"
+    record = models.AppBskyFeedPost.Record(
+        text=old_text,
+        created_at=datetime(2026, 11, 12, 12, tzinfo=UTC).isoformat(),
+        facets=[
+            models.AppBskyRichtextFacet.Main(
+                index=models.AppBskyRichtextFacet.ByteSlice(
+                    byte_start=len(old_text) - 7, byte_end=len(old_text)
+                ),
+                features=[models.AppBskyRichtextFacet.Link(uri=agenda)],
+            )
+        ],
+    )
+    meeting = {
+        "title": "Finance & Claims Committee",
+        "agenda": agenda,
+        "when": "Nov 12, 2026 at 6:00 PM EST",
+        "starts_at": datetime(2026, 11, 12, 18, tzinfo=EASTERN),
+        "location": "Virtual via Zoom",
+        "zoom": None,
+    }
+    [post] = meeting_posts(meeting, now)
+
+    assert not SeenPosts(keys_in_record(record, now)).is_new(post)
 
 
 class MeetingRuns:
@@ -185,10 +229,11 @@ class MeetingRuns:
             record = models.AppBskyFeedPost.Record(
                 text=builder.build_text(),
                 facets=builder.build_facets(),
+                embed=post.embed,
                 created_at=now.astimezone(UTC).isoformat(),
             )
             self.history |= keys_in_record(record, now)
-        return [post.title for post in posts]
+        return [card(post).title for post in posts]
 
 
 # The saved meetings, all in the evening: four on Nov 11 (6:00-7:00 PM), two
