@@ -5,7 +5,11 @@ from atproto import Client, client_utils, models
 from decouple import config
 
 from rss_post import media
-from rss_post.dedup import public_published_keys, published_keys
+from rss_post.dedup import (
+    PostRef,
+    public_published_posts,
+    published_posts,
+)
 from rss_post.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -47,10 +51,11 @@ class Bluesky:
         except Exception as e:  # noqa: BLE001 - thumbnails are optional
             logger.warning(f"Posting card without thumbnail: {e}")
 
-    def published_keys(self) -> set[str]:
-        return published_keys(self.client, self.profile.did)
+    def published_posts(self) -> dict[str, PostRef]:
+        return published_posts(self.client, self.profile.did)
 
-    def post(self, post_obj: Any) -> None:
+    def post(self, post_obj: Any) -> PostRef:
+        """Send the post (as a reply, if it is one); return where it was created."""
         try:
             text_builder: client_utils.TextBuilder = post_obj.build()
             embed: models.AppBskyEmbedExternal.Main | None = getattr(
@@ -62,8 +67,11 @@ class Bluesky:
             post_text: str = text_builder.build_text()
             logger.debug(f"Posting to Bluesky: {post_text[:50]}...")
 
-            response = self.client.send_post(text_builder, embed=embed)
+            response = self.client.send_post(
+                text_builder, embed=embed, reply_to=getattr(post_obj, "reply", None)
+            )
             logger.info(f"Successfully posted to Bluesky: {response.uri}")
+            return PostRef(response.uri, response.cid)
         except Exception as e:
             logger.error(f"Failed to post to Bluesky: {e}")
             raise
@@ -72,16 +80,30 @@ class Bluesky:
 class Stdout:
     def __init__(self) -> None:
         logger.info("Initializing dry-run mode (console output)")
+        self.printed = 0
 
-    def published_keys(self) -> set[str]:
+    def published_posts(self) -> dict[str, PostRef]:
         """What the account has posted, read publicly so dry runs skip it too."""
         username = config("BSKY_USERNAME", default="")
         if not username:
             logger.warning("BSKY_USERNAME not set; dry run won't skip posted items")
-            return set()
-        return public_published_keys(username)
+            return {}
+        return public_published_posts(username)
 
-    def post(self, post_obj: Any) -> None:
+    def post(self, post_obj: Any) -> PostRef:
+        """Print the post, replies indented; return a stand-in ref for threading."""
+        text = self.render(post_obj)
+        reply = getattr(post_obj, "reply", None)
+        if reply is not None:
+            kind = getattr(post_obj, "reply_kind", None) or "reply"
+            print(f"  ↳ [{kind.upper()} REPLY to {reply.parent.uri}]")
+            text = "\n".join(f"    {line}" for line in text.splitlines())
+        print(text)
+        self.printed += 1
+        return PostRef(f"at://dry-run/app.bsky.feed.post/{self.printed}", "dry-run")
+
+    @staticmethod
+    def render(post_obj: Any) -> str:
         text_builder: client_utils.TextBuilder = post_obj.build()
         embed: models.AppBskyEmbedExternal.Main | None = getattr(
             post_obj, "embed", None
@@ -89,10 +111,10 @@ class Stdout:
 
         post_text: str = text_builder.build_text()
         logger.debug(f"Dry-run post: {post_text[:50]}...")
-        print(post_text)
-
+        lines = [post_text]
         if embed:
-            print(f"[EMBED CARD: {embed.external.title} - {embed.external.uri}]")
+            lines.append(f"[EMBED CARD: {embed.external.title} - {embed.external.uri}]")
             if embed.external.description:
-                print(f"  {embed.external.description}")
-            print(f"  [THUMBNAIL: {_thumbnail_url(post_obj) or 'none'}]")
+                lines.append(f"  {embed.external.description}")
+            lines.append(f"  [THUMBNAIL: {_thumbnail_url(post_obj) or 'none'}]")
+        return "\n".join(lines)

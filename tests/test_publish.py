@@ -5,7 +5,7 @@ import httpx
 from libmuni.civicclerk import CivicClerkClient
 
 from rss_post import norwalk_civic_clerk
-from rss_post.dedup import SeenPosts
+from rss_post.dedup import PostRef, SeenPosts, reply_key
 from rss_post.norwalk_feeds import NorwalkFeeds, publish
 from rss_post.post import Post
 
@@ -114,3 +114,32 @@ def test_unreadable_meetings_count_as_a_failure():
 
     assert result == (0, 1)
     client.post.assert_not_called()
+
+
+def test_reply_goes_out_after_the_post_it_replies_to_in_the_same_run():
+    client = MagicMock()
+    client.post.side_effect = [PostRef("at://p/root", "c1"), PostRef("at://p/r", "c2")]
+    root = card_post("https://x.example/meeting")
+    reply = Post().with_text("Soon").replying_to(root, "reminder")
+
+    assert publish(client, [("a", lambda: [root]), ("b", lambda: [reply])]) == (2, 0)
+    assert client.post.call_args.args[0].reply.root.uri == "at://p/root"
+
+
+def test_reply_without_its_root_is_skipped_not_failed():
+    client = MagicMock()
+    reply = Post().with_text("Soon").replying_to("https://x.example/m", "reminder")
+
+    assert publish(client, [("a", lambda: [reply])]) == (0, 0)
+    client.post.assert_not_called()
+
+
+def test_reply_already_posted_is_skipped():
+    client = MagicMock()
+    root = PostRef("at://p/root", "c")
+    seen = SeenPosts(
+        {"https://x.example/m": root, reply_key(root.uri, "reminder"): root}
+    )
+    reply = Post().with_text("Soon").replying_to("https://x.example/m", "reminder")
+
+    assert publish(client, [("a", lambda: [reply])], seen) == (0, 0)

@@ -1,11 +1,17 @@
+from __future__ import annotations
+
 import re
 from datetime import date
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from atproto import client_utils, models
 from bs4 import BeautifulSoup
 
 from rss_post.logging_config import get_logger
+
+if TYPE_CHECKING:
+    from rss_post.dedup import PostRef
 
 logger = get_logger(__name__)
 
@@ -33,6 +39,13 @@ class Post:
         self.title: str | None = None
         # Set for posts that may go out once per day (see ``keyed_by``).
         self.day: date | None = None
+        # Replies (see ``replying_to``/``reply_to``): the kind of follow-up,
+        # what it replies to by key or Post (resolved when publishing), and
+        # the resolved root/parent refs that go on the record.
+        self.reply_kind: str | None = None
+        self.reply_root: str | Post | None = None
+        self.reply_parent: str | Post | None = None
+        self.reply: models.AppBskyFeedPost.ReplyRef | None = None
 
     def from_feed(self, feed_title):
         self.text_builder.text(feed_title + "\n")
@@ -117,6 +130,38 @@ class Post:
         """
         self.link = link
         self.day = day
+        return self
+
+    def with_text(self, text: str):
+        """Plain text, as is."""
+        self.text_builder.text(text)
+        self.post_length += len(text)
+        return self
+
+    def replying_to(
+        self,
+        root: str | Post,
+        kind: str,
+        parent: str | Post | None = None,
+    ):
+        """Make this the ``kind`` follow-up (e.g. ``"reminder"``) in a thread.
+
+        ``root`` and ``parent`` (default: ``root``) name the posts to reply
+        to: a dedup key from the account's history (``SeenPosts.key``, e.g.
+        a meeting's agenda link on a day), or a ``Post`` sent earlier in the
+        same run. ``publish`` resolves them and skips the reply if either
+        can't be found. Each thread gets one reply of each kind.
+        """
+        self.reply_kind = kind
+        self.reply_root = root
+        self.reply_parent = parent
+        return self
+
+    def reply_to(self, root: PostRef, parent: PostRef | None = None):
+        """Reply to known posts: ``parent`` (default: ``root``) in ``root``'s thread."""
+        self.reply = models.AppBskyFeedPost.ReplyRef(
+            root=root.strong_ref(), parent=(parent or root).strong_ref()
+        )
         return self
 
     @classmethod

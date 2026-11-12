@@ -7,7 +7,13 @@ from zoneinfo import ZoneInfo
 
 from rss_post import norwalk_civic_clerk, norwalk_oyster
 from rss_post.bsky import Bluesky, Stdout
-from rss_post.dedup import SeenPosts
+from rss_post.dedup import (
+    CANCELLED,
+    REPLY_PREFIXES,
+    SeenPosts,
+    daily_key,
+    post_key,
+)
 from rss_post.logging_config import get_logger, setup_logging
 from rss_post.media import image_from_item
 from rss_post.post import Post
@@ -23,6 +29,10 @@ MEETINGS_HOUR = 7
 # ~1.91:1 thumbnail crop keeps the ring text. Used for meeting cards: the
 # CivicClerk portal is rendered by JavaScript and has no og:image of its own.
 CITY_SEAL = Path(__file__).parent / "assets" / "city_seal.png"
+# A meeting's reminder goes out from the first run this long before it starts.
+# A bit over an hour so hourly runs hit it even when one starts a few minutes
+# late; a second run inside the window skips the reminder already sent.
+REMINDER_WINDOW = timedelta(minutes=75)
 
 
 def published_at(item) -> datetime | None:
@@ -130,6 +140,38 @@ class NorwalkFeeds:
                 continue
             posts.append(meeting_post(meeting, now.astimezone(EASTERN).date()))
         logger.info(f"Generated {len(posts)} meeting posts")
+        return posts
+
+    def get_meeting_reminders(self, now: datetime | None = None) -> list[Post]:
+        """Replies to today's meeting posts for meetings starting soon.
+
+        Each reminder is threaded under the meeting's post from today (found
+        by its agenda link and the day) and gives the start time and Zoom
+        link. It goes out once, from the first run within ``REMINDER_WINDOW``
+        of the start; if today's meeting post isn't found it is skipped.
+        """
+        now = now or datetime.now(EASTERN)
+        today = now.astimezone(EASTERN).date()
+        posts = []
+        for meeting in norwalk_civic_clerk.get_todays_meetings(now):
+            starts_at = meeting["starts_at"]
+            if not now < starts_at <= now + REMINDER_WINDOW:
+                continue
+            if CANCELLED.search(meeting["title"]):
+                logger.info(f"No reminder for cancelled meeting: {meeting['title']}")
+                continue
+            local = starts_at.astimezone(EASTERN)
+            post = Post().with_text(
+                f"{REPLY_PREFIXES['reminder']} {local.hour % 12 or 12}:{local:%M %p}"
+            )
+            if meeting["zoom"]:
+                zoom = meeting["zoom"]
+                post.with_text(" — Zoom: ").with_link(
+                    zoom.removeprefix("https://").removeprefix("http://"), zoom
+                )
+            post.replying_to(daily_key(post_key(meeting["agenda"]), today), "reminder")
+            posts.append(post)
+        logger.info(f"Generated {len(posts)} meeting reminders")
         return posts
 
     def get_norwalk_oyster_newsletter(self) -> list[Post]:
@@ -241,6 +283,8 @@ def main():
     # are skipped, so a failed or missed 7 AM run is caught up by the next one.
     if current_hour >= MEETINGS_HOUR:
         sources.append(("today's meetings", norwalk_feeds.get_todays_norwalk_meetings))
+        # After the meetings, so a reminder can reply to a post made this run.
+        sources.append(("meeting reminders", norwalk_feeds.get_meeting_reminders))
         sources.append(
             (
                 "today's Norwalk Oyster events",
@@ -251,7 +295,7 @@ def main():
         logger.info(f"Skipping meetings and events (before {MEETINGS_HOUR} AM)")
 
     try:
-        seen = SeenPosts(client.published_keys())
+        seen = SeenPosts(client.published_posts())
     except Exception:
         # Posting without the history would repeat everything still in the
         # window, so skip this run; the next one picks up where this left off
@@ -275,7 +319,10 @@ def publish(client, sources, seen: SeenPosts | None = None) -> tuple[int, int]:
 
     Posts already in ``seen`` (same link, same cancellation status) are
     skipped, and each post sent is added to it, so an item in two feeds goes
-    out once. A source that raises,
+    out once. Replies are pointed at the posts they follow up (see
+    ``Post.replying_to``) and skipped if those can't be found; posts made
+    this run count, so a thread can be started and continued in one run. A
+    source that raises,
     or a post that fails to send, is logged and skipped so the remaining
     sources and posts still go out.
 
@@ -293,16 +340,25 @@ def publish(client, sources, seen: SeenPosts | None = None) -> tuple[int, int]:
             failures += 1
             continue
         for post in posts:
+            if not seen.resolve_reply(post):
+                logger.info(
+                    f"Skipping {post.reply_kind} from {name}: "
+                    "the post it replies to wasn't found"
+                )
+                continue
             if not seen.is_new(post):
-                logger.info(f"Skipping already-posted item from {name}: {post.link}")
+                logger.info(
+                    f"Skipping already-posted item from {name}: "
+                    f"{post.link or seen.key(post)}"
+                )
                 continue
             try:
-                client.post(post)
+                ref = client.post(post)
             except Exception:
                 logger.exception(f"Failed to send a post from {name}")
                 failures += 1
                 continue
-            seen.add(post)
+            seen.add(post, ref)
             total_posts += 1
     return total_posts, failures
 
