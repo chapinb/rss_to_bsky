@@ -1,26 +1,48 @@
-"""Tests for CivicClerk meeting parsing against a saved copy of the portal."""
+"""Tests for CivicClerk meetings using a saved API response."""
 
+import json
 from datetime import datetime
-from unittest.mock import patch
 
-import pytest
-from selenium.common.exceptions import WebDriverException
+import httpx
+import pytz
+from libmuni.civicclerk import CivicClerkClient
 
-from rss_post import norwalk_civic_clerk
-from rss_post.norwalk_civic_clerk import parse_meetings
+from rss_post.norwalk_civic_clerk import format_when, get_todays_meetings
 from tests.conftest import FIXTURES
 
-# Rendered https://norwalkct.portal.civicclerk.com/ captured 2026-11-12,
-# with <script>/<style> removed.
-PORTAL_HTML = (FIXTURES / "civicclerk_portal.html").read_text(encoding="utf-8")
-NOV_11_7AM = datetime(2026, 11, 11, 7, 0)
+# Response of GET https://norwalkct.api.civicclerk.com/v1/Events for
+# 2026-11-11..2026-11-12, captured 2026-11-12.
+EVENTS = json.loads((FIXTURES / "civicclerk_events.json").read_text("utf-8"))
+NOV_11_7AM = pytz.timezone("US/Eastern").localize(datetime(2026, 11, 11, 7, 0))
 
 
-def test_parses_todays_and_tomorrows_meetings():
-    meetings = parse_meetings(PORTAL_HTML, NOV_11_7AM)
+def fake_client(handler) -> CivicClerkClient:
+    http = httpx.Client(transport=httpx.MockTransport(handler))
+    return CivicClerkClient("norwalkct", http_client=http, min_request_interval=0)
 
-    titles = [m["title"] for m in meetings]
-    assert titles == [
+
+def serve_events(requests: list | None = None):
+    def handler(request: httpx.Request) -> httpx.Response:
+        if requests is not None:
+            requests.append(request)
+        return httpx.Response(200, json=EVENTS)
+
+    return fake_client(handler)
+
+
+def test_requests_today_and_tomorrow():
+    requests = []
+    get_todays_meetings(NOV_11_7AM, serve_events(requests))
+
+    query = requests[0].url.params["$filter"]
+    assert "ge 2026-11-11T00:00:00Z" in query
+    assert "le 2026-11-12T23:59:59Z" in query
+
+
+def test_parses_meetings():
+    meetings = get_todays_meetings(NOV_11_7AM, serve_events())
+
+    assert [m["title"] for m in meetings] == [
         "Pension Board of Trustees (CANCELLED)",
         "Ad Hoc Sustainability and Resilience Committee (CANCELLED)",
         "Defined Contribution (CANCELLED)",
@@ -28,12 +50,6 @@ def test_parses_todays_and_tomorrows_meetings():
         "Finance & Claims Committee",
         "Library Board of Directors",
     ]
-    assert "City Council" not in titles  # Nov 10, yesterday
-
-
-def test_parses_meeting_details():
-    meetings = parse_meetings(PORTAL_HTML, NOV_11_7AM)
-
     assert meetings[0] == {
         "title": "Pension Board of Trustees (CANCELLED)",
         "agenda": "https://norwalkct.portal.civicclerk.com/event/1122/files",
@@ -44,43 +60,18 @@ def test_parses_meeting_details():
     assert finance["where"] == "https://norwalkct-org.zoom.us/j/83292194046"
 
 
-def test_unrelated_page_yields_no_meetings():
-    assert parse_meetings("<html><body></body></html>", NOV_11_7AM) == []
+def test_api_failure_yields_no_meetings():
+    client = fake_client(lambda request: httpx.Response(503))
+    assert get_todays_meetings(NOV_11_7AM, client) == []
 
 
-def test_browser_failure_yields_no_meetings():
-    with patch.object(
-        norwalk_civic_clerk,
-        "fetch_page_source",
-        side_effect=WebDriverException("geckodriver missing"),
-    ):
-        assert norwalk_civic_clerk.get_todays_meetings() == []
+def test_network_failure_yields_no_meetings():
+    def handler(request):
+        raise httpx.ConnectError("unreachable", request=request)
+
+    assert get_todays_meetings(NOV_11_7AM, fake_client(handler)) == []
 
 
-def test_no_meeting_entries_logs_a_warning(caplog):
-    parse_meetings("<html><body></body></html>", NOV_11_7AM)
-    assert "No meeting entries found" in caplog.text
-
-
-@pytest.mark.parametrize(
-    "heading",
-    ["Nov 11, 2026", "NOV 11, 2026", "Nov 11,<br/>2026", "Nov 11,\n  2026"],
-)
-def test_date_heading_variants(heading):
-    html = f"""
-        <ul><li class="meeting-event">
-          <a href="/event/1/files"></a>
-          <h2>{heading}</h2><p>6:00 PM EST</p><h3>Test Board</h3>
-        </li></ul>
-    """
-    meetings = parse_meetings(html, NOV_11_7AM)
-    assert [m["when"] for m in meetings] == ["Nov 11, 2026 at 6:00 PM EST"]
-
-
-def test_unparseable_date_is_skipped():
-    html = """
-        <ul><li class="meeting-event">
-          <a href="/event/1/files"></a><h2>TBD</h2><p>-</p><h3>Test Board</h3>
-        </li></ul>
-    """
-    assert parse_meetings(html, NOV_11_7AM) == []
+def test_format_when_uses_daylight_time_in_summer():
+    assert format_when(datetime(2026, 7, 4, 9, 5)) == "Jul 4, 2026 at 9:05 AM EDT"
+    assert format_when(datetime(2026, 12, 1, 0, 30)) == "Dec 1, 2026 at 12:30 AM EST"
