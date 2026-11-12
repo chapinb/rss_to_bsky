@@ -35,56 +35,61 @@ Findings from reviewing the code and the bot's last 100 posts:
 
 ## Phases
 
+Done phases note what actually shipped where it differs from the plan.
+
 ### Phase 1 — CI green ✅
 - Modern GitHub Actions (`checkout@v7`, `astral-sh/setup-uv`), `uv sync --locked`.
 - Update pre-commit hooks; fix the lint findings.
 
 ### Phase 2 — Characterization tests ✅
-- Saved fixtures of the real City of Norwalk feed and CivicClerk portal page.
-- Tests for feed → post generation, the output adapters, and meeting parsing.
-- The CivicClerk scraper is split into *fetch* (Selenium) and *parse* (pure
-  function) so parsing is testable without a browser.
+- Saved fixtures of real source data; tests for feed → post generation, the
+  output adapters, and meeting parsing.
+- Known bugs recorded as tests (future-dated items pass the posting window).
 
 ### Phase 3 — Restore meeting posts ✅
-- Update CivicClerk selectors (`li.meeting-event`) and make date matching
-  case-insensitive.
-- Log a warning when the page yields no meeting entries so the next site change
-  isn't silent.
-- Don't emit a broken link when a meeting has no media/Zoom link.
-- Decide "today" in US/Eastern rather than the container's (UTC) clock.
+- First fixed the scraper's selectors; then (with Phase 7) replaced the
+  Selenium scraper entirely with the CivicClerk API via
+  [libmuni](https://github.com/chapinb/libmuni). No browser, no CSS selectors.
+- Meetings without a Zoom link no longer crash the run; "today" is US/Eastern;
+  times carry the correct EST/EDT label.
 
-### Phase 4 — Stop duplicate posts
+### Phase 4 — Stop duplicate posts ⏸ deferred
 - Record links already posted and skip them. This covers all three duplicate
   causes at once, independent of feed timestamp quirks.
 - **Open decision:** where the record lives — a JSON/SQLite file on a mounted
   volume, or read back the bot's own recent posts from Bluesky at startup (no
   storage needed).
+- `test_city_calendar_accepts_future_dated_items` documents the current
+  behaviour and should flip when this lands.
 
-### Phase 5 — Security patches (lockfile only)
-- `uv lock --upgrade-package urllib3 --upgrade-package soupsieve --upgrade-package pytest`.
-- No code changes; tests must pass unchanged.
+### Phase 5 — Security patches ✅
+- Lockfile-only patch of flagged packages; the rest (cryptography, h11) were
+  capped by old atproto/httpx and cleared by Phase 7. `pip-audit` is clean.
 
-### Phase 6 — Reproducible Docker image
-- Install with `uv sync --locked --no-dev`; pin geckodriver to an explicit
-  release URL; add an `ENTRYPOINT`.
-- Verify with a local build + `--dry-run` before switching the deployment.
+### Phase 6 — Reproducible Docker image ✅
+- `uv sync --locked` from the official uv image; no Firefox/geckodriver/Xvfb;
+  non-root user; default `CMD ["norwalk", "1"]` (overridable as before).
+- Verified with a local build + `--dry-run` against live feeds.
 
-### Phase 7 — Dependency upgrades (one PR each)
-- Low risk first: beautifulsoup4, feedparser → selenium → atproto (pre-1.0, most
-  likely to break).
-- Drop the unused direct `httpx` dependency; replace `pytz` with `zoneinfo`.
+### Phase 7 — Dependency upgrades ✅
+- Everything on current releases (atproto 0.0.73, bs4 4.15, feedparser 6.0.14,
+  pytest 9, ...). libmuni replaced selenium.
+- Dropped the direct `httpx` dependency; replaced `pytz` with `zoneinfo` + `tzdata`.
 
-### Phase 8 — Resilience
-- Isolate failures per feed and per post (log and continue).
-- Tolerant date handling via feedparser's `published_parsed`; skip undated items.
+### Phase 8 — Resilience ✅
+- Failures isolated per source and per post; the run exits 1 if anything failed.
+- Feed fetch errors raise instead of looking like an empty feed, and are
+  retried (norwalkct.gov resets ~1 in 6 connections).
+- Dates from feedparser's normalized `published_parsed`/`updated_parsed`;
+  undated items are skipped.
 
-### Phase 9 — Post quality
-- Put the title in the post text (searchable, readable in timelines).
-- Strip HTML from and cap length of embed card descriptions.
-- Fetch `og:image` thumbnails for cards where available.
-- Rename the "Nancy on Norwalk" source to Norwalk Current (the feed now redirects).
+### Phase 9 — Post quality (partly done)
+- ✅ Strip HTML from embed card titles/descriptions.
+- ✅ Read Norwalk Current (formerly Nancy on Norwalk) directly.
+- ⬜ Put the title in the post text (searchable, readable in timelines).
+- ⬜ Fetch `og:image` thumbnails for cards where available.
 
-### Phase 10 — Housekeeping
-- README, `pyproject.toml` description, consider Python 3.12+.
-- Confirm `BSKY_PASSWORD` is a Bluesky app password.
-- Enable Dependabot/Renovate so the project doesn't drift again.
+### Phase 10 — Housekeeping (partly done)
+- ✅ README, `pyproject.toml` description, Python 3.14 runtime.
+- ✅ Weekly Dependabot updates for uv, GitHub Actions and Docker.
+- ⬜ Confirm `BSKY_PASSWORD` is a Bluesky app password.
