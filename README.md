@@ -48,6 +48,26 @@ BSKY_USERNAME=norwalkctevents.bsky.social
 BSKY_PASSWORD=<a Bluesky app password, not the account password>
 ```
 
+### AI agenda summaries (optional)
+
+With `LLM_API_KEY` set, the bot replies under each city meeting's post with a
+short "AI summary of the agenda:" (2–3 bullets written by an LLM from the
+published agenda). It works with any OpenAI-compatible Chat Completions API;
+the defaults use Google Gemini:
+
+```sh
+LLM_API_KEY=<API key>                # unset: no summaries, nothing else changes
+LLM_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+LLM_MODEL=gemini-3.5-flash-lite
+```
+
+The LLM is asked once per meeting post, i.e. normally once per meeting (under
+the post the day before), and never for agendas that aren't published yet or
+have only routine items. Summaries are best effort: if the key is rejected or
+the API can't be reached, the run skips summaries (one warning) and carries on;
+LLM problems never make the run fail. Dry runs without a key log the agendas
+that would be summarized.
+
 ### Docker
 
 ```sh

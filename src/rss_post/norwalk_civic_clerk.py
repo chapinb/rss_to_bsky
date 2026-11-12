@@ -53,6 +53,13 @@ T = TypeVar("T")
 MINUTES_LOOKBACK = timedelta(days=60)
 MINUTES_TYPE = "Minutes"
 
+# An agenda whose items (not counting section headings) total fewer characters
+# than this is boilerplate (call to order, minutes, adjournment): nothing to
+# summarize.
+MIN_AGENDA_ITEM_CHARS = 100
+# Longer items (e.g. a list of every account in a budget transfer) are cut.
+MAX_AGENDA_ITEM_CHARS = 1000
+
 
 @dataclass(frozen=True)
 class Minutes:
@@ -177,8 +184,9 @@ def get_todays_meetings(
     reports a failure instead of looking like a day with no meetings.
 
     With ``read_agendas``, each meeting that hasn't started and isn't
-    cancelled also gets a ``participation`` entry from its agenda, read with
-    the same client (see ``read_participation``).
+    cancelled also gets ``participation`` and ``agenda_outline`` entries from
+    its agenda, read once with the same client (see ``read_agenda``,
+    ``participation_in`` and ``agenda_outline``).
     """
     now = now or datetime.now(EASTERN)
     today, tomorrow = now.date(), (now + timedelta(days=1)).date()
@@ -199,9 +207,9 @@ def get_todays_meetings(
                 and meeting["starts_at"] >= now
                 and not CANCELLED.search(meeting["title"])
             ):
-                meeting["participation"] = read_participation(
-                    client, meeting["agenda_id"]
-                )
+                agenda = read_agenda(client, meeting["agenda_id"])
+                meeting["participation"] = participation_in(agenda)
+                meeting["agenda_outline"] = agenda_outline(agenda)
     finally:
         if owns_client:
             client.close()
@@ -316,17 +324,15 @@ def find_participation(agenda: Agenda) -> Participation:
     return found
 
 
-def read_participation(
-    client: CivicClerkClient, agenda_id: int | None
-) -> Participation | None:
-    """Where the public can speak at a meeting, from its agenda.
+def read_agenda(client: CivicClerkClient, agenda_id: int | None) -> Agenda | None:
+    """A meeting's published agenda.
 
     Best effort: ``None`` when the meeting has no published agenda or it can't
     be read (after retrying transient failures), so the meeting is still
-    posted, just without the note.
+    posted, just without what its agenda would add.
     """
     if agenda_id is None:
-        logger.info("No agenda to read for public comment")
+        logger.info("No agenda to read")
         return None
     try:
         agenda = with_retries(
@@ -338,12 +344,68 @@ def read_participation(
     if agenda.raw.get("agendaIsPublish") is False or not agenda.items:
         logger.info(f"Agenda {agenda_id} is not published yet")
         return None
+    return agenda
+
+
+def participation_in(agenda: Agenda | None) -> Participation | None:
+    """Where the public can speak at a meeting, from its agenda (if any)."""
+    if agenda is None:
+        return None
     found = find_participation(agenda)
     logger.info(
-        f"Agenda {agenda_id}: public comment: {'yes' if found.comment else 'no'}; "
-        f"public hearings: {len(found.hearings)}"
+        f"Agenda {agenda.agenda_id}: public comment: "
+        f"{'yes' if found.comment else 'no'}; public hearings: {len(found.hearings)}"
     )
     return found
+
+
+def read_participation(
+    client: CivicClerkClient, agenda_id: int | None
+) -> Participation | None:
+    """Where the public can speak at a meeting, from its agenda.
+
+    Best effort, like ``read_agenda``: ``None`` without a readable published
+    agenda.
+    """
+    return participation_in(read_agenda(client, agenda_id))
+
+
+def outline_item_text(item: AgendaItem) -> str:
+    """An agenda item's name as plain text (``item_text``), capped in length."""
+    text = item_text(item.name)
+    if len(text) > MAX_AGENDA_ITEM_CHARS:
+        text = text[: MAX_AGENDA_ITEM_CHARS - 1].rsplit(" ", 1)[0] + "…"
+    return text
+
+
+def agenda_outline(agenda: Agenda | None) -> str | None:
+    """A published agenda as a plain-text outline (for summaries), or None if
+    there is none or it is only boilerplate (see ``MIN_AGENDA_ITEM_CHARS``).
+
+    Section headings are lines of their own and items are indented ``-``
+    lines, nested as on the agenda.
+    """
+    if agenda is None or agenda.raw.get("agendaIsPublish") is False:
+        return None
+    lines = []
+    item_chars = 0
+
+    def add(items: list[AgendaItem], depth: int) -> None:
+        nonlocal item_chars
+        for item in items:
+            text = outline_item_text(item)
+            if text:
+                if item.is_section:
+                    lines.append(f"{'  ' * depth}{text}")
+                else:
+                    lines.append(f"{'  ' * depth}- {text}")
+                    item_chars += len(text)
+            add(item.children, depth + 1)
+
+    add(agenda.items, 0)
+    if item_chars < MIN_AGENDA_ITEM_CHARS:
+        return None
+    return "\n".join(lines)
 
 
 def minutes_file(event: Event) -> PublishedFile | None:

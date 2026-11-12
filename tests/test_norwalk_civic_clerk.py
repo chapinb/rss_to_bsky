@@ -10,7 +10,9 @@ import pytest
 from libmuni.civicclerk import Agenda, APIStatusError, CivicClerkClient, NetworkError
 
 from rss_post.norwalk_civic_clerk import (
+    MAX_AGENDA_ITEM_CHARS,
     Participation,
+    agenda_outline,
     find_participation,
     format_when,
     get_todays_meetings,
@@ -309,8 +311,83 @@ def test_meetings_with_agendas():
         "Finance & Claims Committee": Participation(comment=True),
         "Library Board of Directors": Participation(comment=True),
     }
+    # The same read gives the agenda's outline, for summaries.
+    finance = next(m for m in meetings if m["title"] == "Finance & Claims Committee")
+    assert finance["agenda_outline"] == outline("8805")
+    assert "agenda_outline" not in meetings[0]
     # Without read_agendas, none are read.
     assert all(
         "participation" not in m
         for m in get_todays_meetings(NOV_11_7AM, fake_client(handler))
     )
+
+
+def outline(agenda: int | str | dict) -> str | None:
+    raw = agenda if isinstance(agenda, dict) else saved_agenda(agenda)
+    return agenda_outline(Agenda.from_api(raw))
+
+
+def test_agenda_outline_nests_sections_and_items_as_plain_text():
+    assert outline(8841).splitlines()[2:13] == [
+        "ACCEPTANCE OF MINUTES",
+        "  - Regular Meeting: 11.12.26",
+        "  - Revised Meeting Minutes 10.8.26",
+        "PUBLIC PARTICIPATION",
+        "REPORTS",
+        "  - President",
+        "    - Introduction of New Board Members Ray Cooke Amy Kule Elsa P. Obuchowski",
+        "  - Library Director",
+        (
+            "    - Request to close the library Saturday, December 26, 2026 "
+            "(NOTE: Library is closed December 25 and 27)"
+        ),
+        (
+            "    - Request to approve the updated Code of Conduct policy "
+            "Attachment 1: Current Policy Attachment 2: Requested revision "
+            "(approved date area in red awaiting approval)"
+        ),
+        "    - Heath Department Partnership: Know Your Numbers",
+    ]
+
+
+def test_agenda_outline_caps_long_items():
+    # The ARPA transfer item lists every account: thousands of characters.
+    lines = outline(8805).splitlines()
+    arpa = next(line for line in lines if "ARPA transfer" in line)
+    assert arpa.startswith("  - Approve ARPA transfer requests")
+    assert arpa.endswith("…")
+    assert max(len(line) for line in lines) <= len("  - ") + MAX_AGENDA_ITEM_CHARS
+    assert "<" not in "".join(lines)
+
+
+def test_agenda_outline_of_a_short_agenda():
+    assert "  - 30 Friendly Road: Unkempt Construction site" in outline(8840)
+
+
+def test_unpublished_agenda_has_no_outline():
+    assert outline(8835) is None
+    assert agenda_outline(None) is None
+
+
+def test_boilerplate_agenda_has_no_outline():
+    def item(id, name, section=False, children=()):
+        return {
+            "id": id,
+            "agendaObjectItemName": name,
+            "isSection": section,
+            "sortOrder": id,
+            "childItems": list(children),
+        }
+
+    agenda = {
+        "id": 1,
+        "agendaIsPublish": True,
+        "items": [
+            item(1, "CALL TO ORDER", True),
+            item(2, "ROLL CALL", True),
+            item(3, "ACCEPTANCE OF MINUTES", True, [item(4, "October 8, 2026")]),
+            item(5, "PUBLIC PARTICIPATION", True),
+            item(6, "ADJOURNMENT", True),
+        ],
+    }
+    assert outline(agenda) is None

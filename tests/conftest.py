@@ -33,3 +33,15 @@ def no_thumbnail_network():
         "rss_post.media._get", side_effect=httpx.ConnectError("network disabled")
     ) as mock_get:
         yield mock_get
+
+
+@pytest.fixture(autouse=True)
+def no_llm(monkeypatch):
+    """No LLM unless a test sets ``LLM_API_KEY``, and a fresh run's LLM state."""
+    from rss_post import summarize
+
+    for name in ("LLM_API_KEY", "LLM_BASE_URL", "LLM_MODEL"):
+        monkeypatch.setenv(name, "")
+    summarize.reset()
+    yield
+    summarize.reset()
