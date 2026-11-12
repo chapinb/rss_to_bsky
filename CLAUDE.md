@@ -42,6 +42,7 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 - Norwalk Oyster newsletter issues and today's top-rated community events
 - Norwalk Public Library events (today's notable community and adult programs)
 - Today's community events from the city's Recreation & Parks and Main City calendars
+- A Sunday-evening look-ahead thread of the coming week's meetings and events
 
 **Post Building**: `src/rss_post/post.py:Post` - Builder pattern for constructing social media posts with length constraints (250 chars), HTML stripping, and link formatting. A post can be a threaded follow-up: `replying_to(root, kind, parent=None)` names the post(s) it replies to by dedup key (from the account's history) or by a `Post` sent earlier in the run; `publish` resolves them to root/parent refs (`reply_to(root_ref, parent_ref)`) and skips the reply if they aren't found
 
@@ -71,6 +72,8 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **Agenda summaries**: `NorwalkFeeds.get_agenda_summaries` - an "AI summary of the agenda:" reply (2–3 bullets) under a city meeting's post, only for meeting posts made in the same run, so the LLM is asked once per meeting post (normally once per meeting, under the day-before post; again under the on-the-day post only if the day-before one has no summary). The agenda text is `meeting["agenda_outline"]` (`norwalk_civic_clerk.agenda_outline`), built from the same agenda read that finds public comment (`get_todays_meetings(read_agendas=True)`), so summaries make no CivicClerk requests of their own; unpublished or boilerplate-only agendas get no outline and no call. The source catches everything itself, so it never adds to the run's failures
 
+**Weekly look-ahead**: `src/rss_post/lookahead.py` - On Sundays from 6 PM Eastern (first successful run at or after `LOOKAHEAD_HOUR`), a thread for the coming Mon–Sun: a root post ("This week in Norwalk: N meetings, M events", linking the CivicClerk portal, #NorwalkCT) and one reply per day with something on, in time order, each replying to the one before. Meetings (CivicClerk, Board of Education) are all listed; events (Norwalk Oyster, library, city calendars; each module's own filters/caps per day, same-event listings merged, and a city-calendar event dropped when it lists a CivicClerk meeting that day: similar name after dropping dates/"special meeting"/"public hearing" noise, start within 30 min) are capped at `MAX_EVENTS_PER_DAY` with "+N more". Meetings are never merged. Names are tidied (whitespace, space before commas, trailing dates). Replies may use up to `REPLY_MAX_LENGTH` (295 code points, under Bluesky's 300 graphemes; links are facets on the names, so URLs don't count); a busy day is split into "Monday (part 2), ..." replies. Each source is read once for the week (`get_meetings_between`, `get_events_by_day` helpers). The root is keyed by the portal link and the Sunday it went out; each day's reply is its own reply kind (`dedup.lookahead_kind`, prefixes in `REPLY_PREFIXES`), so hourly re-runs skip what went out and a run that fails halfway is resumed by the next. A source that fails is left out of the thread (logged); if all fail, nothing is posted and the run reports a failure
+
 **Deduplication**: `src/rss_post/dedup.py` - Reads the links the account posted (and its own replies) in the last 30 days from Bluesky at startup and skips items already posted (no local storage). `published_posts` maps each key to the latest post's `PostRef`, and `SeenPosts.ref(key_or_post)` looks a post up so later runs can reply to it. Replies are keyed by their thread root's URI and kind (`reply_key`), so each follow-up goes out once per thread; a reply's kind is read back from its text's fixed prefix (`REPLY_PREFIXES`, e.g. reminder = "Starting at"), and new kinds register theirs there. A reply with a link card is also keyed by the card's link, so its item isn't later posted standalone
 
 **Logging**: `src/rss_post/logging_config.py` - Centralized logging configuration with structured output
@@ -89,9 +92,10 @@ Environment variables in `.env` file (template at `template.env`):
 - Builder pattern for post construction with length validation
 - Time-based filtering (only posts from within specified hours)
 - Link-based deduplication against the account's own recent posts; replies deduped by (thread root, kind)
-- Threaded follow-ups (meeting reminders, recordings and minutes; later summaries) found via the post history, not local storage
+- Threaded follow-ups (meeting reminders, recordings, minutes and agenda summaries) found via the post history, not local storage
 - Content filtering (CT Mirror posts filtered for "norwalk" mentions)
 - Schedule-aware posting (meetings, Board of Education meetings, Norwalk Oyster events, library events and city calendar events posted once a day by the first successful run from 7 AM Eastern; ones that have started are skipped)
+- Weekly look-ahead thread on Sunday evenings, deduped per week by its root's daily key and per day by reply kind
 - Adapter pattern for output destinations (Bluesky vs console)
 - Comprehensive logging throughout all components with configurable levels
 - Per-source and per-post error isolation; the run exits 1 if anything failed

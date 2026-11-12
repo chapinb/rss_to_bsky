@@ -59,6 +59,32 @@ REPLY_PREFIXES: dict[str, str] = {
     "summary": "AI summary of the agenda",
 }
 
+# The weekly look-ahead's day-by-day replies (see ``lookahead``): one kind per
+# weekday and part, e.g. "lookahead-monday" ("Monday, Nov 16 ...") and, when a
+# busy day is split, "lookahead-monday-2" ("Monday (part 2), Nov 16 ...").
+WEEKDAYS = (
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+)
+LOOKAHEAD_MAX_PARTS = 4
+
+
+def lookahead_kind(weekday: int, part: int = 1) -> str:
+    """Reply kind of part ``part`` of the look-ahead's ``weekday`` (0 = Monday)."""
+    kind = f"lookahead-{WEEKDAYS[weekday].lower()}"
+    return kind if part == 1 else f"{kind}-{part}"
+
+
+for _weekday, _name in enumerate(WEEKDAYS):
+    REPLY_PREFIXES[lookahead_kind(_weekday)] = f"{_name}, "
+    for _part in range(2, LOOKAHEAD_MAX_PARTS + 1):
+        REPLY_PREFIXES[lookahead_kind(_weekday, _part)] = f"{_name} (part {_part}), "
+
 
 @dataclass(frozen=True)
 class PostRef:
