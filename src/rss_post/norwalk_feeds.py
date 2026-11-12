@@ -1,22 +1,20 @@
 import argparse
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytz
-from atproto import client_utils
 
+from rss_post import norwalk_civic_clerk
 from rss_post.bsky import Bluesky, Stdout
+from rss_post.logging_config import get_logger, setup_logging
 from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
-from rss_post import norwalk_civic_clerk
-from rss_post.logging_config import setup_logging, get_logger
-
 
 logger = get_logger(__name__)
 
 
 def posting_filter(item_pub_date: str, posting_frequency: timedelta) -> bool:
     pub_date = datetime.strptime(item_pub_date, "%a, %d %b %Y %H:%M:%S %z")
-    return datetime.now(timezone.utc) - pub_date <= posting_frequency
+    return datetime.now(UTC) - pub_date <= posting_frequency
 
 
 class NorwalkFeeds:
@@ -30,8 +28,7 @@ class NorwalkFeeds:
         logger.info(f"Processing feed with embed card: {feed_name} from {feed_url}")
         items = read_rss_items(feed_url)
         posts = [
-            Post()
-            .with_embed_card(item.link, item.title, item.description)
+            Post().with_embed_card(item.link, item.title, item.description)
             for item in items
             if posting_filter(item.published, self.posting_frequency)
         ]

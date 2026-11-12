@@ -1,9 +1,10 @@
-from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
-from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
 import time
+from datetime import datetime, timedelta
+
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 
 from rss_post.logging_config import get_logger
 
@@ -61,14 +62,14 @@ def get_todays_meetings():
                     }
                     meetings.append(meeting_info)
                     logger.info(f"Found meeting: {title} on {date}")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - scraping must degrade gracefully
                 logger.warning(f"Failed to parse meeting element: {e}")
                 continue
 
         logger.info(f"Successfully read {len(meetings)} meetings")
         return meetings
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - scraping must degrade gracefully
         logger.error(f"Failed to read meetings: {e}")
         return []
 

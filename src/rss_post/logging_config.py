@@ -1,11 +1,8 @@
 import logging
 import sys
-from typing import Optional
 
 
-def setup_logging(
-    level: Optional[str] = None, format_str: Optional[str] = None
-) -> None:
+def setup_logging(level: str | None = None, format_str: str | None = None) -> None:
     """
     Configure logging for the RSS to Bluesky application.
 

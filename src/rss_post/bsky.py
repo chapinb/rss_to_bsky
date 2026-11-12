@@ -1,4 +1,5 @@
-from typing import Any, Optional
+from typing import Any
+
 from atproto import Client, client_utils, models
 from decouple import config
 
@@ -19,7 +20,7 @@ class Bluesky:
     def post(self, post_obj: Any) -> None:
         try:
             text_builder: client_utils.TextBuilder = post_obj.build()
-            embed: Optional[models.AppBskyEmbedExternal.Main] = getattr(
+            embed: models.AppBskyEmbedExternal.Main | None = getattr(
                 post_obj, "embed", None
             )
 
@@ -39,7 +40,7 @@ class Stdout:
 
     def post(self, post_obj: Any) -> None:
         text_builder: client_utils.TextBuilder = post_obj.build()
-        embed: Optional[models.AppBskyEmbedExternal.Main] = getattr(
+        embed: models.AppBskyEmbedExternal.Main | None = getattr(
             post_obj, "embed", None
         )
 

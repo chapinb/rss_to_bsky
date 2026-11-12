@@ -1,6 +1,6 @@
 import feedparser
-
 from feedparser import FeedParserDict
+
 from rss_post.logging_config import get_logger
 
 logger = get_logger(__name__)
