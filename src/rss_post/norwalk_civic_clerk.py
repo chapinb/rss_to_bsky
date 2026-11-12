@@ -116,6 +116,5 @@ if __name__ == "__main__":
         print(f"Title: {meeting['title']}")
         print(f"Agenda: {meeting['agenda']}")
         print(f"When: {meeting['when']}")
-        print(f"Where: {meeting['location']}")
         print(f"Zoom: {meeting['zoom']}")
         print()
