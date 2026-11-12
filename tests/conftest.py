@@ -40,7 +40,7 @@ def no_llm(monkeypatch):
     """No LLM unless a test sets ``LLM_API_KEY``, and a fresh run's LLM state."""
     from rss_post import summarize
 
-    for name in ("LLM_API_KEY", "LLM_BASE_URL", "LLM_MODEL"):
+    for name in ("LLM_API_KEY", "LLM_BASE_URL", "LLM_MODEL", "LLM_UNTRUSTED_NONCE"):
         monkeypatch.setenv(name, "")
     summarize.reset()
     yield
