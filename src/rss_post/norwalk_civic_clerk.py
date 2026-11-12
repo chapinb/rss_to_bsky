@@ -39,6 +39,12 @@ EASTERN = ZoneInfo("America/New_York")
 ATTEMPTS = 3
 BACKOFF_SECONDS = 2.0
 
+# A YouTube video link (youtu.be/ID, youtube.com/watch?v=ID, /live/ID, ...).
+YOUTUBE_URL = re.compile(
+    r"(?:youtu\.be/|youtube\.com/(?:watch\?(?:.*&)?v=|live/|embed/|shorts/))"
+    r"([\w-]{11})"
+)
+
 T = TypeVar("T")
 
 # Minutes are looked for on meetings this far back. Over Jul-Nov 2026 Norwalk
@@ -110,7 +116,21 @@ def format_location(location: EventLocation | None) -> str | None:
     return ", ".join(part.strip() for part in parts if part and part.strip()) or None
 
 
+def youtube_id(event: Event) -> str | None:
+    """The YouTube id of the meeting's recording, if it has one.
+
+    Norwalk leaves ``youtubeVideoId`` empty and puts a ``youtu.be`` link in
+    ``externalMediaUrl`` once the recording is up; before that the field may
+    hold the meeting's Zoom link instead, which is not a recording.
+    """
+    if event.youtube_video_id:
+        return event.youtube_video_id
+    match = YOUTUBE_URL.search(event.raw.get("externalMediaUrl") or "")
+    return match.group(1) if match else None
+
+
 def meeting_from_event(event: Event) -> dict:
+    video = youtube_id(event)
     return {
         "title": (event.name or "Meeting").strip(),
         "agenda": f"{PORTAL_URL}/event/{event.id}/files",
@@ -119,6 +139,9 @@ def meeting_from_event(event: Event) -> dict:
         "location": format_location(event.location),
         "zoom": event.virtual_meeting_url,
         "agenda_id": event.agenda_id,
+        # The recording's YouTube page and thumbnail, once it is posted.
+        "recording": video and f"https://www.youtube.com/watch?v={video}",
+        "recording_thumb": video and f"https://i.ytimg.com/vi/{video}/hqdefault.jpg",
     }
 
 
@@ -184,6 +207,27 @@ def get_todays_meetings(
             client.close()
 
     logger.info(f"Successfully read {len(meetings)} meetings")
+    return meetings
+
+
+def get_recent_meetings(
+    days: int, now: datetime | None = None, client: CivicClerkClient | None = None
+) -> list[dict]:
+    """Meetings from the last ``days`` days (US/Eastern) that have started.
+
+    For follow-ups that appear after a meeting, such as its recording. Raises
+    like ``get_todays_meetings``.
+    """
+    now = (now or datetime.now(EASTERN)).astimezone(EASTERN)
+    since = (now - timedelta(days=days)).date()
+    logger.info(f"Reading {TENANT} meetings from {since} to {now.date()}")
+    meetings = [
+        meeting_from_event(event) for event in read_events(since, now.date(), client)
+    ]
+    meetings = [
+        m for m in meetings if since <= m["starts_at"].date() and m["starts_at"] <= now
+    ]
+    logger.info(f"Read {len(meetings)} meetings since {since}")
     return meetings
 
 

@@ -53,6 +53,9 @@ MAX_HEARING_TOPIC = 60
 # recently: enough to catch up after missed runs, while a first run (or one
 # after a long outage) doesn't post weeks of backlog.
 MINUTES_FRESHNESS = timedelta(days=3)
+# Recordings are posted for meetings from this many days back. Norwalk's
+# usually go up within a few days, but sometimes weeks late in a batch.
+RECORDING_LOOKBACK_DAYS = 14
 # At most this many events a day from each city calendar (#13 plans a weekly
 # look-ahead for the rest).
 CITY_EVENTS_PER_DAY = 2
@@ -161,6 +164,21 @@ def minutes_post(minutes: norwalk_civic_clerk.Minutes) -> Post:
             minutes.name or f"{meeting['title']} minutes",
             f"{meeting['title']} · {meeting['when']}",
             thumb_url=CITY_SEAL,
+        )
+    )
+
+
+def recording_post(meeting: dict) -> Post:
+    """A "Recording: <meeting>" post with a card for its YouTube video."""
+    day = meeting["starts_at"].date()
+    return (
+        Post()
+        .with_headline(f"{REPLY_PREFIXES['recording']}: {meeting['title']}")
+        .with_embed_card(
+            meeting["recording"],
+            f"{meeting['title']} ({day:%b} {day.day}, {day.year})",
+            "Meeting recording on YouTube",
+            thumb_url=meeting["recording_thumb"],
         )
     )
 
@@ -282,6 +300,30 @@ class NorwalkFeeds:
                 )
             posts.append(post)
         logger.info(f"Generated {len(posts)} meeting minutes posts")
+        return posts
+
+    def get_meeting_recordings(self, now: datetime | None = None) -> list[Post]:
+        """Replies with the recordings of the last two weeks' meetings.
+
+        Each is a YouTube card threaded under the meeting's post from its day,
+        or failing that the day before, once. If neither post is in the
+        history the recording is skipped (``publish`` logs it).
+        """
+        now = now or datetime.now(EASTERN)
+        meetings = norwalk_civic_clerk.get_recent_meetings(RECORDING_LOOKBACK_DAYS, now)
+        posts = []
+        for meeting in meetings:
+            if not meeting["recording"] or CANCELLED.search(meeting["title"]):
+                continue
+            day = meeting["starts_at"].date()
+            root = post_key(meeting["agenda"])
+            on_day, day_before = (
+                recording_post(meeting).replying_to(daily_key(root, d), "recording")
+                for d in (day, day - timedelta(days=1))
+            )
+            # A reply as the fallback too, so with neither post nothing is sent.
+            posts.append(on_day.otherwise(day_before))
+        logger.info(f"Generated {len(posts)} meeting recording replies")
         return posts
 
     def get_todays_boe_meetings(self, now: datetime | None = None) -> list[Post]:
@@ -507,6 +549,7 @@ def main():
         sources.append(("today's meetings", norwalk_feeds.get_todays_norwalk_meetings))
         # After the meetings, so a reminder can reply to a post made this run.
         sources.append(("meeting reminders", norwalk_feeds.get_meeting_reminders))
+        sources.append(("meeting recordings", norwalk_feeds.get_meeting_recordings))
         sources.append(
             (
                 "today's and tomorrow's Board of Education meetings",
@@ -593,7 +636,7 @@ def publish(client, sources, seen: SeenPosts | None = None) -> tuple[int, int]:
             if not seen.resolve_reply(post):
                 logger.info(
                     f"Skipping {post.reply_kind} from {name}: "
-                    "the post it replies to wasn't found"
+                    f"the post it replies to wasn't found ({post.link or 'no link'})"
                 )
                 continue
             if not seen.is_new(post):

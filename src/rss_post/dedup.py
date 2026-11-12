@@ -50,11 +50,11 @@ CANCELLED = re.compile(r"\bcancell?ed\b", re.IGNORECASE)
 
 # The text each kind of reply starts with, so later runs can tell a reply's
 # kind from its text alone. A new kind of follow-up registers its prefix here
-# (e.g. "summary": "AI summary", "recording": "Recording"), and its posts'
-# text must start with it.
+# (e.g. "summary": "AI summary"), and its posts' text must start with it.
 REPLY_PREFIXES: dict[str, str] = {
     "reminder": "Starting at",
     "minutes": "Minutes posted",
+    "recording": "Recording",
 }
 
 
