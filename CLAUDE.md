@@ -57,6 +57,8 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **Minutes**: `NorwalkFeeds.get_meeting_minutes` posts "Minutes posted: <meeting>, <date>" with a card for the minutes file (`{PORTAL_URL}/event/{id}/files/agenda/{file_id}`; the `Minutes` record keeps `file_id` for `get_file_text`). Every run reads meetings from the last 60 days (`MINUTES_LOOKBACK`; Norwalk's median lag is ~5 days, 90% within 16) in one paged `iter_events` call and posts minutes published in the last 3 days (`MINUTES_FRESHNESS`, so a first run doesn't post the backlog). Minutes files published before their meeting are the previous meeting's and are ignored. Each is a reply to the meeting's post from the day of the meeting, else the day before (`Post.otherwise` chains the alternatives), else posted standalone when the meeting post has left the 30-day history
 
+**Meeting recordings**: `NorwalkFeeds.get_meeting_recordings` reads the last 14 days of meetings (`norwalk_civic_clerk.get_recent_meetings`, `RECORDING_LOOKBACK_DAYS`) and replies to each one's post (from its day, else the day before, via `Post.otherwise`) with a "Recording: <name>" YouTube card. Replies only: if neither meeting post is in the history the recording is skipped. Norwalk leaves `youtubeVideoId` empty and puts a `youtu.be` link in the raw `externalMediaUrl` once the recording is up (before that it may hold the Zoom link, which is ignored). The thumbnail is `i.ytimg.com`'s (YouTube's watch page bot-checks datacenter IPs, so og:image is unreliable)
+
 **Board of Education**: `src/rss_post/norwalk_boe.py` - Today's and tomorrow's BoE and committee meetings from the district's Finalsite BOE Calendar iCal feed (they aren't in the city's CivicClerk). The feed has no page per meeting, so each card links to the calendar's `~occur_id/<id>` deep link (unique per meeting; like city meetings, posts are keyed by that link + the posting day); the post links to BoardDocs for agendas but never reads it (BoardDocs refuses automated requests)
 
 **Norwalk Oyster**: `src/rss_post/norwalk_oyster.py` - Neither source has a usable RSS feed: events come from the calendar's JSON data file (top-rated, scored 4+, posted at 7 AM), and newsletter issues from the beehiiv newsletter's Google News sitemap (its `/feed` is behind a Cloudflare bot check)
@@ -80,7 +82,7 @@ Environment variables in `.env` file (template at `template.env`):
 - Builder pattern for post construction with length validation
 - Time-based filtering (only posts from within specified hours)
 - Link-based deduplication against the account's own recent posts; replies deduped by (thread root, kind)
-- Threaded follow-ups (meeting reminders; later recordings, minutes, summaries) found via the post history, not local storage
+- Threaded follow-ups (meeting reminders, recordings and minutes; later summaries) found via the post history, not local storage
 - Content filtering (CT Mirror posts filtered for "norwalk" mentions)
 - Schedule-aware posting (meetings, Board of Education meetings, Norwalk Oyster events, library events and city calendar events posted once a day by the first successful run from 7 AM Eastern; ones that have started are skipped)
 - Adapter pattern for output destinations (Bluesky vs console)

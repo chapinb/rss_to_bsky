@@ -77,6 +77,8 @@ def test_parses_meetings():
         "location": "Hybrid via Zoom and Room 220",
         "zoom": None,
         "agenda_id": None,
+        "recording": None,
+        "recording_thumb": None,
     }
     defined = next(m for m in meetings if m["title"].startswith("Defined"))
     assert defined["location"] == (
