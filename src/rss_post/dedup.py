@@ -57,6 +57,7 @@ REPLY_PREFIXES: dict[str, str] = {
     "minutes": "Minutes posted",
     "recording": "Recording",
     "summary": "AI summary of the agenda",
+    "minutes-summary": "AI summary of the minutes",
 }
 
 # The weekly look-ahead's day-by-day replies (see ``lookahead``): one kind per
