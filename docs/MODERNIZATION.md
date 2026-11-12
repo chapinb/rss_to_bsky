@@ -93,6 +93,8 @@ Done phases note what actually shipped where it differs from the plan.
 - Failures isolated per source and per post; the run exits 1 if anything failed.
 - Feed fetch errors raise instead of looking like an empty feed, and are
   retried (norwalkct.gov resets ~1 in 6 connections).
+- CivicClerk network errors, 429s and 5xx are retried too; if meetings still
+  can't be read the source fails (exit 1) instead of posting nothing silently.
 - Dates from feedparser's normalized `published_parsed`/`updated_parsed`;
   undated items are skipped.
 
