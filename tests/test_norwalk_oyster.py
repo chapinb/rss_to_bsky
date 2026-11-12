@@ -124,23 +124,27 @@ def test_event_posts_say_when_and_where(oyster_site, freeze_feeds_now):
 
 def test_server_errors_are_retried_then_raised(no_sleep):
     url = norwalk_oyster.EVENTS_URL
-    with patch(
-        "rss_post.norwalk_oyster.httpx.get",
-        return_value=response(url, status=503),
-    ) as mock_get:
-        with pytest.raises(httpx.HTTPStatusError):
-            norwalk_oyster.fetch(url)
+    with (
+        patch(
+            "rss_post.norwalk_oyster.httpx.get",
+            return_value=response(url, status=503),
+        ) as mock_get,
+        pytest.raises(httpx.HTTPStatusError),
+    ):
+        norwalk_oyster.fetch(url)
     assert mock_get.call_count == norwalk_oyster.ATTEMPTS
 
 
 def test_client_errors_are_not_retried(no_sleep):
     url = norwalk_oyster.NEWSLETTER_SITEMAP_URL
-    with patch(
-        "rss_post.norwalk_oyster.httpx.get",
-        return_value=response(url, status=403),
-    ) as mock_get:
-        with pytest.raises(httpx.HTTPStatusError):
-            norwalk_oyster.fetch(url)
+    with (
+        patch(
+            "rss_post.norwalk_oyster.httpx.get",
+            return_value=response(url, status=403),
+        ) as mock_get,
+        pytest.raises(httpx.HTTPStatusError),
+    ):
+        norwalk_oyster.fetch(url)
     assert mock_get.call_count == 1
 
 
@@ -152,4 +156,3 @@ def test_network_error_then_success(no_sleep):
         side_effect=[httpx.ConnectError("down"), ok],
     ):
         assert norwalk_oyster.fetch(url) is ok
-
