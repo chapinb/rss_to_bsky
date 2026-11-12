@@ -444,6 +444,33 @@ def minutes_file(event: Event) -> PublishedFile | None:
     return min(files, key=lambda f: f.published_at, default=None)
 
 
+def plain_text(text: str) -> str:
+    """Extracted file text without layout whitespace: each line stripped,
+    runs of spaces collapsed and blank lines dropped (fewer tokens to send)."""
+    lines = (" ".join(line.split()) for line in text.splitlines())
+    return "\n".join(line for line in lines if line)
+
+
+def read_minutes_text(client: CivicClerkClient, minutes: Minutes) -> str | None:
+    """The text of ``minutes`` (see ``plain_text``), or None if there is none.
+
+    The API extracts text best effort: scanned PDFs, and some others, come
+    back empty. Best effort like ``read_agenda``: None (logged) if the file
+    can't be read after retrying transient failures.
+    """
+    try:
+        text = with_retries(
+            f"minutes {minutes.file_id}",
+            lambda: client.get_file_text(minutes.file_id),
+        )
+    except CivicClerkError as e:
+        logger.warning(f"Could not read minutes {minutes.file_id} ({e})")
+        return None
+    text = plain_text(text or "")
+    logger.info(f"Minutes {minutes.file_id}: {len(text)} chars of text")
+    return text or None
+
+
 def get_recent_minutes(
     now: datetime | None = None, client: CivicClerkClient | None = None
 ) -> list[Minutes]:
