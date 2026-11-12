@@ -60,10 +60,11 @@ class NorwalkFeeds:
             "https://www.norwalkct.gov/RSSFeed.aspx?ModID=1&CID=All-newsflash.xml",
         )
 
-    def get_nancy_on_norwalk_stories(self) -> list[Post]:
+    def get_norwalk_current_stories(self) -> list[Post]:
+        # Formerly Nancy on Norwalk; nancyonnorwalk.com/feed/ redirects here.
         return self.generate_with_embed_card(
-            "Nancy on Norwalk",
-            "https://www.nancyonnorwalk.com/feed/",
+            "Norwalk Current",
+            "https://www.norwalkcurrent.com/feed/",
         )
 
     def get_todays_norwalk_meetings(self) -> list[Post]:
@@ -150,7 +151,7 @@ def main():
     sources: list[tuple[str, Callable[[], list[Post]]]] = [
         ("news flashes", norwalk_feeds.get_news_flashes),
         ("committee events", norwalk_feeds.get_committee_events),
-        ("Nancy on Norwalk stories", norwalk_feeds.get_nancy_on_norwalk_stories),
+        ("Norwalk Current stories", norwalk_feeds.get_norwalk_current_stories),
         ("CT Mirror stories", norwalk_feeds.get_ct_mirror_stories),
     ]
     current_hour = datetime.now(ZoneInfo("America/New_York")).hour

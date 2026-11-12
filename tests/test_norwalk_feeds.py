@@ -55,13 +55,17 @@ def test_city_calendar_accepts_future_dated_items(freeze_feeds_now):
     assert len(posts) == 3
 
 
-def test_city_calendar_card_description_is_raw_html(freeze_feeds_now):
-    """Current behaviour; HTML stripping for cards is planned in Phase 9."""
+def test_city_calendar_card_description_is_plain_text(freeze_feeds_now):
     freeze_feeds_now(datetime(2026, 11, 5, 12, 0, tzinfo=EST))
     with feeds_from_fixture("norwalk_calendar.xml"):
         posts = NorwalkFeeds(timedelta(hours=24)).get_committee_events()
 
-    assert "<strong>" in card(posts[0]).description
+    housing = next(p for p in posts if card(p).uri.endswith("EID=17270"))
+    assert card(housing).description == (
+        "Event date: November 18, 2026 Event Time: 05:30 PM - 06:30 PM "
+        "Location: Norwalk, CT 06851-5125"
+    )
+    assert "<" not in card(housing).description
 
 
 def test_ct_mirror_only_posts_stories_mentioning_norwalk(freeze_feeds_now):

@@ -61,7 +61,9 @@ class Post:
         """Add an embed card with external link to the post"""
         self.embed = models.AppBskyEmbedExternal.Main(
             external=models.AppBskyEmbedExternal.External(
-                uri=url, title=title, description=description
+                uri=url,
+                title=self.remove_html_formatting(title),
+                description=self.remove_html_formatting(description),
             )
         )
         logger.debug(f"Added embed card for URL: {url}")
