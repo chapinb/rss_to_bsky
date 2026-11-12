@@ -11,6 +11,7 @@ dependencies = [
     "atproto>=0.0.73",
     "beautifulsoup4>=4.15.0",
     "feedparser>=6.0.14",
+    "httpx>=0.28.1",
     "libmuni>=0.1.0",
     "python-decouple>=3.8",
     "tzdata>=2026.6",
@@ -18,7 +19,6 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "httpx>=0.28.1",
     "pytest-watcher>=0.6.3",
     "pytest>=9.2.0",
 ]

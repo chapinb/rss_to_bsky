@@ -22,3 +22,14 @@ def freeze_feeds_now():
     yield _freeze
     for patcher in patchers:
         patcher.stop()
+
+
+@pytest.fixture(autouse=True)
+def no_thumbnail_network():
+    """Keep tests offline: thumbnail lookups fail unless a test patches them."""
+    import httpx
+
+    with patch(
+        "rss_post.media._get", side_effect=httpx.ConnectError("network disabled")
+    ) as mock_get:
+        yield mock_get

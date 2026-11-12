@@ -693,6 +693,7 @@ dependencies = [
     { name = "atproto" },
     { name = "beautifulsoup4" },
     { name = "feedparser" },
+    { name = "httpx" },
     { name = "libmuni" },
     { name = "python-decouple" },
     { name = "tzdata" },
@@ -700,7 +701,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "httpx" },
     { name = "pytest" },
     { name = "pytest-watcher" },
 ]
@@ -710,6 +710,7 @@ requires-dist = [
     { name = "atproto", specifier = ">=0.0.73" },
     { name = "beautifulsoup4", specifier = ">=4.15.0" },
     { name = "feedparser", specifier = ">=6.0.14" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "libmuni", specifier = ">=0.1.0" },
     { name = "python-decouple", specifier = ">=3.8" },
     { name = "tzdata", specifier = ">=2026.6" },
@@ -717,7 +718,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "httpx", specifier = ">=0.28.1" },
     { name = "pytest", specifier = ">=9.2.0" },
     { name = "pytest-watcher", specifier = ">=0.6.3" },
 ]

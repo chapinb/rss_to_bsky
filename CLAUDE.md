@@ -47,6 +47,8 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **RSS Processing**: `src/rss_post/read_rss.py` - Thin wrapper around feedparser library
 
+**Card thumbnails**: `src/rss_post/media.py` - Finds a card image from the feed item (media:content, media:thumbnail, image enclosure, first `<img>`), falling back to the linked page's `og:image`; `Bluesky` downloads it (≤1 MB) and uploads it as the card's thumb. Best effort: failures post the card without a thumbnail
+
 **Meetings**: `src/rss_post/norwalk_civic_clerk.py` - Today's meetings from the CivicClerk API via `libmuni`
 
 **Logging**: `src/rss_post/logging_config.py` - Centralized logging configuration with structured output

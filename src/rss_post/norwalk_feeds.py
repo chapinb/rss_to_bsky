@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 from rss_post import norwalk_civic_clerk
 from rss_post.bsky import Bluesky, Stdout
 from rss_post.logging_config import get_logger, setup_logging
+from rss_post.media import image_from_item
 from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
 
@@ -41,7 +42,12 @@ class NorwalkFeeds:
         logger.info(f"Processing feed with embed card: {feed_name} from {feed_url}")
         items = read_rss_items(feed_url)
         posts = [
-            Post().with_embed_card(item.link, item.title, item.get("description", ""))
+            Post().with_embed_card(
+                item.link,
+                item.title,
+                item.get("description", ""),
+                thumb_url=image_from_item(item),
+            )
             for item in items
             if posting_filter(item, self.posting_frequency)
         ]
@@ -102,7 +108,10 @@ class NorwalkFeeds:
             logger.debug(f"Found Norwalk mention in CT Mirror story: {item.title}")
             norwalk_items.append(
                 Post().with_embed_card(
-                    item.link, item.title, item.get("description", "")
+                    item.link,
+                    item.title,
+                    item.get("description", ""),
+                    thumb_url=image_from_item(item),
                 )
             )
         logger.info(
