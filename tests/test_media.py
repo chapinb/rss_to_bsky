@@ -147,3 +147,18 @@ def test_card_description_caps_length_on_word_boundary():
 def test_with_embed_card_keeps_thumb_url():
     post = Post().with_embed_card("https://x", "T", "D", thumb_url="https://i")
     assert post.thumb_url == "https://i"
+
+
+def test_download_thumbnail_reads_packaged_images(tmp_path):
+    image = tmp_path / "seal.png"
+    image.write_bytes(b"png")
+    assert media.download_thumbnail(image) == b"png"
+    assert media.download_thumbnail(tmp_path / "missing.png") is None
+
+
+def test_city_seal_is_a_usable_thumbnail():
+    from rss_post.norwalk_feeds import CITY_SEAL
+
+    image = media.download_thumbnail(CITY_SEAL)
+    assert image is not None
+    assert image.startswith(b"\x89PNG")

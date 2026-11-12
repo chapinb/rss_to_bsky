@@ -2,6 +2,7 @@ import argparse
 import sys
 from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from rss_post import norwalk_civic_clerk, norwalk_oyster
@@ -17,10 +18,11 @@ logger = get_logger(__name__)
 EASTERN = ZoneInfo("America/New_York")
 # Meetings and events go out from the first successful run at or after this hour (Eastern).
 MEETINGS_HOUR = 7
-# The city's logo from the norwalkct.gov site header (484x84 PNG, ~12 KB), for
-# meeting cards: the CivicClerk portal is rendered by JavaScript and has no
-# og:image of its own.
-CITY_LOGO_URL = "https://www.norwalkct.gov/ImageRepository/Document?documentID=39211"
+# The city's circular emblem ("The City of Norwalk, Est. 1651, Inc. 1913", from
+# the norwalkct.gov homepage SVG), centered on a 1200x628 card so Bluesky's
+# ~1.91:1 thumbnail crop keeps the ring text. Used for meeting cards: the
+# CivicClerk portal is rendered by JavaScript and has no og:image of its own.
+CITY_SEAL = Path(__file__).parent / "assets" / "city_seal.png"
 
 
 def published_at(item) -> datetime | None:
@@ -64,7 +66,7 @@ def meeting_post(meeting: dict, day: date) -> Post:
         Post()
         .with_headline(f"{meeting['title']}\n{meeting['when']}")
         .with_embed_card(
-            meeting["agenda"], meeting["title"], details, thumb_url=CITY_LOGO_URL
+            meeting["agenda"], meeting["title"], details, thumb_url=CITY_SEAL
         )
         # After the card, which keys the post by its link but not the day.
         .keyed_by(meeting["agenda"], day)

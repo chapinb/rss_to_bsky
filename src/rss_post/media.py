@@ -4,6 +4,7 @@ Everything here is best effort: a missing or broken image should leave the
 card without a thumbnail, never stop the post from going out.
 """
 
+from pathlib import Path
 from urllib.parse import urljoin
 
 import httpx
@@ -83,13 +84,29 @@ def og_image_from_page(page_url: str) -> str | None:
     return None
 
 
-def find_thumbnail_url(page_url: str, feed_image: str | None) -> str | None:
+def find_thumbnail_url(
+    page_url: str, feed_image: str | Path | None
+) -> str | Path | None:
     """The feed's own image when it has one, else the linked page's."""
     return feed_image or og_image_from_page(page_url)
 
 
-def download_thumbnail(image_url: str) -> bytes | None:
-    """Fetch an image for a card thumb, or ``None`` if it is unusable."""
+def download_thumbnail(image_url: str | Path) -> bytes | None:
+    """Fetch an image for a card thumb, or ``None`` if it is unusable.
+
+    A ``Path`` is an image shipped with the package and is read from disk.
+    """
+    if isinstance(image_url, Path):
+        try:
+            image = image_url.read_bytes()
+        except OSError as e:
+            logger.warning(f"Could not read thumbnail {image_url}: {e}")
+            return None
+        if len(image) > MAX_THUMB_BYTES:
+            logger.warning(f"Thumbnail {image_url} is over the size limit")
+            return None
+        return image
+
     try:
         response = _get(image_url)
         response.raise_for_status()

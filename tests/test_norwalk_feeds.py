@@ -9,7 +9,7 @@ from atproto import models
 
 from rss_post import norwalk_civic_clerk
 from rss_post.dedup import SeenPosts, keys_in_record
-from rss_post.norwalk_feeds import CITY_LOGO_URL, NorwalkFeeds, publish
+from rss_post.norwalk_feeds import CITY_SEAL, NorwalkFeeds, publish
 from rss_post.read_rss import read_rss_items
 from tests.conftest import FIXTURES
 from tests.test_norwalk_civic_clerk import EVENTS, fake_client
@@ -132,7 +132,7 @@ def test_meeting_posts_have_an_agenda_card_and_zoom_link():
         "Nov 10, 2026 at 7:30 PM EST · "
         "Council Chambers, 125 East Avenue, Norwalk, CT 06851"
     )
-    assert post.thumb_url == CITY_LOGO_URL
+    assert post.thumb_url == CITY_SEAL
     # Still keyed by the agenda link and the day, not just the card's link.
     assert SeenPosts.key(post) == (
         "https://norwalkct.portal.civicclerk.com/event/1049/files on 2026-11-10"
