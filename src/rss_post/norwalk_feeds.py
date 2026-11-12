@@ -5,7 +5,7 @@ from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from rss_post import norwalk_civic_clerk, norwalk_oyster
+from rss_post import norwalk_boe, norwalk_civic_clerk, norwalk_oyster
 from rss_post.bsky import Bluesky, Stdout
 from rss_post.dedup import (
     CANCELLED,
@@ -174,6 +174,39 @@ class NorwalkFeeds:
         logger.info(f"Generated {len(posts)} meeting reminders")
         return posts
 
+    def get_todays_boe_meetings(self, now: datetime | None = None) -> list[Post]:
+        """Posts for today's and tomorrow's Board of Education meetings that
+        haven't started yet.
+
+        Like city meetings, each is keyed by its own link (its entry on the
+        district's calendar) and today's date, so later runs the same day skip
+        what an earlier run posted, and tomorrow's meetings are posted again
+        on the day.
+        """
+        now = now or datetime.now(EASTERN)
+        today = now.astimezone(EASTERN).date()
+        posts = []
+        meetings = norwalk_boe.get_meetings_on(today, today + timedelta(days=1))
+        for meeting in meetings:
+            if meeting.starts_at < now:
+                logger.info(f"Skipping meeting that has started: {meeting.title}")
+                continue
+            title = f"Board of Education: {meeting.title}"
+            details = " · ".join(filter(None, [meeting.when, meeting.location]))
+            post = (
+                Post()
+                .with_headline(f"{title}\n{meeting.when}")
+                .with_embed_card(meeting.url, title, details)
+                # After the card, which keys the post by its link but not the day.
+                .keyed_by(meeting.url, today)
+                .with_link("\nAgendas on BoardDocs", norwalk_boe.AGENDAS_URL)
+            )
+            if meeting.zoom:
+                post.with_link("\nJoin on Zoom", meeting.zoom)
+            posts.append(post)
+        logger.info(f"Generated {len(posts)} Board of Education meeting posts")
+        return posts
+
     def get_norwalk_oyster_newsletter(self) -> list[Post]:
         logger.info("Processing Norwalk Oyster newsletter")
         now = datetime.now(UTC)
@@ -285,6 +318,12 @@ def main():
         sources.append(("today's meetings", norwalk_feeds.get_todays_norwalk_meetings))
         # After the meetings, so a reminder can reply to a post made this run.
         sources.append(("meeting reminders", norwalk_feeds.get_meeting_reminders))
+        sources.append(
+            (
+                "today's and tomorrow's Board of Education meetings",
+                norwalk_feeds.get_todays_boe_meetings,
+            )
+        )
         sources.append(
             (
                 "today's Norwalk Oyster events",
