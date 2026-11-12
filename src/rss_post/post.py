@@ -46,6 +46,8 @@ class Post:
         self.reply_root: str | Post | None = None
         self.reply_parent: str | Post | None = None
         self.reply: models.AppBskyFeedPost.ReplyRef | None = None
+        # Sent instead if this reply's posts can't be found (see ``otherwise``).
+        self.fallback: Post | None = None
 
     def from_feed(self, feed_title):
         self.text_builder.text(feed_title + "\n")
@@ -155,6 +157,15 @@ class Post:
         self.reply_kind = kind
         self.reply_root = root
         self.reply_parent = parent
+        return self
+
+    def otherwise(self, fallback: Post):
+        """Send ``fallback`` instead if this reply's posts can't be found.
+
+        ``fallback`` may be another reply with its own fallback; ``publish``
+        sends the first whose posts are found, or one that isn't a reply.
+        """
+        self.fallback = fallback
         return self
 
     def reply_to(self, root: PostRef, parent: PostRef | None = None):

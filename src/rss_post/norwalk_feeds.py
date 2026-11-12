@@ -49,6 +49,10 @@ ZOOM_LINK_TEXT = "\nJoin on Zoom"
 PUBLIC_COMMENT_NOTE = "🗣 Public comment on the agenda"
 PUBLIC_HEARING_NOTE = "🗣 Public hearing"
 MAX_HEARING_TOPIC = 60
+# Minutes go out from the first run after they're published, if published this
+# recently: enough to catch up after missed runs, while a first run (or one
+# after a long outage) doesn't post weeks of backlog.
+MINUTES_FRESHNESS = timedelta(days=3)
 # At most this many events a day from each city calendar (#13 plans a weekly
 # look-ahead for the rest).
 CITY_EVENTS_PER_DAY = 2
@@ -142,6 +146,25 @@ def meeting_post(meeting: dict, day: date) -> Post:
     return post
 
 
+def minutes_post(minutes: norwalk_civic_clerk.Minutes) -> Post:
+    """A "Minutes posted: <meeting>, <date>" post with a card for the minutes."""
+    meeting = minutes.meeting
+    day = meeting["starts_at"].date()
+    return (
+        Post()
+        .with_headline(
+            f"{REPLY_PREFIXES['minutes']}: {meeting['title']}, "
+            f"{day:%b} {day.day}, {day.year}"
+        )
+        .with_embed_card(
+            minutes.url,
+            minutes.name or f"{meeting['title']} minutes",
+            f"{meeting['title']} · {meeting['when']}",
+            thumb_url=CITY_SEAL,
+        )
+    )
+
+
 class NorwalkFeeds:
     def __init__(self, posting_frequency: timedelta) -> None:
         self.posting_frequency = posting_frequency
@@ -230,6 +253,35 @@ class NorwalkFeeds:
             post.replying_to(daily_key(post_key(meeting["agenda"]), today), "reminder")
             posts.append(post)
         logger.info(f"Generated {len(posts)} meeting reminders")
+        return posts
+
+    def get_meeting_minutes(self, now: datetime | None = None) -> list[Post]:
+        """Posts for meeting minutes published in the last ``MINUTES_FRESHNESS``.
+
+        Each is a reply to the meeting's post from the day of the meeting, or
+        failing that the day before. Minutes often come out after those posts
+        have left the history (30 days), so then they're posted on their own.
+        Either way the post has a card for the minutes, which keys it: a reply
+        is skipped once sent, and minutes posted (standalone or as a reply)
+        aren't posted again standalone.
+        """
+        now = now or datetime.now(EASTERN)
+        posts = []
+        for minutes in norwalk_civic_clerk.get_recent_minutes(now):
+            if now - minutes.published_at > MINUTES_FRESHNESS:
+                continue
+            meeting = minutes.meeting
+            root = post_key(meeting["agenda"], meeting["title"])
+            day = meeting["starts_at"].date()
+            post = minutes_post(minutes)
+            for posted_on in (day - timedelta(days=1), day):
+                post = (
+                    minutes_post(minutes)
+                    .replying_to(daily_key(root, posted_on), "minutes")
+                    .otherwise(post)
+                )
+            posts.append(post)
+        logger.info(f"Generated {len(posts)} meeting minutes posts")
         return posts
 
     def get_todays_boe_meetings(self, now: datetime | None = None) -> list[Post]:
@@ -445,6 +497,7 @@ def main():
         ("Norwalk Current stories", norwalk_feeds.get_norwalk_current_stories),
         ("CT Mirror stories", norwalk_feeds.get_ct_mirror_stories),
         ("Norwalk Oyster newsletter", norwalk_feeds.get_norwalk_oyster_newsletter),
+        ("meeting minutes", norwalk_feeds.get_meeting_minutes),
     ]
     current_hour = datetime.now(EASTERN).hour
     logger.info(f"Current hour (Eastern): {current_hour}")
@@ -515,11 +568,11 @@ def publish(client, sources, seen: SeenPosts | None = None) -> tuple[int, int]:
     Posts already in ``seen`` (same link, same cancellation status) are
     skipped, and each post sent is added to it, so an item in two feeds goes
     out once. Replies are pointed at the posts they follow up (see
-    ``Post.replying_to``) and skipped if those can't be found; posts made
-    this run count, so a thread can be started and continued in one run. A
-    source that raises,
-    or a post that fails to send, is logged and skipped so the remaining
-    sources and posts still go out.
+    ``Post.replying_to``); if those can't be found, the reply's fallback
+    (``Post.otherwise``) is sent instead, or nothing. Posts made this run
+    count, so a thread can be started and continued in one run. A source
+    that raises, or a post that fails to send, is logged and skipped so the
+    remaining sources and posts still go out.
 
     Returns:
         The number of posts sent and the number of failures.
@@ -535,6 +588,8 @@ def publish(client, sources, seen: SeenPosts | None = None) -> tuple[int, int]:
             failures += 1
             continue
         for post in posts:
+            while not seen.resolve_reply(post) and getattr(post, "fallback", None):
+                post = post.fallback
             if not seen.resolve_reply(post):
                 logger.info(
                     f"Skipping {post.reply_kind} from {name}: "

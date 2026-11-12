@@ -1,4 +1,5 @@
-"""Today's and tomorrow's City of Norwalk meetings from CivicClerk.
+"""City of Norwalk meetings from CivicClerk: today's and tomorrow's, and
+recent meetings' minutes.
 
 Uses the public CivicClerk API via ``libmuni`` rather than scraping the
 JavaScript-rendered portal. Meeting agendas are read to note where the public
@@ -9,7 +10,7 @@ import re
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import TypeVar
 from zoneinfo import ZoneInfo
 
@@ -23,6 +24,7 @@ from libmuni.civicclerk import (
     Event,
     EventLocation,
     NetworkError,
+    PublishedFile,
 )
 
 from rss_post.dedup import CANCELLED
@@ -38,6 +40,23 @@ ATTEMPTS = 3
 BACKOFF_SECONDS = 2.0
 
 T = TypeVar("T")
+
+# Minutes are looked for on meetings this far back. Over Jul-Nov 2026 Norwalk
+# published minutes a median of 5 days after the meeting, 90% within 16 days
+# and all but one (65 days) within 60. About 7 pages of events (1 request/s).
+MINUTES_LOOKBACK = timedelta(days=60)
+MINUTES_TYPE = "Minutes"
+
+
+@dataclass(frozen=True)
+class Minutes:
+    """A meeting's published minutes."""
+
+    meeting: dict  # As from ``meeting_from_event``.
+    file_id: int  # For ``CivicClerkClient.get_file_text``.
+    name: str | None
+    url: str  # The file in the portal's viewer.
+    published_at: datetime  # Eastern.
 
 
 def is_transient(error: CivicClerkError) -> bool:
@@ -101,6 +120,26 @@ def meeting_from_event(event: Event) -> dict:
         "zoom": event.virtual_meeting_url,
         "agenda_id": event.agenda_id,
     }
+
+
+def read_events(
+    from_date: date, to_date: date, client: CivicClerkClient | None = None
+) -> list[Event]:
+    """Events from ``from_date`` to ``to_date``, in one paged API call.
+
+    Network failures, rate limits and server errors are retried; if the
+    events still can't be read, the ``CivicClerkError`` is raised.
+    """
+    owns_client = client is None
+    client = client or CivicClerkClient(TENANT)
+    try:
+        return with_retries(
+            "meetings",
+            lambda: list(client.iter_events(from_date=from_date, to_date=to_date)),
+        )
+    finally:
+        if owns_client:
+            client.close()
 
 
 def get_todays_meetings(
@@ -260,6 +299,53 @@ def read_participation(
         f"Agenda {agenda_id}: public comment: {'yes' if found.comment else 'no'}; "
         f"public hearings: {len(found.hearings)}"
     )
+    return found
+
+
+def minutes_file(event: Event) -> PublishedFile | None:
+    """The event's minutes: the first published after the meeting started.
+
+    Boards often attach the previous meeting's minutes to the next meeting
+    ahead of it (for approval); those are published before it starts.
+    """
+    files = [
+        f
+        for f in event.published_files
+        if f.file_type == MINUTES_TYPE
+        and f.published_at is not None
+        and f.published_at >= event.starts_at
+    ]
+    return min(files, key=lambda f: f.published_at, default=None)
+
+
+def get_recent_minutes(
+    now: datetime | None = None, client: CivicClerkClient | None = None
+) -> list[Minutes]:
+    """Minutes published so far for meetings in the last ``MINUTES_LOOKBACK``."""
+    now = now or datetime.now(EASTERN)
+    today = now.astimezone(EASTERN).date()
+    logger.info(
+        f"Reading {TENANT} minutes for meetings since {today - MINUTES_LOOKBACK}"
+    )
+    found = []
+    for event in read_events(today - MINUTES_LOOKBACK, today, client):
+        file = minutes_file(event)
+        if file is None or file.published_at is None:
+            continue
+        published_at = file.published_at.replace(tzinfo=EASTERN)
+        if published_at > now:
+            continue
+        meeting = meeting_from_event(event)
+        found.append(
+            Minutes(
+                meeting=meeting,
+                file_id=file.file_id,
+                name=file.name,
+                url=f"{PORTAL_URL}/event/{event.id}/files/agenda/{file.file_id}",
+                published_at=published_at,
+            )
+        )
+    logger.info(f"Found minutes for {len(found)} meetings")
     return found
 
 

@@ -18,7 +18,9 @@ Follow-ups (a meeting's reminder, later its recording or minutes) are replies
 threaded under the post they follow up. A reply is keyed by the post it
 replies to (its thread root's URI) and its kind, e.g. ``reminder``. Later runs
 tell a reply's kind from its text, which starts with that kind's fixed prefix
-(``REPLY_PREFIXES``). The history also maps each key to the post's ``uri``/``cid``
+(``REPLY_PREFIXES``). A reply with a link card is also keyed by the card's
+link, so what it links isn't posted again on its own (e.g. minutes posted
+standalone once the meeting post is older than the history). The history also maps each key to the post's ``uri``/``cid``
 (``PostRef``), so a later run can find the post to reply to.
 """
 
@@ -48,10 +50,11 @@ CANCELLED = re.compile(r"\bcancell?ed\b", re.IGNORECASE)
 
 # The text each kind of reply starts with, so later runs can tell a reply's
 # kind from its text alone. A new kind of follow-up registers its prefix here
-# (e.g. "minutes": "Minutes posted", "summary": "AI summary",
-# "recording": "Recording"), and its posts' text must start with it.
+# (e.g. "summary": "AI summary", "recording": "Recording"), and its posts'
+# text must start with it.
 REPLY_PREFIXES: dict[str, str] = {
     "reminder": "Starting at",
+    "minutes": "Minutes posted",
 }
 
 
@@ -117,17 +120,22 @@ def keys_in_record(record, posted: datetime | None = None) -> set[str]:
     (``posted``), using the card's title, or for links in the text the text,
     to tell whether it is a cancellation.
 
-    A reply is keyed only by its thread and kind (see ``reply_key``); replies
-    whose text doesn't start with a known prefix (written by hand) have no
-    keys.
+    A reply is keyed by its thread and kind (see ``reply_key``) and its
+    card's link, if it has one; replies whose text doesn't start with a known
+    prefix (written by hand) have no keys.
     """
+    external = getattr(getattr(record, "embed", None), "external", None)
     reply = getattr(record, "reply", None)
     if reply is not None:
         kind = reply_kind(record.text or "")
-        return {reply_key(reply.root.uri, kind)} if kind is not None else set()
+        if kind is None:
+            return set()
+        keys = {reply_key(reply.root.uri, kind)}
+        if external is not None:
+            keys.add(post_key(external.uri, external.title or ""))
+        return keys
     keys = set()
     day = posted.astimezone(EASTERN).date() if posted is not None else None
-    external = getattr(getattr(record, "embed", None), "external", None)
     if external is not None:
         key = post_key(external.uri, external.title or "")
         keys.add(key)
