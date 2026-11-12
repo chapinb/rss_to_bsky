@@ -10,6 +10,8 @@ Every run posts new items from these sources to Bluesky:
 | Norwalk Current (formerly Nancy on Norwalk) | RSS |
 | CT Mirror stories that mention Norwalk | RSS, filtered |
 | Today's and tomorrow's city meetings (each once a day, from the first run at or after 7 AM Eastern) | CivicClerk API via [libmuni](https://github.com/chapinb/libmuni) |
+| [Norwalk Oyster](https://norwalkoyster.com/) newsletter issues | The newsletter's Google News sitemap |
+| Today's top-rated [Norwalk Oyster](https://norwalkoyster.com/) events (from the first run at or after 7 AM Eastern; ones that have started are skipped) | The calendar's JSON data, events scored 4+ of 5 |
 
 RSS items are posted as link cards when they were published within the last
 `<hours>` hours and the account hasn't already posted that link in the last 30

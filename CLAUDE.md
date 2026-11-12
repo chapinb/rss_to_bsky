@@ -38,6 +38,7 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 - Norwalk Current stories (formerly Nancy on Norwalk)
 - CT Mirror stories (filtered for Norwalk mentions)
 - City meeting schedules via the CivicClerk API (libmuni)
+- Norwalk Oyster newsletter issues and today's top-rated community events
 
 **Post Building**: `src/rss_post/post.py:Post` - Builder pattern for constructing social media posts with length constraints (250 chars), HTML stripping, and link formatting
 
@@ -50,6 +51,8 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 **Card thumbnails**: `src/rss_post/media.py` - Finds a card image from the feed item (media:content, media:thumbnail, image enclosure, first `<img>`), falling back to the linked page's `og:image`; `Bluesky` downloads it (≤1 MB) and uploads it as the card's thumb. Best effort: failures post the card without a thumbnail
 
 **Meetings**: `src/rss_post/norwalk_civic_clerk.py` - Today's meetings from the CivicClerk API via `libmuni`
+
+**Norwalk Oyster**: `src/rss_post/norwalk_oyster.py` - Neither source has a usable RSS feed: events come from the calendar's JSON data file (top-rated, scored 4+, posted at 7 AM), and newsletter issues from the beehiiv newsletter's Google News sitemap (its `/feed` is behind a Cloudflare bot check)
 
 **Deduplication**: `src/rss_post/dedup.py` - Reads the links the account posted in the last 30 days from Bluesky at startup and skips items already posted (no local storage)
 
@@ -67,7 +70,7 @@ Environment variables in `.env` file (template at `template.env`):
 - Time-based filtering (only posts from within specified hours)
 - Link-based deduplication against the account's own recent posts
 - Content filtering (CT Mirror posts filtered for "norwalk" mentions)
-- Schedule-aware posting (meetings posted once a day by the first successful run from 7 AM Eastern; meetings that have started are skipped)
+- Schedule-aware posting (meetings and Norwalk Oyster events posted once a day by the first successful run from 7 AM Eastern; ones that have started are skipped)
 - Adapter pattern for output destinations (Bluesky vs console)
 - Comprehensive logging throughout all components with configurable levels
 - Per-source and per-post error isolation; the run exits 1 if anything failed
