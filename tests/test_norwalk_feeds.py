@@ -12,9 +12,11 @@ from rss_post import norwalk_civic_clerk, summarize
 from rss_post.dedup import PostRef, SeenPosts, keys_in_record
 from rss_post.norwalk_civic_clerk import Participation
 from rss_post.norwalk_feeds import (
+    AGENDA_SUMMARY_MAX_CHARS,
     CITY_SEAL,
     NorwalkFeeds,
     bullets,
+    fit_bullets,
     participation_note,
     publish,
 )
@@ -629,10 +631,9 @@ def test_agendas_are_summarized_once_under_the_day_before_post():
         SUMMARY,
     ]
     assert runs.summarizer.call_count == 2
-    text, instructions, max_chars = runs.summarizer.call_args_list[0].args
+    text, instructions = runs.summarizer.call_args_list[0].args
     assert "Authorize the Purchasing Agent to issue a purchase order" in text
     assert "2 or 3 short bullet points" in instructions
-    assert len("AI summary of the agenda:\n") + max_chars <= 300
 
     # Later runs that day post nothing new, so the LLM isn't asked again.
     for hour in range(8, 23):
@@ -851,3 +852,28 @@ def test_unexpected_error_in_summaries_is_not_a_run_failure():
         *NOV_12_MEETINGS,
     ]
     assert runs.result == (6, 0)
+
+
+def test_summary_reply_always_fits_bluesky():
+    assert len("AI summary of the agenda:\n") + AGENDA_SUMMARY_MAX_CHARS <= 300
+
+
+def test_overlong_summary_keeps_the_leading_bullets_that_fit():
+    first = "• Approve $1.2M in bond transfers for school roof and HVAC projects"
+    second = "• Review the FY2027 capital budget amendments for public works"
+    third = "• Consider a contract for " + "snow removal and street sweeping " * 4
+    summary = fit_bullets(f"{first}\n{second}\n{third}", 140)
+    assert summary == f"{first}\n{second}"
+
+
+def test_overlong_single_bullet_is_shortened_at_a_word():
+    summary = fit_bullets("- " + "word " * 80, 60)
+    assert summary is not None
+    assert summary.startswith("• word")
+    assert summary.endswith("…")
+    assert len(summary) <= 60
+
+
+def test_summary_within_the_limit_is_kept_whole():
+    assert fit_bullets("* one\n\n* two", 100) == "• one\n• two"
+    assert fit_bullets("   ", 100) is None
