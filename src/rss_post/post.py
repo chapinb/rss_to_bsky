@@ -14,6 +14,8 @@ class Post:
         self.text_builder = client_utils.TextBuilder()
         self.post_length = 0
         self.embed = None
+        # The item this post is about, used to skip items already posted.
+        self.link: str | None = None
 
     def from_feed(self, feed_title):
         self.text_builder.text(feed_title + "\n")
@@ -66,6 +68,7 @@ class Post:
                 description=self.remove_html_formatting(description),
             )
         )
+        self.link = url
         logger.debug(f"Added embed card for URL: {url}")
         return self
 

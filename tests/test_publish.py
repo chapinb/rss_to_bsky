@@ -1,6 +1,8 @@
 from unittest.mock import MagicMock
 
+from rss_post.dedup import SeenLinks
 from rss_post.norwalk_feeds import publish
+from rss_post.post import Post
 
 
 def test_publishes_every_post_from_every_source():
@@ -30,3 +32,42 @@ def test_failing_post_does_not_stop_the_rest():
 
     assert publish(client, sources) == (2, 1)
     assert client.post.call_count == 3
+
+
+def card_post(url):
+    return Post().with_embed_card(url, "t")
+
+
+def test_skips_links_already_posted():
+    client = MagicMock()
+    sources = [
+        (
+            "a",
+            lambda: [
+                card_post("https://x.example/old"),
+                card_post("https://x.example/new"),
+            ],
+        )
+    ]
+
+    assert publish(client, sources, SeenLinks(["https://x.example/old"])) == (1, 0)
+    assert client.post.call_args.args[0].link == "https://x.example/new"
+
+
+def test_same_link_in_two_sources_is_posted_once():
+    client = MagicMock()
+    sources = [
+        ("a", lambda: [card_post("https://x.example/story")]),
+        ("b", lambda: [card_post("http://www.x.example/story/")]),
+    ]
+
+    assert publish(client, sources) == (1, 0)
+
+
+def test_failed_post_is_not_marked_as_posted():
+    client = MagicMock()
+    client.post.side_effect = [RuntimeError("rate limited"), None]
+    post = card_post("https://x.example/story")
+    sources = [("a", lambda: [post]), ("b", lambda: [post])]
+
+    assert publish(client, sources) == (1, 1)

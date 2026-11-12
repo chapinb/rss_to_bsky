@@ -12,7 +12,9 @@ Every run posts new items from these sources to Bluesky:
 | Today's and tomorrow's city meetings (7 AM Eastern run only) | CivicClerk API via [libmuni](https://github.com/chapinb/libmuni) |
 
 RSS items are posted as link cards when they were published within the last
-`<hours>` hours, so run the bot once every `<hours>` hours.
+`<hours>` hours and the account hasn't already posted that link in the last 30
+days. Run the bot at least once every `<hours>` hours; a window longer than
+the run interval is safe and lets a run catch up after a failed one.
 
 ## Running
 
@@ -28,7 +30,11 @@ Options: `--dry-run` / `-n` prints instead of posting, and `--log-level`
 takes `DEBUG`, `INFO` (the default), `WARNING`, `ERROR` or `CRITICAL`.
 
 The command exits with status 1 if any source failed to load or any post
-failed to send. Everything else still gets posted.
+failed to send. Everything else still gets posted. If the account's recent
+posts can't be read, nothing is posted (to avoid duplicates) and it exits 1.
+
+Dry runs also skip already-posted links when `BSKY_USERNAME` is set; they read
+the account's public posts, so no password is needed.
 
 ### Credentials
 

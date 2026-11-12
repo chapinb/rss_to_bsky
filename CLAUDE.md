@@ -47,6 +47,8 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **Meetings**: `src/rss_post/norwalk_civic_clerk.py` - Today's meetings from the CivicClerk API via `libmuni`
 
+**Deduplication**: `src/rss_post/dedup.py` - Reads the links the account posted in the last 30 days from Bluesky at startup and skips items already posted (no local storage)
+
 **Logging**: `src/rss_post/logging_config.py` - Centralized logging configuration with structured output
 
 ### Configuration
@@ -59,6 +61,7 @@ Environment variables in `.env` file (template at `template.env`):
 
 - Builder pattern for post construction with length validation
 - Time-based filtering (only posts from within specified hours)
+- Link-based deduplication against the account's own recent posts
 - Content filtering (CT Mirror posts filtered for "norwalk" mentions)
 - Schedule-aware posting (meetings only posted at 7 AM)
 - Adapter pattern for output destinations (Bluesky vs console)

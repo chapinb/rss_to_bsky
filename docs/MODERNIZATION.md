@@ -53,14 +53,22 @@ Done phases note what actually shipped where it differs from the plan.
 - Meetings without a Zoom link no longer crash the run; "today" is US/Eastern;
   times carry the correct EST/EDT label.
 
-### Phase 4 — Stop duplicate posts ⏸ deferred
-- Record links already posted and skip them. This covers all three duplicate
-  causes at once, independent of feed timestamp quirks.
-- **Open decision:** where the record lives — a JSON/SQLite file on a mounted
-  volume, or read back the bot's own recent posts from Bluesky at startup (no
-  storage needed).
-- `test_city_calendar_accepts_future_dated_items` documents the current
-  behaviour and should flip when this lands.
+### Phase 4 — Stop duplicate posts ✅
+- Each run reads the links the account posted in the last 30 days back from
+  Bluesky (no storage needed) and skips feed items whose link is among them,
+  and items already posted earlier in the same run. Links are compared after
+  normalizing scheme, `www.`, trailing slash, fragment and `utm_*` parameters.
+- Dry runs read the same history from the public AppView, so they show what a
+  real run would post.
+- If the history can't be read, the run posts nothing and exits 1 rather
+  than risk reposting.
+- Meeting posts (no link card) are not deduplicated: tomorrow's meetings are
+  posted the day before and again on the day, as before.
+- Replaying the bot's real Oct 27 – Nov 12 history (`tests/fixtures/
+  bsky_author_feed.json`) drops all 19 duplicate posts out of 100.
+- Follow-up: with dedup in place the posting window can be wider than the run
+  interval (e.g. run hourly with `norwalk 6`), so a failed run or outage is
+  caught up by the next one instead of losing posts.
 
 ### Phase 5 — Security patches ✅
 - Lockfile-only patch of flagged packages; the rest (cryptography, h11) were
