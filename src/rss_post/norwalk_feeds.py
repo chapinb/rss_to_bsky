@@ -5,7 +5,7 @@ from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from rss_post import norwalk_boe, norwalk_civic_clerk, norwalk_oyster
+from rss_post import norwalk_boe, norwalk_civic_clerk, norwalk_library, norwalk_oyster
 from rss_post.bsky import Bluesky, Stdout
 from rss_post.dedup import (
     CANCELLED,
@@ -244,6 +244,31 @@ class NorwalkFeeds:
         logger.info(f"Generated {len(posts)} Norwalk Oyster event posts")
         return posts
 
+    def get_todays_norwalk_library_events(
+        self, now: datetime | None = None
+    ) -> list[Post]:
+        """Posts for today's notable library events that haven't started yet.
+
+        Each event has its own page per date, so later runs the same day skip
+        what an earlier run posted by its link.
+        """
+        now = now or datetime.now(EASTERN)
+        posts = []
+        for event in norwalk_library.get_events_on(now.astimezone(EASTERN).date()):
+            if event.starts_at < now:
+                logger.info(f"Skipping library event that has started: {event.title}")
+                continue
+            details = ", ".join(filter(None, [event.when, event.location]))
+            posts.append(
+                Post()
+                .with_headline(f"Today at the library: {event.title} ({details})")
+                .with_embed_card(
+                    event.url, event.title, event.description, thumb_url=event.image
+                )
+            )
+        logger.info(f"Generated {len(posts)} Norwalk Public Library event posts")
+        return posts
+
     def get_ct_mirror_stories(self) -> list[Post]:
         feed_url = "https://ctmirror.org/feed/"
         logger.info("Processing CT Mirror stories, filtering for Norwalk mentions")
@@ -328,6 +353,12 @@ def main():
             (
                 "today's Norwalk Oyster events",
                 norwalk_feeds.get_todays_norwalk_oyster_events,
+            )
+        )
+        sources.append(
+            (
+                "today's Norwalk Public Library events",
+                norwalk_feeds.get_todays_norwalk_library_events,
             )
         )
     else:
