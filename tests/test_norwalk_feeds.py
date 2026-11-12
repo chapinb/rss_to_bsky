@@ -35,7 +35,7 @@ def test_city_calendar_posts_recent_items_as_embed_cards(freeze_feeds_now):
 
     housing = next(p for p in posts if card(p).uri.endswith("EID=17270"))
     assert card(housing).title == "Housing Authority Special Meeting"
-    assert housing.build().build_text() == ""
+    assert housing.build().build_text() == "Housing Authority Special Meeting"
 
 
 def test_city_calendar_accepts_future_dated_items(freeze_feeds_now):

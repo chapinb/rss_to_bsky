@@ -40,6 +40,18 @@ def test_truncate_description():
     assert post.post_length == 13
 
 
+def test_with_headline_strips_html_without_trailing_newline():
+    post = Post().with_headline("<b>Council</b> meets &amp; votes")
+    assert post.build().build_text() == "Council meets & votes"
+    assert post.post_length == len("Council meets & votes")
+
+
+def test_with_headline_caps_length():
+    text = Post().with_headline("word " * 100).build().build_text()
+    assert len(text) <= Post.MAX_POST_LENGTH
+    assert text.endswith("word…")
+
+
 def parse_item(item_xml: str):
     feed = f"""<?xml version="1.0"?><rss version="2.0"><channel>
         <title>t</title><item><link>https://example.com/a</link>{item_xml}</item>

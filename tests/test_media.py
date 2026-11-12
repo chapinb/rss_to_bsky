@@ -63,9 +63,7 @@ def test_no_image():
 
 
 def response(url, status_code=200, **kwargs):
-    return httpx.Response(
-        status_code, request=httpx.Request("GET", url), **kwargs
-    )
+    return httpx.Response(status_code, request=httpx.Request("GET", url), **kwargs)
 
 
 def test_og_image_from_page():

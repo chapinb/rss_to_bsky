@@ -31,6 +31,20 @@ def posting_filter(item, posting_frequency: timedelta) -> bool:
     return datetime.now(UTC) - pub_date <= posting_frequency
 
 
+def card_post(item) -> Post:
+    """A post with the item's headline as text and a link card for the item."""
+    return (
+        Post()
+        .with_headline(item.title)
+        .with_embed_card(
+            item.link,
+            item.title,
+            item.get("description", ""),
+            thumb_url=image_from_item(item),
+        )
+    )
+
+
 class NorwalkFeeds:
     def __init__(self, posting_frequency: timedelta) -> None:
         self.posting_frequency = posting_frequency
@@ -42,12 +56,7 @@ class NorwalkFeeds:
         logger.info(f"Processing feed with embed card: {feed_name} from {feed_url}")
         items = read_rss_items(feed_url)
         posts = [
-            Post().with_embed_card(
-                item.link,
-                item.title,
-                item.get("description", ""),
-                thumb_url=image_from_item(item),
-            )
+            card_post(item)
             for item in items
             if posting_filter(item, self.posting_frequency)
         ]
@@ -106,14 +115,7 @@ class NorwalkFeeds:
             if "norwalk" not in text.lower():
                 continue
             logger.debug(f"Found Norwalk mention in CT Mirror story: {item.title}")
-            norwalk_items.append(
-                Post().with_embed_card(
-                    item.link,
-                    item.title,
-                    item.get("description", ""),
-                    thumb_url=image_from_item(item),
-                )
-            )
+            norwalk_items.append(card_post(item))
         logger.info(
             f"Generated {len(norwalk_items)} CT Mirror posts with Norwalk mentions"
         )

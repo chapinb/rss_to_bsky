@@ -37,6 +37,18 @@ class Post:
         self.post_length += len(item_title) + 1
         return self
 
+    def with_headline(self, headline: str):
+        """Post text that is just the headline, for posts carried by a card.
+
+        Gives card-only posts searchable, screen-reader-friendly text.
+        """
+        headline = self.remove_html_formatting(headline)
+        if len(headline) > self.MAX_POST_LENGTH:
+            headline = headline[: self.MAX_POST_LENGTH - 1].rsplit(" ", 1)[0] + "…"
+        self.text_builder.text(headline)
+        self.post_length += len(headline)
+        return self
+
     def with_description(self, item_description, num_links: int = 0):
         self.post_length += num_links * self.LINK_LENGTH
 
