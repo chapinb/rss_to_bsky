@@ -1,0 +1,156 @@
+{
+ "id": 8791,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 24347,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24363,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "PUBLIC HEARING",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24356,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Public hearing on the naming of the Norwalk High School Band storage building at Andrews field in honor of Douglas Oravez.",
+     "sortOrder": 3,
+     "isSection": 0,
+     "parentId": 24363,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24348,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 4,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24349,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 5,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24355,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Regular Meeting: 9/2/26",
+     "sortOrder": 6,
+     "isSection": 0,
+     "parentId": 24349,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24350,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "PUBLIC PARTICIPATION",
+   "sortOrder": 7,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24351,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "OLD BUSINESS",
+   "sortOrder": 8,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24357,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Authorize the naming of the Norwalk High School Band storage building at Andrews Field (\"commonly referred to as the Greenhouse\") in honor of Douglas Oravez.",
+     "sortOrder": 9,
+     "isSection": 0,
+     "parentId": 24351,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24352,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "NEW BUSINESS",
+   "sortOrder": 10,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24360,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<strong>1.  Approve Tucker Mechanical, Inc. as the sole source vendor for Building Management System (BMS) maintenance, technical support, and future BMS upgrades and expansions for the various City buildings, subject to applicable City purchasing requirements, annual appropriations, and separate authorization of individual projects. This approval shall expire July 1, 2029.</strong><br><br><strong>2.  </strong><strong>Authorize the Purchasing Agent to issue a Purchase Order to Tucker Mechanical, Inc., as the sole source vendor, for the BMS controls upgrade at the Norwalk Police Headquarters for a total not to exceed $149,809.00. Funds are available from account 09277100 5777 C0137.</strong><br><br><strong><strong>3.  </strong></strong><strong>Authorize the Office of Building Management to issue change orders on the Purchase Order for a total not to exceed $14,980.90. Funds are available from account 09277100 5777 C0137.</strong>",
+     "sortOrder": 12,
+     "isSection": 0,
+     "parentId": 24352,
+     "childItems": []
+    },
+    {
+     "id": 24358,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "<strong>1.  Authorize the Mayor, Barbara C. Smyth, to execute an agreement with Helpy Clean US LLC for the Senior Center Patio Renovation project (#4535) for a total not to exceed $187,367.00. CBDG funds in the amount of $72,500 awarded to Norwalk Senior Center to be assigned to the City of Norwalk - Account #TBD </strong><strong>Accounts #09272010-5777-C0881 (ADA) and #09267100 5777 C0683 (Building Management).</strong><strong>  </strong><br><br><strong>2.  Authorize a contingency allowance for a total not to exceed $18,737.00, <strong>Accounts #09272010-5777-C0881 and #09267100 5777 C0683.</strong></strong>",
+     "sortOrder": 13,
+     "isSection": 0,
+     "parentId": 24352,
+     "childItems": []
+    },
+    {
+     "id": 24362,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "1.  Authorize the Chairman of the City of Norwalk Land Use & Building Management Committee as the School Building Committee to certify the City of Norwalk, Land Use & Building Management Committee's approval of final plans, specifications and cost estimate for State Project 103-0263N-Norwalk High School/P-Tech FF&E and Technology (Phase 2 of 2)",
+     "sortOrder": 14,
+     "isSection": 0,
+     "parentId": 24352,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24353,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "DISCUSSION",
+   "sortOrder": 15,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24361,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Monthly School Construction updates",
+     "sortOrder": 16,
+     "isSection": 0,
+     "parentId": 24353,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24354,
+   "agendaObjectItemOutlineNumber": "IX.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 17,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

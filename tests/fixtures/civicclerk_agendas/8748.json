@@ -1,0 +1,153 @@
+{
+ "id": 8748,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 23499,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23500,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23501,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23507,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Regular Meeting: August 12, 2026",
+     "sortOrder": 8,
+     "isSection": 0,
+     "parentId": 23501,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23502,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "PUBLIC PARTICIPATION",
+   "sortOrder": 4,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23503,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "OLD BUSINESS",
+   "sortOrder": 5,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23504,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "NEW BUSINESS",
+   "sortOrder": 6,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23508,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<span data-olk-copy-source=\"MessageBody\" style=\"margin-left: 0in;\">1. Authorize the Mayor Barbara C. Smyth, to enter into a contract with Priority Landscaping, LLC, for project #4527, Meadow Street Park Renovation, in an amount not to exceed $340,000.00, from accounts 520000 5796 MLK08, 09276030 5777 C0588, 09236030 5777 C0588, 09246030 5777 C0588.</span><br><br><span data-olk-copy-source=\"MessageBody\" style=\"margin-left: 0in;\">2. Authorize the Director of Recreation and Parks to issue orders with Priority Landscaping, LLC, for project #4527, Meadow Street Park Renovation, in an amount not to exceed $34,000.00, from accounts 520000 5796 MLK08, 09276030 5777 C0588, 09236030 5777 C0588, 09246030 5777 C0588.</span><br><span data-olk-copy-source=\"MessageBody\" style=\"margin-left: 0in;\"><br></span><span data-olk-copy-source=\"MessageBody\" style=\"margin-left: 0in;\"><br></span><span data-olk-copy-source=\"MessageBody\" style=\"margin-left: 0in;\"><br></span>",
+     "sortOrder": 9,
+     "isSection": 0,
+     "parentId": 23504,
+     "childItems": []
+    },
+    {
+     "id": 23509,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Authorize the Mayor, Barbara C. Smyth, to enter into an agreement for the use of Calf Pasture Beach and immediate surrounding grounds by Norwalk Police – Police Athletics League/PAL for their inaugural Norwalk Police PAL 5k and Mile Walk Halloween Costume Fun Run to be held on Saturday, October 31st, 2026, from 9:30 A.M. to 11:00 A.M. Set-up at 8:00 A.M. Approximately 220 people.",
+     "sortOrder": 10,
+     "isSection": 0,
+     "parentId": 23504,
+     "childItems": []
+    },
+    {
+     "id": 23510,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "Authorize the Mayor, Barbara C. Smyth, to enter into an agreement for the use of Veteran’s Park and immediate surrounding grounds by Norwalk River Rowing Association for their River of Hope to be held on Saturday, September 26th from 10:00 A.M to 12:00 P.M with set-up at 10:00 A.M. and tear-down by 12:30 P.M. Approximately 100 people.",
+     "sortOrder": 11,
+     "isSection": 0,
+     "parentId": 23504,
+     "childItems": []
+    },
+    {
+     "id": 23511,
+     "agendaObjectItemOutlineNumber": "D.",
+     "agendaObjectItemName": "Authorize the use of Veteran’s Park and immediate surrounding grounds by Orange Theory Fitness for their 2026 Dri Tri be held on Saturday, October 24th from 7:00 A.M. to 2:00 P.M. Approximately 245 people.",
+     "sortOrder": 12,
+     "isSection": 0,
+     "parentId": 23504,
+     "childItems": []
+    },
+    {
+     "id": 23512,
+     "agendaObjectItemOutlineNumber": "E.",
+     "agendaObjectItemName": "Authorize the use of Wolfpit Elementary School and immediate surrounding grounds by Wolfpit PTA for their Pumpkin Fest to be held on Saturday, October 17th from 12:00 P.M to 4:00 P.M with set-up at 8:00 A.M. and tear-down by 6:00 P.M. Rain date on Sunday, October 18th. Approximately 500 people.",
+     "sortOrder": 13,
+     "isSection": 0,
+     "parentId": 23504,
+     "childItems": []
+    },
+    {
+     "id": 23513,
+     "agendaObjectItemOutlineNumber": "F.",
+     "agendaObjectItemName": "Authorize the Mayor, Barbara C. Smyth, to enter into an agreement for the use of Washington Street Plaza and immediate surrounding grounds by City of Norwalk Department of Economic & Community Development for their Halloween Nightfair to be held on Saturday, October 24th from 2:00 P.M. to 10:00 P.M with set-up at 8:00 A.M. and tear-down by 11:55 P.M. Approximately 5,000 people. ",
+     "sortOrder": 14,
+     "isSection": 0,
+     "parentId": 23504,
+     "childItems": []
+    },
+    {
+     "id": 23514,
+     "agendaObjectItemOutlineNumber": "G.",
+     "agendaObjectItemName": "Schedule a Public Hearing for the revised Park Rules and Regulations proposed by the Department of Recreation and Parks.",
+     "sortOrder": 15,
+     "isSection": 0,
+     "parentId": 23504,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23505,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "DISCUSSION",
+   "sortOrder": 7,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23506,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 8,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

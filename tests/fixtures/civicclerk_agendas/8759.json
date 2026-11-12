@@ -1,0 +1,99 @@
+{
+ "id": 8759,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 23751,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23752,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23754,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "PUBLIC HEARINGS",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23761,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<strong>26-0618-02 – Leslie Dale Dunn, Trustee</strong> – Variance of Table 4.3.1-C for Front Setback (30’ required, 14’ proposed), Side Setback (6’ required, 2.9’ proposed), Building Height (32’ maximum, 38.4’ proposed) and Total Building Height (40’ maximum, 44.2’ proposed) for proposed front addition and raising the building for flood compliance at existing single-family dwelling in CD-1S zone and Coastal Area Management Overlay. <strong>Property located at 38 Westmere Ave. District 6, Block 33, Lot 39. </strong>",
+     "sortOrder": 10,
+     "isSection": 0,
+     "parentId": 23754,
+     "childItems": []
+    },
+    {
+     "id": 23762,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "<strong>26-0917-01 – Ten Willard Apartments LLC – </strong>Appeal of Cease & Desist for Violation of Workforce Housing Regulations (Section 6.12.4) maximum rent for existing mixed-use development including 22 workforce housing units in CD-3C zone.<strong> Property located at 10 Willard Rd. District 5, Block 17, Lot 2. </strong>",
+     "sortOrder": 11,
+     "isSection": 0,
+     "parentId": 23754,
+     "childItems": []
+    },
+    {
+     "id": 23765,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "<strong>26-0917-02 – Michael & Emily Giunta – </strong>Variances of Table 4.3.1-C & 4.3.10 Encroachments: front setback (front porch required 20’, proposed 17.1’, existing house setback 21.7’, proposed lifted portions at 21.7’ with portions of structure to be demolished and rebuilt on or about existing footprint), side setback (HVAC units 4’ required, 2.2’ proposed), Building Height (maximum 32’, proposed 35.4’), Vehicular Parking Requirement (New Driveway maximum 10’ for first 10’ from frontage line, proposed 20’ for Northern driveway and to allow Parking Spaces within the front yard setback), and Section 4.3.12.E.1. for DPW Roadway Standards distance between driveways (minimum 50’ on center, proposed 39.4’ on center), for proposed elevation and additions to an existing single family residence in CD-1S zone and Coastal Area Management Overlay. <strong>Property located at 7 Twilight Pl. District 5, Block 85C, Lot 36.</strong>",
+     "sortOrder": 12,
+     "isSection": 0,
+     "parentId": 23754,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23757,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "BOARD ACTION ON: A-C",
+   "sortOrder": 4,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23753,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "ADMINISTRATIVE ACTIONS",
+   "sortOrder": 5,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23760,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Action on Hearing Minutes: (August 20, 2026)",
+     "sortOrder": 6,
+     "isSection": 0,
+     "parentId": 23753,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23759,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 7,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

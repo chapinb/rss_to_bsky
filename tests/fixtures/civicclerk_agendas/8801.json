@@ -1,0 +1,193 @@
+{
+ "id": 8801,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 24531,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24532,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24547,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "PUBLIC COMMENT",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24537,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "RECEIPT & DISCUSSION",
+   "sortOrder": 4,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24548,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<strong>#S26-669 – 44 Sammis Street – Peter and Claire Londa </strong>– Corrective Action removal of a retaining wall adjacent to a wetland",
+     "sortOrder": 5,
+     "isSection": 0,
+     "parentId": 24537,
+     "childItems": []
+    },
+    {
+     "id": 24552,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "<strong>#S26-670 - 95 North Seir Hill Road - Silvermine Golf Club</strong> - Improvements to course facilities involving alteration of watercourse edge",
+     "sortOrder": 20,
+     "isSection": 0,
+     "parentId": 24537,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24538,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "DISCUSSION &/OR DECISION",
+   "sortOrder": 6,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24546,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<strong>#S26-665 - 35 Weatherbell Drive - Suchy for Pasquarella -&nbsp;</strong>Corrective Action retention of previous filling, grading and removal of vegetation adjacent to a wetland and watercourse",
+     "sortOrder": 7,
+     "isSection": 0,
+     "parentId": 24538,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24540,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "ENFORCEMENT ACTIONS",
+   "sortOrder": 8,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24549,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<strong>#V26-1084 – 51 Fox Run Road – Valdovinos – </strong>Unauthorized site work in and adjacent to a wetland or watercourse",
+     "sortOrder": 9,
+     "isSection": 0,
+     "parentId": 24540,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24551,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "RELEASE OR REDUCTION OF BOND",
+   "sortOrder": 10,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24550,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<strong>#S24-645 - 36 Range Road - Anderson&nbsp;</strong>- Corrective Action grading, filling and landscaping within and adjacent to a wetland and watercourse",
+     "sortOrder": 19,
+     "isSection": 0,
+     "parentId": 24551,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24533,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 11,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24541,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "September 8, 2026 meeting minutes",
+     "sortOrder": 12,
+     "isSection": 0,
+     "parentId": 24533,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24539,
+   "agendaObjectItemOutlineNumber": "IX.",
+   "agendaObjectItemName": "CONSERVATION INITIATIVES",
+   "sortOrder": 14,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24536,
+   "agendaObjectItemOutlineNumber": "X.",
+   "agendaObjectItemName": "REPORTS",
+   "sortOrder": 15,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24542,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Commission Chair&nbsp;",
+     "sortOrder": 16,
+     "isSection": 0,
+     "parentId": 24536,
+     "childItems": []
+    },
+    {
+     "id": 24543,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Senior Environmental Officer",
+     "sortOrder": 17,
+     "isSection": 0,
+     "parentId": 24536,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24535,
+   "agendaObjectItemOutlineNumber": "XI.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 18,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24545,
+   "agendaObjectItemOutlineNumber": "",
+   "agendaObjectItemName": "UPCOMING MEETINGS",
+   "sortOrder": 19,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

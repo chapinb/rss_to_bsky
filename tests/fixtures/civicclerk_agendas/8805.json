@@ -1,0 +1,190 @@
+{
+ "id": 8805,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 24598,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24599,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24600,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24606,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Regular Meeting: October 8, 2026",
+     "sortOrder": 4,
+     "isSection": 0,
+     "parentId": 24600,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24601,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "PUBLIC PARTICIPATION",
+   "sortOrder": 5,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24605,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "REPORTS",
+   "sortOrder": 6,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24607,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Oak Hills Park Authority Monthly Financial Statements for September 2026",
+     "sortOrder": 7,
+     "isSection": 0,
+     "parentId": 24605,
+     "childItems": []
+    },
+    {
+     "id": 24610,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Monthly Tax Collector's Reports dated September and October 2026",
+     "sortOrder": 8,
+     "isSection": 0,
+     "parentId": 24605,
+     "childItems": []
+    },
+    {
+     "id": 24611,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "Claims Committee Report dated November 2026",
+     "sortOrder": 9,
+     "isSection": 0,
+     "parentId": 24605,
+     "childItems": []
+    },
+    {
+     "id": 24609,
+     "agendaObjectItemOutlineNumber": "D.",
+     "agendaObjectItemName": "Narrative on Tax Collections dated October 2026",
+     "sortOrder": 10,
+     "isSection": 0,
+     "parentId": 24605,
+     "childItems": []
+    },
+    {
+     "id": 24608,
+     "agendaObjectItemOutlineNumber": "E.",
+     "agendaObjectItemName": "Tax Assessor Report",
+     "sortOrder": 11,
+     "isSection": 0,
+     "parentId": 24605,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24602,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "OLD BUSINESS",
+   "sortOrder": 12,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24603,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "NEW BUSINESS",
+   "sortOrder": 13,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 25139,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Authorize the Mayor, Barbara Smyth, to sign any all agreements, documents and instruments with Axon Enterprise Inc for the sole source purchase of a five-year contract (effective July 1, 2027- June 30,2032) for the installation and<br>maintenance for the purchase of Axon equipment to outfit 75 patrol vehicles with upgraded dashboard cameras, 183 body worn cameras, 187 Taser 10’s electronic systems. 11 License Plate reader cameras, one Virtual reality training<br>system, the FUSUS real-time crime analysis and data center, and a public safety DFR drone as a first responder program and any all-related equipment for an amount not to exceed a total five-year cost of $5,493,446.22.<br><br>(Account # 013049–5258 POLICE OTHER PROFESSIONAL SERVS)<br><br>The yearly cost per fiscal year is as follows:<br><br><u>New proposed contract between City of Norwalk Axon Contract</u><br>Contract Year                                                                            Axon<br>City Of Norwalk / Axon Year 1- 2027-2028                            $ 1,034,965.27<br>City of Norwalk / Axon Year 2-2028-2029                              $ 1,065,728.57<br>City of Norwalk / Axon Year 3-2029-2030                              $ 1,097,590.55<br>City of Norwalk / Axon Year 4-2030-2031                              $ 1,130,551.23<br>City of Norwalk / Axon Year 5- 2031-2032                             $ 1,164,610.60<br>Total Contract Value                                                               $ 5,493,446.22",
+     "sortOrder": 14,
+     "isSection": 0,
+     "parentId": 24603,
+     "childItems": []
+    },
+    {
+     "id": 25414,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Authorize the Mayor, Barbara C. Smyth, to execute an agreement with Point and Pay, LLC for payment processing services (Project 4446) whereby various City departments will be able to order from Point and Pay independently for payment processing services over the term of the agreement and to execute the documents, instruments, and/or order forms necessary for City departments to obtain payment processing services during the term of the agreement.",
+     "sortOrder": 15,
+     "isSection": 0,
+     "parentId": 24603,
+     "childItems": []
+    },
+    {
+     "id": 25481,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "1. Approve ARPA transfer requests from the accounts listed below in the amount of $128,578.74 to COMMUNITY REC CENTER ARPA (13-049-0-0-5796-ABL0):<br><br><table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-collapse: collapse;border-width: medium;border-style: none;border-color: currentcolor;border-image: none;width: 624px;\"><tbody><tr><td valign=\"top\" style=\"width: 42.3077%; border: 1pt solid windowtext; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><strong>FULL ACCT</strong></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: 1pt 1pt 1pt medium; border-style: solid solid solid none; border-color: windowtext windowtext windowtext currentcolor; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><strong>ACCT DESCRIPTION</strong></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: 1pt 1pt 1pt medium; border-style: solid solid solid none; border-color: windowtext windowtext windowtext currentcolor; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:center;'><strong>BALANCE</strong></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -100-001-30100-0 -5796 -AMD01</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">MAYOR INITIATIVE ARPA (Sustainability Salary and health stipend)</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">15,247.35</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 11.2pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -113-013-13100-0 -5796 -AFD01</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 11.2pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">ARPA GENERAL PURPOSE LIBRARY</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 11.2pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">5,532.04</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -200-020-20100-0 -5796 -ACS01</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">NORWALK COMMUNITY RECOVERY</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">707.68</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -200-020-20100-0 -5796 -ACS02</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">NORWALK COMMUNITY RECOVERY</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">39,990.86</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -200-020-20100-0 -5796 -ACS03</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">NORWALK COMMUNITY RECOVERY</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">0.05</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -301-031-31100-0 -5796 -AFN02</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">SCBA AIR CYLINDERS</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">408.75</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -301-031-31100-0 -5796 -AFN03</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">PURCHASE OF ADMIN VEHICLES</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">2,525.82</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -700-013-13500-0000-5796 -AEC03</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">COMPLETE STREETS</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">1,400.00</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -700-013-13500-0000-5796 -AEC05</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">BUSINESS COVID ASSISTANCE</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">10,000.00</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -700-013-13500-0000-5796 -AEC10</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">INNOVATION GRANTS FOR START UP</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">1,228.46</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -700-013-13500-0000-5796 -AEC15</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">PERMIT COORDINATOR</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">35,172.30</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 14.25pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -700-013-13500-0000-5796 -AEC17</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 14.25pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">TREE PLANTING PROGRAM</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 14.25pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">1,950.00</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -700-013-13500-0000-5796 -AEC18</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">TREE PLANTING SIDEWALK</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">54.82</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -400-040-40100-0 -5796 -APW04</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">DRG2022-1 LOCKWOOD LANE HEATHE</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">2,316.73</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -400-040-40100-0 -5796 -APW05</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">GENERAL DRAINAGE-VARIOUS CITY</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">42.92</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -400-040-40100-0 -5796 -APW08</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">TREE PLANTING DPW CITYWIDE</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">25.00</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -400-040-40100-0 -5796 -APW10</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">PAVEMENT MANAGEMENT PROGRAM</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">42.79</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -400-040-40100-0 -5796 -APW11</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">MUNICIPAL SOLID WASTE DISPOSAL</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">5,906.90</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -400-040-40100-0 -5796 -ARP02</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">STAFFING AND EQUIPMENT</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">3,240.83</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -500-050-50500-0 -5796 -APS01</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">BOARD OF EDUCATION ARPA</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">889.59</span></p></td></tr><tr><td valign=\"top\" style=\"width: 42.3077%; border-width: medium 1pt 1pt; border-style: none solid solid; border-color: currentcolor windowtext windowtext; border-image: none; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">13 -200-020-62000-0 -5726 -</span></p></td><td valign=\"top\" style=\"width: 41.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;'><span style=\"font-size:13px;\">OTHER OFFICE EQUIPMENT</span></p></td><td valign=\"top\" style=\"width: 16.3462%; border-width: medium 1pt 1pt medium; border-style: none solid solid none; border-color: currentcolor windowtext windowtext currentcolor; padding: 0in 5.4pt; height: 12.75pt; vertical-align: top;\"><p style='margin-top:0in;margin-right:0in;margin-bottom:0in;margin-left:0in;font-size:16px;font-family:\"Aptos\",sans-serif;text-align:right;'><span style=\"font-size:13px;\">1,895.85</span></p></td></tr></tbody></table><br><br><table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" style=\"border-collapse: collapse; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; width: 46%;\" class=\"fr-not-dropzone\"></table>2. Approve a transfer of expenses in the amount of $128,578.74 from Capital Account# 09256030-5777-C0719 (98 SOUTH MAIN COMM CENTER) to ARPA Account# 13-049-0-0-5796-ABL0 (COMMUNITY REC CENTER ARPA)<br><br>",
+     "sortOrder": 16,
+     "isSection": 0,
+     "parentId": 24603,
+     "childItems": []
+    },
+    {
+     "id": 25124,
+     "agendaObjectItemOutlineNumber": "D.",
+     "agendaObjectItemName": "Approve Finance and Claims Committee 2027 Meeting Calendar",
+     "sortOrder": 17,
+     "isSection": 0,
+     "parentId": 24603,
+     "childItems": []
+    },
+    {
+     "id": 25555,
+     "agendaObjectItemOutlineNumber": "E.",
+     "agendaObjectItemName": "Authorize the Purchasing Agent to issue a purchase order to Apple Inc. for laptops in an amount not to exceed $76,736.00, charge to account 09275010-5777-C0740 Student Technology.",
+     "sortOrder": 21,
+     "isSection": 0,
+     "parentId": 24603,
+     "childItems": []
+    },
+    {
+     "id": 25569,
+     "agendaObjectItemOutlineNumber": "F.",
+     "agendaObjectItemName": "Authorize the Mayor, Barbara C. Smyth, to execute a tax abatement agreement with Owner, Sound Communities Inc, owner of 8 Chestnut St. (the “Parcel”), and Developer, SC Leroy LLC, proposed ground lessee of the Parcel under a lease in which Developer will be obligated to construct 68 new construction housing units thereon consisting of extremely low (up to 30% AMI) and very low (up to 50% AMI) income housing units (the “Housing Project”), for annual payment in lieu of taxes. The Tax Year’s PILOT shall be determined by multiplying the aggregate rent collected with respect to the Housing Project for the preceding Tax Year, excluding any rental assistance subsidies, and reduced by the costs of utilities and trash payments paid by the Developer for such Tax Year, by eight percent (8%), for a term of 16 years from the date of completion of the Housing Project as reflected by the issuance of the first certificate of occupancy or temporary certificate of occupancy for the last unit in the Housing Project, or 18 years from the date when all parties have signed the Agreement, whichever occurs first. ",
+     "sortOrder": 22,
+     "isSection": 0,
+     "parentId": 24603,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24604,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 18,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

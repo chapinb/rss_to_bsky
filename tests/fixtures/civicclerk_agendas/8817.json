@@ -1,0 +1,155 @@
+{
+ "id": 8817,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 24816,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24817,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24819,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "PUBLIC PARTICIPATION",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24818,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 4,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24827,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Discuss and vote to approve the minutes from the September 24, 2026 regular meeting of<br data-pasted=\"true\">the Board of Ethics",
+     "sortOrder": 11,
+     "isSection": 0,
+     "parentId": 24818,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24820,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "OLD BUSINESS",
+   "sortOrder": 6,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24828,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Discuss Code of Ethics – City Code – Chapter 32: https://ecode360.com/27048731",
+     "sortOrder": 12,
+     "isSection": 0,
+     "parentId": 24820,
+     "childItems": []
+    },
+    {
+     "id": 24829,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Discuss the Citizen’s Guide to the Code of<br data-pasted=\"true\">Ethics: https://www.norwalkct.gov/DocumentCenter/View/888/Citizens-Guide-to-<br>Code-of-Ethics-2021?bidId=",
+     "sortOrder": 13,
+     "isSection": 0,
+     "parentId": 24820,
+     "childItems": []
+    },
+    {
+     "id": 24832,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "Discuss future education seminars for City Officers and Employees",
+     "sortOrder": 16,
+     "isSection": 0,
+     "parentId": 24820,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24821,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "NEW BUSINESS",
+   "sortOrder": 7,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24830,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<span style=\"margin-left:0in;\">Discuss and vote on Chapter 32 (Code of Ethics), Section 32-8 (Prohibited Gifts)</span>",
+     "sortOrder": 14,
+     "isSection": 0,
+     "parentId": 24821,
+     "childItems": []
+    },
+    {
+     "id": 24831,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Discuss rules and regulations for public hearings conducted by a Hearing Board. See, City Code section 32-12(C)(7)(a)",
+     "sortOrder": 15,
+     "isSection": 0,
+     "parentId": 24821,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24822,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "DISCUSSION",
+   "sortOrder": 8,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24826,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "EXECUTIVE SESSION",
+   "sortOrder": 9,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24833,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "If any ethics complaints are received prior to the meeting, it is anticipated that the Board of Ethics will enter into executive session to consider same.",
+     "sortOrder": 17,
+     "isSection": 0,
+     "parentId": 24826,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24823,
+   "agendaObjectItemOutlineNumber": "IX.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 10,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

@@ -1,0 +1,107 @@
+{
+ "id": 8781,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": false,
+ "items": [
+  {
+   "id": 24106,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24107,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24110,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "REMARKS BY MAYOR AND INTERMIN SUPERINTENDANT OF NORWALK PUBLIC SCHOOLS ",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24111,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "REMARKS BY COMMITTEE CHAIRS - FINANCE & CLAIMS AND BOARD OF EDUCATION FINANCE ",
+   "sortOrder": 4,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24113,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "PRESENTATIONS",
+   "sortOrder": 5,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24120,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "CFO of the City and CFO of the Norwalk Public Schools",
+     "sortOrder": 6,
+     "isSection": 0,
+     "parentId": 24113,
+     "childItems": []
+    },
+    {
+     "id": 24121,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "City - Presentation to provide update of FYE 2026 and FYE 2027 Operating and Capital Budgets, and overview of FYE 2028 Budget Process ",
+     "sortOrder": 7,
+     "isSection": 0,
+     "parentId": 24113,
+     "childItems": []
+    },
+    {
+     "id": 24122,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "Board of Education/NPS - Key issues impacting FYE 2027 Operating and Capital Budgets, and overview of FYE 2028 Budget process ",
+     "sortOrder": 8,
+     "isSection": 0,
+     "parentId": 24113,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24123,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "PUBLIC HEARING ON THE FYE 2028 OPERATING BUDGET ",
+   "sortOrder": 9,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24124,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "PUBLIC HEARING  ON THE FYE 2028 CAPITAL BUDGET",
+   "sortOrder": 10,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24112,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 11,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

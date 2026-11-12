@@ -1,0 +1,219 @@
+{
+ "id": 8624,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 20805,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 20802,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 20803,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 20810,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "<span style=\"font-family: Arial;\">Regular Meeting: August 3, 2026</span>",
+     "sortOrder": 4,
+     "isSection": 0,
+     "parentId": 20803,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 20806,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "SPECIAL APPROPRIATION AGENDA",
+   "sortOrder": 5,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 20807,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "TRANSFER AGENDA",
+   "sortOrder": 6,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 20811,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Transfer FY 2025-2026",
+     "sortOrder": 7,
+     "isSection": 0,
+     "parentId": 20807,
+     "childItems": []
+    },
+    {
+     "id": 23763,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Transfer FY2026-2027",
+     "sortOrder": 8,
+     "isSection": 0,
+     "parentId": 20807,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 20808,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "OTHER BUSINESS",
+   "sortOrder": 9,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23764,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Preliminary Update on FY26 End of Year Report",
+     "sortOrder": 10,
+     "isSection": 0,
+     "parentId": 20808,
+     "childItems": []
+    },
+    {
+     "id": 20812,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Contingency Tracker August 2026",
+     "sortOrder": 11,
+     "isSection": 0,
+     "parentId": 20808,
+     "childItems": []
+    },
+    {
+     "id": 20813,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "NPS School Construction - Monthly Project - August 2026",
+     "sortOrder": 12,
+     "isSection": 0,
+     "parentId": 20808,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 20809,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "ADDITIONAL INFORMATION",
+   "sortOrder": 13,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 20814,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Financial Reports",
+     "sortOrder": 14,
+     "isSection": 0,
+     "parentId": 20809,
+     "childItems": [
+      {
+       "id": 23434,
+       "agendaObjectItemOutlineNumber": "1.",
+       "agendaObjectItemName": "Oak Hills Park Authority Monthly Financial Statements for July 2026",
+       "sortOrder": 15,
+       "isSection": 0,
+       "parentId": 20814,
+       "childItems": []
+      },
+      {
+       "id": 20816,
+       "agendaObjectItemOutlineNumber": "2.",
+       "agendaObjectItemName": "Narrative on Tax Collections dated July & August 2026",
+       "sortOrder": 16,
+       "isSection": 0,
+       "parentId": 20814,
+       "childItems": []
+      },
+      {
+       "id": 20817,
+       "agendaObjectItemOutlineNumber": "3.",
+       "agendaObjectItemName": "Monthly Tax Collector's Reports dated July and August 2026",
+       "sortOrder": 17,
+       "isSection": 0,
+       "parentId": 20814,
+       "childItems": []
+      },
+      {
+       "id": 20818,
+       "agendaObjectItemOutlineNumber": "4.",
+       "agendaObjectItemName": "Year-to-date Capital Budget Report - FY 2026-2027",
+       "sortOrder": 18,
+       "isSection": 0,
+       "parentId": 20814,
+       "childItems": []
+      },
+      {
+       "id": 20819,
+       "agendaObjectItemOutlineNumber": "5.",
+       "agendaObjectItemName": "Year-to-date Operating Expenditure Report - FY 2026-2027",
+       "sortOrder": 19,
+       "isSection": 0,
+       "parentId": 20814,
+       "childItems": []
+      },
+      {
+       "id": 20820,
+       "agendaObjectItemOutlineNumber": "6.",
+       "agendaObjectItemName": "Year-to-date Operating Revenue Report - FY 2026-2027",
+       "sortOrder": 20,
+       "isSection": 0,
+       "parentId": 20814,
+       "childItems": []
+      },
+      {
+       "id": 20821,
+       "agendaObjectItemOutlineNumber": "7.",
+       "agendaObjectItemName": "Police, Fire & DPW Wages - FY 2026-2027",
+       "sortOrder": 21,
+       "isSection": 0,
+       "parentId": 20814,
+       "childItems": []
+      },
+      {
+       "id": 20824,
+       "agendaObjectItemOutlineNumber": "8.",
+       "agendaObjectItemName": "Year-to-date BOE Operating Expenditure Report - FY 2026-2027",
+       "sortOrder": 22,
+       "isSection": 0,
+       "parentId": 20814,
+       "childItems": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 20804,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 23,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

@@ -1,0 +1,182 @@
+{
+ "id": 8738,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 23314,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23323,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL AND SEATING OF ALTERNATES",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23319,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "REVIEW AND ACTION ON APPLICATIONS",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23325,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "#2026-59 CSPR – Tara Bongiorni – 19 Burwell Street – Construct a new impervious patio within fifty (50) feet of tidal wetlands - Report & recommended action",
+     "sortOrder": 4,
+     "isSection": 0,
+     "parentId": 23319,
+     "childItems": []
+    },
+    {
+     "id": 23326,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "#2026-55 CSPR – Tomas Builders, LLC – 34 Charles Street (District 3, Block 7, Lot 43) – Coastal site plan review application for the construction of a two-family detached dwelling - Report & recommended action",
+     "sortOrder": 5,
+     "isSection": 0,
+     "parentId": 23319,
+     "childItems": []
+    },
+    {
+     "id": 23384,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "#2024-37 CAM/SPR - Wall St Opportunity Fund LLC c/o Jason Milligan - 21 and 23 Isaacs Street (District 1, Block 29, Lots 25 & 28) - Modification to previously approved coastal site plan review application for the construction of a six-story, 119-room extended stay hotel, 100 multifamily units and five live-work units to 100-room extended stay hotel and 107 multifamily units as well as facade changes - Report & recommended action",
+     "sortOrder": 6,
+     "isSection": 0,
+     "parentId": 23319,
+     "childItems": []
+    },
+    {
+     "id": 23335,
+     "agendaObjectItemOutlineNumber": "D.",
+     "agendaObjectItemName": "#2026-52 CSPR - Wall Street Opportunity Fund LLC c/o Jason Milligan - 21 & 23 Isaacs Street - Coastal site plan review application to construct a six-story, 207-unit multifamily dwelling on site that was previously approved for the construction of a six-story 105-unit multifamily dwelling and 119-room extended stay hotel - Report & recommended action",
+     "sortOrder": 7,
+     "isSection": 0,
+     "parentId": 23319,
+     "childItems": []
+    },
+    {
+     "id": 23328,
+     "agendaObjectItemOutlineNumber": "E.",
+     "agendaObjectItemName": "#2026-58 SPR - Julie and Mohan Vanam - 36 Catherine Street - Construction of a detached accessory dwelling unit - Report & recommended action",
+     "sortOrder": 8,
+     "isSection": 0,
+     "parentId": 23319,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23320,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "PUBLIC HEARINGS",
+   "sortOrder": 9,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23327,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "#2026-41 R/M/SP - Manresa Osprey LLC - Longshore Avenue and 0 and 3 Manresa Island (District 5, Block 86, Lots 1 and 2) - Zoning regulation and map amendment to create the Special District - Manresa Wilds (SD-MW) zoning district and special permit application for a Development Park Master Plan - Public hearing",
+     "sortOrder": 10,
+     "isSection": 0,
+     "parentId": 23320,
+     "childItems": []
+    },
+    {
+     "id": 23332,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "<span style=\"margin-left:0in;\">#2026-47 R/M – Wall Street Neighborhood Association – Zoning regulation text amendment and zoning map amendment to Article 4 to create the Wall Street Village District Overlay and associated standards relating to density, parking, workforce housing and public realm</span> - Public hearing",
+     "sortOrder": 11,
+     "isSection": 0,
+     "parentId": 23320,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23317,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "DISCUSSION",
+   "sortOrder": 12,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23329,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Discussion of future zoning regulation amendments including where building height is measured to on mansard roofs, warehousing as an accessory use to personal service establishments, permitting retail sales in the SD-MC, and revising the permitting procedure and parking requirements for ADUs in mixed-use/commercial zones",
+     "sortOrder": 13,
+     "isSection": 0,
+     "parentId": 23317,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23315,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 14,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23324,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Regular Meeting: August 19, 2026",
+     "sortOrder": 15,
+     "isSection": 0,
+     "parentId": 23315,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23321,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "COMMENTS OF DIRECTOR",
+   "sortOrder": 16,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23322,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "COMMENTS OF COMMISSIONERS",
+   "sortOrder": 17,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23316,
+   "agendaObjectItemOutlineNumber": "IX.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 18,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23318,
+   "agendaObjectItemOutlineNumber": "",
+   "agendaObjectItemName": "UPCOMING MEETINGS",
+   "sortOrder": 19,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}
