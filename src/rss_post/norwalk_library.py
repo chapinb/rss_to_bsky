@@ -23,6 +23,7 @@ community and adult programs a day are worth a post, so the feed is filtered:
 
 import re
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
@@ -185,3 +186,12 @@ def get_events_on(day: date) -> list[Event]:
     events = events_on(fetch(EVENTS_URL).json(), day)
     logger.info(f"Found {len(events)} notable Norwalk Public Library events on {day}")
     return events
+
+
+def get_events_by_day(days: Iterable[date]) -> dict[date, list[Event]]:
+    """The notable events on each of ``days`` (each day capped as in
+    ``events_on``), from one read of the feed."""
+    days = list(days)
+    logger.info(f"Reading Norwalk Public Library events for {days[0]} to {days[-1]}")
+    data = fetch(EVENTS_URL).json()
+    return {day: events_on(data, day) for day in days}

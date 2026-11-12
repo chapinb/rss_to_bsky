@@ -10,6 +10,7 @@ Feeds only list upcoming events, a couple of weeks ahead.
 
 import re
 import xml.etree.ElementTree as ET
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date, datetime, time
 from zoneinfo import ZoneInfo
@@ -146,6 +147,16 @@ def get_events_on(feed_url: str, day: date) -> list[Event]:
     events = events_on(fetch(feed_url).content, day)
     logger.info(f"Found {len(events)} city calendar events on {day}")
     return events
+
+
+def get_events_by_day(feed_url: str, days: Iterable[date]) -> dict[date, list[Event]]:
+    """Events starting on each of ``days``, from one read of the feed."""
+    days = list(days)
+    logger.info(
+        f"Reading city calendar events for {days[0]} to {days[-1]} from {feed_url}"
+    )
+    xml = fetch(feed_url).content
+    return {day: events_on(xml, day) for day in days}
 
 
 def _words(name: str) -> str:

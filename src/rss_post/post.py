@@ -140,6 +140,12 @@ class Post:
         self.post_length += len(text)
         return self
 
+    def with_tag(self, tag: str):
+        """A hashtag, e.g. ``with_tag("NorwalkCT")`` for ``#NorwalkCT``."""
+        self.text_builder.tag(f"#{tag}", tag)
+        self.post_length += len(tag) + 1
+        return self
+
     def replying_to(
         self,
         root: str | Post,

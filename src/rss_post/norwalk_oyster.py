@@ -8,6 +8,7 @@ with its title and publish time.
 
 import time
 import xml.etree.ElementTree as ET
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date, datetime
 from urllib.parse import quote
@@ -148,6 +149,14 @@ def get_events_on(day: date) -> list[Event]:
     events = events_on(fetch(EVENTS_URL).json(), day)
     logger.info(f"Found {len(events)} top-rated Norwalk Oyster events on {day}")
     return events
+
+
+def get_events_by_day(days: Iterable[date]) -> dict[date, list[Event]]:
+    """Top-rated events on each of ``days``, from one read of the calendar."""
+    days = list(days)
+    logger.info(f"Reading Norwalk Oyster events for {days[0]} to {days[-1]}")
+    data = fetch(EVENTS_URL).json()
+    return {day: events_on(data, day) for day in days}
 
 
 def issues_from_sitemap(xml: bytes) -> list[Issue]:

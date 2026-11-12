@@ -10,6 +10,7 @@ from zoneinfo import ZoneInfo
 import httpx
 
 from rss_post import (
+    lookahead,
     norwalk_boe,
     norwalk_city_calendar,
     norwalk_civic_clerk,
@@ -689,6 +690,9 @@ def main():
             )
     else:
         logger.info(f"Skipping meetings and events (before {MEETINGS_HOUR} AM)")
+    # Every Sunday run from 6 PM on; the thread's root is skipped once posted.
+    if lookahead.is_due(datetime.now(EASTERN)):
+        sources.append(("weekly look-ahead", lookahead.weekly_lookahead))
 
     try:
         seen = SeenPosts(client.published_posts())

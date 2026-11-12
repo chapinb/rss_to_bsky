@@ -190,14 +190,34 @@ def get_todays_meetings(
     """
     now = now or datetime.now(EASTERN)
     today, tomorrow = now.date(), (now + timedelta(days=1)).date()
-    logger.info(f"Reading {TENANT} meetings for {today} and {tomorrow}")
+    return get_meetings_between(
+        today, tomorrow, client, read_agendas=read_agendas, now=now
+    )
+
+
+def get_meetings_between(
+    from_date: date,
+    to_date: date,
+    client: CivicClerkClient | None = None,
+    *,
+    read_agendas: bool = False,
+    now: datetime | None = None,
+) -> list[dict]:
+    """Meetings from ``from_date`` through ``to_date`` (inclusive, Eastern),
+    retried and raised like ``get_todays_meetings``.
+
+    With ``read_agendas``, meetings that haven't started by ``now`` and aren't
+    cancelled also get their agenda read (see ``get_todays_meetings``).
+    """
+    now = now or datetime.now(EASTERN)
+    logger.info(f"Reading {TENANT} meetings from {from_date} to {to_date}")
 
     owns_client = client is None
     client = client or CivicClerkClient(TENANT)
     try:
         events = with_retries(
             "meetings",
-            lambda: list(client.iter_events(from_date=today, to_date=tomorrow)),
+            lambda: list(client.iter_events(from_date=from_date, to_date=to_date)),
         )
         meetings = [meeting_from_event(event) for event in events]
         for meeting in meetings:
