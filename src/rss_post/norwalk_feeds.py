@@ -4,7 +4,7 @@ from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from rss_post import norwalk_civic_clerk
+from rss_post import norwalk_civic_clerk, norwalk_oyster
 from rss_post.bsky import Bluesky, Stdout
 from rss_post.dedup import SeenPosts
 from rss_post.logging_config import get_logger, setup_logging
@@ -13,6 +13,8 @@ from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
 
 logger = get_logger(__name__)
+
+EASTERN = ZoneInfo("America/New_York")
 
 
 def published_at(item) -> datetime | None:
@@ -101,6 +103,33 @@ class NorwalkFeeds:
         logger.info(f"Generated {len(posts)} meeting posts")
         return posts
 
+    def get_norwalk_oyster_newsletter(self) -> list[Post]:
+        logger.info("Processing Norwalk Oyster newsletter")
+        now = datetime.now(UTC)
+        posts = [
+            Post()
+            .with_headline(f"Norwalk Oyster: {issue.title}")
+            .with_embed_card(issue.url, issue.title)
+            for issue in norwalk_oyster.get_newsletter_issues()
+            if now - issue.published <= self.posting_frequency
+        ]
+        logger.info(f"Generated {len(posts)} Norwalk Oyster newsletter posts")
+        return posts
+
+    def get_todays_norwalk_oyster_events(self) -> list[Post]:
+        today = datetime.now(EASTERN).date()
+        posts = []
+        for event in norwalk_oyster.get_events_on(today):
+            details = ", ".join(filter(None, [event.when, event.venue]))
+            headline = f"Today: {event.name}" + (f" ({details})" if details else "")
+            posts.append(
+                Post()
+                .with_headline(headline)
+                .with_embed_card(event.url, event.name, event.description)
+            )
+        logger.info(f"Generated {len(posts)} Norwalk Oyster event posts")
+        return posts
+
     def get_ct_mirror_stories(self) -> list[Post]:
         feed_url = "https://ctmirror.org/feed/"
         logger.info("Processing CT Mirror stories, filtering for Norwalk mentions")
@@ -165,13 +194,20 @@ def main():
         ("committee events", norwalk_feeds.get_committee_events),
         ("Norwalk Current stories", norwalk_feeds.get_norwalk_current_stories),
         ("CT Mirror stories", norwalk_feeds.get_ct_mirror_stories),
+        ("Norwalk Oyster newsletter", norwalk_feeds.get_norwalk_oyster_newsletter),
     ]
-    current_hour = datetime.now(ZoneInfo("America/New_York")).hour
+    current_hour = datetime.now(EASTERN).hour
     logger.info(f"Current hour (Eastern): {current_hour}")
     if current_hour == 7:
         sources.append(("today's meetings", norwalk_feeds.get_todays_norwalk_meetings))
+        sources.append(
+            (
+                "today's Norwalk Oyster events",
+                norwalk_feeds.get_todays_norwalk_oyster_events,
+            )
+        )
     else:
-        logger.info("Skipping meetings (not 7 AM hour)")
+        logger.info("Skipping meetings and events (not 7 AM hour)")
 
     try:
         seen = SeenPosts(client.published_keys())
