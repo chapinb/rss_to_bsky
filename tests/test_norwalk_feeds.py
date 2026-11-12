@@ -9,10 +9,17 @@ from atproto import models
 
 from rss_post import norwalk_civic_clerk
 from rss_post.dedup import PostRef, SeenPosts, keys_in_record
-from rss_post.norwalk_feeds import CITY_SEAL, NorwalkFeeds, publish
+from rss_post.norwalk_civic_clerk import Participation
+from rss_post.norwalk_feeds import (
+    CITY_SEAL,
+    NorwalkFeeds,
+    participation_note,
+    publish,
+)
+from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
 from tests.conftest import FIXTURES
-from tests.test_norwalk_civic_clerk import EVENTS, fake_client
+from tests.test_norwalk_civic_clerk import EVENTS, fake_client, saved_agenda
 
 EST = timezone(timedelta(hours=-5))
 EASTERN = ZoneInfo("America/New_York")
@@ -201,6 +208,9 @@ class MeetingRuns:
 
     def __init__(self):
         self.events = EVENTS
+        # Agendas are served from the saved ones; set False to fail them.
+        self.agendas_up = True
+        self.agenda_requests: list[str] = []
         self.history: dict[str, PostRef] = {}
         self.sent: list = []
 
@@ -210,6 +220,12 @@ class MeetingRuns:
         def handler(request):
             if not civic_clerk_up:
                 return httpx.Response(503)
+            if request.url.path.startswith("/v1/Meetings/"):
+                agenda_id = request.url.path.rsplit("/", 1)[1]
+                self.agenda_requests.append(agenda_id)
+                if not self.agendas_up:
+                    return httpx.Response(503)
+                return httpx.Response(200, json=saved_agenda(agenda_id))
             return httpx.Response(200, json=self.events)
 
         def send(post):
@@ -310,6 +326,128 @@ def test_meetings_that_have_started_are_not_posted():
         runs.run(datetime(2026, 11, 11, 18, 30, tzinfo=EASTERN))
         == NOV_11_MEETINGS[2:] + NOV_12_MEETINGS
     )
+
+
+def test_meeting_posts_note_public_comment_from_the_agenda():
+    runs = MeetingRuns()
+    assert runs.run(datetime(2026, 11, 12, 7, tzinfo=EASTERN)) == NOV_12_MEETINGS
+
+    # Both saved agendas have a PUBLIC PARTICIPATION section.
+    assert [post.build().build_text() for post, _ in runs.sent] == [
+        (
+            "Finance & Claims Committee\nNov 12, 2026 at 7:00 PM EST\n"
+            "🗣 Public comment on the agenda\nJoin on Zoom"
+        ),
+        (
+            "Library Board of Directors\nNov 12, 2026 at 7:00 PM EST\n"
+            "🗣 Public comment on the agenda\nJoin on Zoom"
+        ),
+    ]
+    # Read once each, with the client that read the meetings.
+    assert runs.agenda_requests == ["8805", "8841"]
+
+
+def test_agenda_failure_does_not_drop_the_meeting_post():
+    runs = MeetingRuns()
+    runs.agendas_up = False
+
+    assert runs.run(datetime(2026, 11, 12, 7, tzinfo=EASTERN)) == NOV_12_MEETINGS
+    assert [post.build().build_text() for post, _ in runs.sent] == [
+        "Finance & Claims Committee\nNov 12, 2026 at 7:00 PM EST\nJoin on Zoom",
+        "Library Board of Directors\nNov 12, 2026 at 7:00 PM EST\nJoin on Zoom",
+    ]
+    # Retried like the meetings, then given up on.
+    assert runs.agenda_requests == ["8805"] * 3 + ["8841"] * 3
+
+
+def test_agendas_are_read_only_for_meetings_still_to_be_posted():
+    runs = MeetingRuns()
+    # Nov 11's meetings are cancelled and have no agenda; reminders don't
+    # read agendas.
+    runs.run(datetime(2026, 11, 11, 8, tzinfo=EASTERN), reminders=True)
+    assert runs.agenda_requests == ["8805", "8841"]
+    # Once the meetings have started, their agendas aren't read.
+    runs.agenda_requests.clear()
+    runs.run(datetime(2026, 11, 12, 19, 30, tzinfo=EASTERN), reminders=True)
+    assert runs.agenda_requests == []
+
+
+def note_post(participation, title="Planning and Zoning Commission", zoom=True):
+    meeting = {
+        "title": title,
+        "agenda": "https://norwalkct.portal.civicclerk.com/event/930/files",
+        "when": "Nov 18, 2026 at 6:00 PM EST",
+        "starts_at": datetime(2026, 11, 18, 18, tzinfo=EASTERN),
+        "location": None,
+        "zoom": "https://norwalkct-org.zoom.us/j/1" if zoom else None,
+        "participation": participation,
+    }
+    [post] = meeting_posts(meeting, datetime(2026, 11, 18, 7, tzinfo=EASTERN))
+    return post
+
+
+def test_meeting_post_notes_a_public_hearing():
+    post = note_post(Participation(hearings=["FYE 2028 OPERATING BUDGET"]), zoom=False)
+    assert post.build().build_text() == (
+        "Planning and Zoning Commission\nNov 18, 2026 at 6:00 PM EST\n"
+        "🗣 Public hearing: FYE 2028 OPERATING BUDGET"
+    )
+    # The note doesn't change how the post is deduplicated.
+    assert SeenPosts.key(post) == (
+        "https://norwalkct.portal.civicclerk.com/event/930/files on 2026-11-18"
+    )
+
+
+def test_meeting_post_notes_public_comment_and_hearings():
+    post = note_post(
+        Participation(
+            comment=True,
+            hearings=[
+                (
+                    "Naming of the Police Headquarters Plaza in honor of Retired "
+                    "Police Chief and Former Mayor Harry W. Rilling."
+                ),
+                "Proposed disposition of City property",
+            ],
+        )
+    )
+    assert post.build().build_text() == (
+        "Planning and Zoning Commission\nNov 18, 2026 at 6:00 PM EST\n"
+        "🗣 Public comment on the agenda\n"
+        "Public hearings: Naming of the Police Headquarters Plaza in honor of "
+        "Retired Police Chief and… (+1 more)\n"
+        "Join on Zoom"
+    )
+
+
+def test_meeting_post_without_participation_has_no_note():
+    for participation in (None, Participation()):
+        post = note_post(participation, zoom=False)
+        assert post.build().build_text() == (
+            "Planning and Zoning Commission\nNov 18, 2026 at 6:00 PM EST"
+        )
+
+
+def test_hearing_topic_is_shortened_then_dropped_to_fit():
+    hearings = ["Zoning regulation text amendment " * 10]
+    for length in range(30, 200, 7):
+        title = ("Special Meeting " * 20)[:length].strip()
+        post = note_post(Participation(comment=True, hearings=hearings), title)
+        text = post.build().build_text()
+        assert len(text) <= Post.MAX_POST_LENGTH
+        assert text.startswith(f"{title}\nNov 18, 2026 at 6:00 PM EST")
+        assert text.endswith("Join on Zoom")
+    # A short title leaves room for the topic; a long one for less.
+    assert "Public hearing: Zoning" in participation_note(
+        Participation(hearings=hearings), 200
+    )
+    assert participation_note(Participation(comment=True, hearings=hearings), 60) == (
+        "🗣 Public comment on the agenda\nPublic hearing on the agenda"
+    )
+    assert participation_note(Participation(comment=True, hearings=hearings), 40) == (
+        "🗣 Public comment on the agenda"
+    )
+    assert participation_note(Participation(comment=True), 20) == ""
 
 
 FINANCE_REMINDER = "Starting at 7:00 PM — Zoom: norwalkct-org.zoom.us/j/83292194046"

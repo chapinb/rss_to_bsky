@@ -1,0 +1,89 @@
+{
+ "id": 8840,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": false,
+ "items": [
+  {
+   "id": 25294,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 25296,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "INTRODUCTIONS",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 25297,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "BLIGHT HEARINGS  CITY CODE 58A-1(2)",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 25298,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "4-6 Union Avenue/21 Camp Street:  Illegal Dumping between two properties.  ",
+     "sortOrder": 3,
+     "isSection": 0,
+     "parentId": 25297,
+     "childItems": []
+    },
+    {
+     "id": 25304,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "16 Devil's Garden Road: Reopened Blight Case from September- Severely overgrown and unkempt vegetation.",
+     "sortOrder": 4,
+     "isSection": 0,
+     "parentId": 25297,
+     "childItems": []
+    },
+    {
+     "id": 25305,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "19 Adams Lane: Property owner requesting a hearing regarding a Blight Citation for unkempt or overgrown vegetation.",
+     "sortOrder": 5,
+     "isSection": 0,
+     "parentId": 25297,
+     "childItems": []
+    },
+    {
+     "id": 25306,
+     "agendaObjectItemOutlineNumber": "D.",
+     "agendaObjectItemName": "30 Friendly Road: Unkempt Construction site; rubbish accumulation on the property.",
+     "sortOrder": 6,
+     "isSection": 0,
+     "parentId": 25297,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 25307,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "ANY OTHER DISCUSSIONS",
+   "sortOrder": 8,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 25308,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 9,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

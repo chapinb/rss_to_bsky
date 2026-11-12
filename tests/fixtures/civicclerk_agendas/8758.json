@@ -1,0 +1,136 @@
+{
+ "id": 8758,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 23728,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23737,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL AND SEATING OF ALTERNATES",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23734,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "PUBLIC HEARINGS",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23741,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "#2025-56 SP – 131 New Canaan Avenue, LLC – 131 New Canaan Avenue – Special permit application to expand a non-conforming Motor Vehicle Repair Use to add an overhead door for service - Public hearing, report & recommended action",
+     "sortOrder": 4,
+     "isSection": 0,
+     "parentId": 23734,
+     "childItems": []
+    },
+    {
+     "id": 23739,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "<span style=\"margin-left:0in;\">#2026-47 R/M – Wall Street Neighborhood Association – Zoning regulation text amendment and zoning map amendment to Article 4 to create the Wall Street Village District Overlay and associated standards relating to density, parking, workforce housing and public realm</span> - Public hearing, report & recommended action",
+     "sortOrder": 5,
+     "isSection": 0,
+     "parentId": 23734,
+     "childItems": []
+    },
+    {
+     "id": 23740,
+     "agendaObjectItemOutlineNumber": "C.",
+     "agendaObjectItemName": "<span style=\"margin-left:0in;\">#2026-49<ins cite=\"mailto:Baker,%20Bryan\" datetime=\"2026-07-17T10:53\"> </ins><del cite=\"mailto:Baker,%20Bryan\" datetime=\"2026-07-17T10:53\"> </del>R – City of Norwalk – Zoning Regulation Text Amendments to Articles 4, 7 and 9 to modify density requirements in the mixed-use/multifamily zones in accordance with PA 25-1; modifications to Community Residence Use(s) to align with Connecticut General Statutes; specifying minimum lot size requirements for Convalescent Home Use(s) in the CD-1M and CD-1S zones; permitting Convalescent Home Use(s) within the Civic District; determining maximum driveway width(s) in the CD-3 and CD-3W zones based on number of dwelling units rather than building type(s); and allowing Cornice Signs to be attached to a backplate</span> - Public hearing, report & recommended action",
+     "sortOrder": 6,
+     "isSection": 0,
+     "parentId": 23734,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23731,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "DISCUSSION",
+   "sortOrder": 7,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23742,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Discussion of Nominating Committee",
+     "sortOrder": 8,
+     "isSection": 0,
+     "parentId": 23731,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23729,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 9,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 23738,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Regular Meeting: September 2, 2026",
+     "sortOrder": 10,
+     "isSection": 0,
+     "parentId": 23729,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 23735,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "COMMENTS OF DIRECTOR",
+   "sortOrder": 11,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23736,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "COMMENTS OF COMMISSIONERS",
+   "sortOrder": 12,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23730,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 13,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 23732,
+   "agendaObjectItemOutlineNumber": "",
+   "agendaObjectItemName": "UPCOMING MEETINGS",
+   "sortOrder": 14,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

@@ -42,6 +42,13 @@ CITY_SEAL = Path(__file__).parent / "assets" / "city_seal.png"
 # A bit over an hour so hourly runs hit it even when one starts a few minutes
 # late; a second run inside the window skips the reminder already sent.
 REMINDER_WINDOW = timedelta(minutes=75)
+ZOOM_LINK_TEXT = "\nJoin on Zoom"
+# Meeting posts note where the public can speak (see participation_note); a
+# hearing's topic is cut to at most MAX_HEARING_TOPIC characters, and left out
+# if fewer than MIN_HEARING_TOPIC fit.
+PUBLIC_COMMENT_NOTE = "🗣 Public comment on the agenda"
+MAX_HEARING_TOPIC = 80
+MIN_HEARING_TOPIC = 20
 # At most this many events a day from each city calendar (#13 plans a weekly
 # look-ahead for the rest).
 CITY_EVENTS_PER_DAY = 2
@@ -78,15 +85,63 @@ def card_post(item) -> Post:
     )
 
 
+def shorten(text: str, length: int) -> str:
+    """``text`` cut at a word to at most ``length`` characters, with an ellipsis."""
+    if len(text) <= length:
+        return text
+    return text[: length - 1].rsplit(" ", 1)[0].rstrip(" ,;:-–—") + "…"
+
+
+def participation_note(
+    participation: norwalk_civic_clerk.Participation | None, room: int
+) -> str:
+    """Lines saying where the public can speak, in at most ``room`` characters.
+
+    For example "🗣 Public comment on the agenda" and "Public hearing: <topic>"
+    (or "Public hearings: <first topic> (+2 more)"). The topic is shortened,
+    then dropped, to fit; empty if nothing fits or there's nothing to note.
+    """
+    if participation is None:
+        return ""
+    comment = [PUBLIC_COMMENT_NOTE] if participation.comment else []
+    hearings = participation.hearings
+    candidates = []
+    if hearings:
+        label = "Public hearing" if len(hearings) == 1 else "Public hearings"
+        if not comment:
+            label = f"🗣 {label}"
+        more = f" (+{len(hearings) - 1} more)" if len(hearings) > 1 else ""
+        fixed = len("\n".join([*comment, f"{label}: {more}"]))
+        topic_room = min(MAX_HEARING_TOPIC, room - fixed)
+        if topic_room >= MIN_HEARING_TOPIC:
+            topic = shorten(hearings[0], topic_room)
+            candidates.append([*comment, f"{label}: {topic}{more}"])
+        candidates.append([*comment, f"{label} on the agenda"])
+    candidates.append(comment)
+    for lines in candidates:
+        note = "\n".join(lines)
+        if len(note) <= room:
+            return note
+    return ""
+
+
 def meeting_post(meeting: dict, day: date) -> Post:
     """The meeting's name and time, a card for its agenda, and its Zoom link.
 
-    Keyed by the agenda link and ``day``, so it goes out at most once a day.
+    When its agenda has public comment or a public hearing, a line or two
+    says so (see ``participation_note``). Keyed by the agenda link and
+    ``day``, so it goes out at most once a day.
     """
     details = " · ".join(filter(None, [meeting["when"], meeting["location"]]))
+    headline = f"{meeting['title']}\n{meeting['when']}"
+    room = Post.MAX_POST_LENGTH - len(headline) - 1  # less the note's newline
+    if meeting["zoom"]:
+        room -= len(ZOOM_LINK_TEXT)
+    if note := participation_note(meeting.get("participation"), room):
+        headline = f"{headline}\n{note}"
     post = (
         Post()
-        .with_headline(f"{meeting['title']}\n{meeting['when']}")
+        .with_headline(headline)
         .with_embed_card(
             meeting["agenda"], meeting["title"], details, thumb_url=CITY_SEAL
         )
@@ -94,7 +149,7 @@ def meeting_post(meeting: dict, day: date) -> Post:
         .keyed_by(meeting["agenda"], day)
     )
     if meeting["zoom"]:
-        post.with_link("\nJoin on Zoom", meeting["zoom"])
+        post.with_link(ZOOM_LINK_TEXT, meeting["zoom"])
     return post
 
 
@@ -146,7 +201,7 @@ class NorwalkFeeds:
         """
         now = now or datetime.now(EASTERN)
         logger.info("Fetching today's Norwalk meetings")
-        meetings = norwalk_civic_clerk.get_todays_meetings(now)
+        meetings = norwalk_civic_clerk.get_todays_meetings(now, read_agendas=True)
         posts = []
         for meeting in meetings:
             if meeting["starts_at"] < now:

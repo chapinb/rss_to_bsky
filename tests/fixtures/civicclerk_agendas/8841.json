@@ -1,0 +1,182 @@
+{
+ "id": 8841,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 25311,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 25312,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 25313,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 25319,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Regular Meeting: 11.12.26",
+     "sortOrder": 8,
+     "isSection": 0,
+     "parentId": 25313,
+     "childItems": []
+    },
+    {
+     "id": 25648,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Revised Meeting Minutes 10.8.26",
+     "sortOrder": 11,
+     "isSection": 0,
+     "parentId": 25313,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 25314,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "PUBLIC PARTICIPATION",
+   "sortOrder": 4,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 25318,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "REPORTS",
+   "sortOrder": 5,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 25320,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "President",
+     "sortOrder": 9,
+     "isSection": 0,
+     "parentId": 25318,
+     "childItems": [
+      {
+       "id": 25649,
+       "agendaObjectItemOutlineNumber": "1.",
+       "agendaObjectItemName": "Introduction of New Board Members<br>   Ray Cooke<br>   Amy Kule<br>   Elsa P. Obuchowski",
+       "sortOrder": 12,
+       "isSection": 0,
+       "parentId": 25320,
+       "childItems": []
+      }
+     ]
+    },
+    {
+     "id": 25321,
+     "agendaObjectItemOutlineNumber": "B.",
+     "agendaObjectItemName": "Library Director",
+     "sortOrder": 10,
+     "isSection": 0,
+     "parentId": 25318,
+     "childItems": [
+      {
+       "id": 25650,
+       "agendaObjectItemOutlineNumber": "1.",
+       "agendaObjectItemName": "Request to close the library Saturday, December 26, 2026 <br>(NOTE: Library is closed December 25 and 27)",
+       "sortOrder": 13,
+       "isSection": 0,
+       "parentId": 25321,
+       "childItems": []
+      },
+      {
+       "id": 25651,
+       "agendaObjectItemOutlineNumber": "2.",
+       "agendaObjectItemName": "Request to approve the updated Code of Conduct policy<br>     Attachment 1: Current Policy<br>     Attachment 2: Requested revision (approved date area in red awaiting approval)",
+       "sortOrder": 14,
+       "isSection": 0,
+       "parentId": 25321,
+       "childItems": []
+      },
+      {
+       "id": 25652,
+       "agendaObjectItemOutlineNumber": "3.",
+       "agendaObjectItemName": "Heath Department Partnership: Know Your Numbers",
+       "sortOrder": 15,
+       "isSection": 0,
+       "parentId": 25321,
+       "childItems": []
+      },
+      {
+       "id": 25653,
+       "agendaObjectItemOutlineNumber": "4.",
+       "agendaObjectItemName": "Programs<br>    Halloween Costume Parade<br>    10th Annual Norwalk Author Festival<br>    Historical presentation of The Life of James H. Williams, better known as \"Professor Jim\", <br>    a collaboration with the Norwalk Historical Society<br><br>",
+       "sortOrder": 16,
+       "isSection": 0,
+       "parentId": 25321,
+       "childItems": []
+      },
+      {
+       "id": 25654,
+       "agendaObjectItemOutlineNumber": "5.",
+       "agendaObjectItemName": "Laptop CONNect Program Update",
+       "sortOrder": 17,
+       "isSection": 0,
+       "parentId": 25321,
+       "childItems": []
+      },
+      {
+       "id": 25655,
+       "agendaObjectItemOutlineNumber": "6.",
+       "agendaObjectItemName": "FY2027-28 Capital and Operating Budget Requests",
+       "sortOrder": 18,
+       "isSection": 0,
+       "parentId": 25321,
+       "childItems": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 25315,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "OLD BUSINESS",
+   "sortOrder": 6,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 25316,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "NEW BUSINESS",
+   "sortOrder": 7,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 25317,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 8,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}

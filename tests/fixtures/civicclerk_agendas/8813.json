@@ -1,0 +1,118 @@
+{
+ "id": 8813,
+ "agendaIsPublish": true,
+ "agendaPacketIsPublish": true,
+ "items": [
+  {
+   "id": 24741,
+   "agendaObjectItemOutlineNumber": "I.",
+   "agendaObjectItemName": "CALL TO ORDER",
+   "sortOrder": 1,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24742,
+   "agendaObjectItemOutlineNumber": "II.",
+   "agendaObjectItemName": "ROLL CALL",
+   "sortOrder": 2,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24750,
+   "agendaObjectItemOutlineNumber": "III.",
+   "agendaObjectItemName": "PUBLIC HEARING",
+   "sortOrder": 3,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24744,
+   "agendaObjectItemOutlineNumber": "IV.",
+   "agendaObjectItemName": "PUBLIC PARTICIPATION and COMMENT",
+   "sortOrder": 4,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24743,
+   "agendaObjectItemOutlineNumber": "V.",
+   "agendaObjectItemName": "ACCEPTANCE OF MINUTES",
+   "sortOrder": 5,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24751,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Discuss and vote on approval of the September 15, 2026 minutes",
+     "sortOrder": 10,
+     "isSection": 0,
+     "parentId": 24743,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24745,
+   "agendaObjectItemOutlineNumber": "VI.",
+   "agendaObjectItemName": "OLD BUSINESS",
+   "sortOrder": 7,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24752,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Discussion and vote on Chapter 55 (Demolition Delay)",
+     "sortOrder": 11,
+     "isSection": 0,
+     "parentId": 24745,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24746,
+   "agendaObjectItemOutlineNumber": "VII.",
+   "agendaObjectItemName": "NEW BUSINESS",
+   "sortOrder": 8,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": [
+    {
+     "id": 24753,
+     "agendaObjectItemOutlineNumber": "A.",
+     "agendaObjectItemName": "Discuss and vote on Chapter 98 (Vehicle and Traffic), Section 43 (Blocking of Intersections)",
+     "sortOrder": 12,
+     "isSection": 0,
+     "parentId": 24746,
+     "childItems": []
+    }
+   ]
+  },
+  {
+   "id": 24748,
+   "agendaObjectItemOutlineNumber": "VIII.",
+   "agendaObjectItemName": "DISCUSSION",
+   "sortOrder": 9,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  },
+  {
+   "id": 24747,
+   "agendaObjectItemOutlineNumber": "IX.",
+   "agendaObjectItemName": "ADJOURNMENT",
+   "sortOrder": 10,
+   "isSection": 1,
+   "parentId": -1,
+   "childItems": []
+  }
+ ]
+}
