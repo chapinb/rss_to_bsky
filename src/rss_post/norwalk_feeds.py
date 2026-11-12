@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 
 from rss_post import norwalk_civic_clerk
 from rss_post.bsky import Bluesky, Stdout
+from rss_post.dedup import SeenPosts
 from rss_post.logging_config import get_logger, setup_logging
 from rss_post.post import Post
 from rss_post.read_rss import read_rss_items
@@ -161,7 +162,16 @@ def main():
     else:
         logger.info("Skipping meetings (not 7 AM hour)")
 
-    total_posts, failures = publish(client, sources)
+    try:
+        seen = SeenPosts(client.published_keys())
+    except Exception:
+        # Posting without the history would repeat everything still in the
+        # window, so skip this run; the next one picks up where this left off
+        # as long as its window covers the gap.
+        logger.exception("Failed to read the account's recent posts; not posting")
+        sys.exit(1)
+
+    total_posts, failures = publish(client, sources, seen)
     if failures:
         logger.error(
             f"Completed with {failures} failure(s). Total posts processed: {total_posts}"
@@ -172,15 +182,19 @@ def main():
     )
 
 
-def publish(client, sources) -> tuple[int, int]:
-    """Post everything from each source, isolating failures.
+def publish(client, sources, seen: SeenPosts | None = None) -> tuple[int, int]:
+    """Post everything new from each source, isolating failures.
 
-    A source that raises, or a post that fails to send, is logged and
-    skipped so the remaining sources and posts still go out.
+    Posts already in ``seen`` (same link, same cancellation status) are
+    skipped, and each post sent is added to it, so an item in two feeds goes
+    out once. A source that raises,
+    or a post that fails to send, is logged and skipped so the remaining
+    sources and posts still go out.
 
     Returns:
         The number of posts sent and the number of failures.
     """
+    seen = seen if seen is not None else SeenPosts()
     total_posts = failures = 0
     for name, get_posts in sources:
         logger.info(f"Processing {name}...")
@@ -191,12 +205,16 @@ def publish(client, sources) -> tuple[int, int]:
             failures += 1
             continue
         for post in posts:
+            if not seen.is_new(post):
+                logger.info(f"Skipping already-posted item from {name}: {post.link}")
+                continue
             try:
                 client.post(post)
             except Exception:
                 logger.exception(f"Failed to send a post from {name}")
                 failures += 1
                 continue
+            seen.add(post)
             total_posts += 1
     return total_posts, failures
 
