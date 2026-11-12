@@ -1,8 +1,11 @@
+from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pytest
+from atproto import models
 
 from rss_post.bsky import Bluesky, Stdout
+from rss_post.dedup import PostRef, keys_in_record
 from rss_post.post import Post
 
 
@@ -106,3 +109,67 @@ def test_bluesky_posts_card_without_thumb_when_upload_fails(mock_client_cls, _co
 
     client.send_post.assert_called_once()
     assert client.send_post.call_args.kwargs["embed"].external.thumb is None
+
+
+ROOT = PostRef("at://did:plc:me/app.bsky.feed.post/root", "cid-root")
+
+
+@patch("rss_post.bsky.config", return_value="x")
+@patch("rss_post.bsky.Client")
+def test_bluesky_returns_ref_of_created_post(mock_client_cls, _config):
+    client = mock_client_cls.return_value
+    client.send_post.return_value = SimpleNamespace(uri="at://p/1", cid="c1")
+
+    assert Bluesky().post(Post().with_title("t")) == PostRef("at://p/1", "c1")
+
+
+@patch("rss_post.bsky.config", return_value="x")
+@patch("rss_post.bsky.Client")
+def test_bluesky_sends_reply_with_root_and_parent(mock_client_cls, _config):
+    client = mock_client_cls.return_value
+    client.send_post.return_value = SimpleNamespace(uri="at://p/2", cid="c2")
+    post = (
+        Post()
+        .with_text("Starting at 7:00 PM — Zoom: ")
+        .with_link("zoom.us/j/1", "https://zoom.us/j/1")
+        .replying_to("key", "reminder")
+        .reply_to(ROOT)
+    )
+
+    assert Bluesky().post(post) == PostRef("at://p/2", "c2")
+
+    args, kwargs = client.send_post.call_args
+    assert args[0] is post.text_builder
+    reply = kwargs["reply_to"]
+    assert reply.root.uri == reply.parent.uri == ROOT.uri
+    assert reply.root.cid == ROOT.cid
+    # What later runs read back: the record send_post makes from these.
+    record = models.AppBskyFeedPost.Record(
+        text=args[0].build_text(),
+        facets=args[0].build_facets(),
+        reply=reply,
+        created_at="2026-11-12T23:05:00Z",
+    )
+    assert record.facets[0].features[0].uri == "https://zoom.us/j/1"
+    assert keys_in_record(record) == {f"{ROOT.uri} reminder"}
+
+
+def test_stdout_prints_reply_indented_under_its_parent(capsys):
+    post = (
+        Post()
+        .with_text("Starting at 7:00 PM")
+        .replying_to("key", "reminder")
+        .reply_to(ROOT)
+    )
+    Stdout().post(post)
+
+    assert capsys.readouterr().out == (
+        f"  ↳ [REMINDER REPLY to {ROOT.uri}]\n    Starting at 7:00 PM\n"
+    )
+
+
+def test_stdout_returns_distinct_refs_so_dry_runs_can_thread():
+    stdout = Stdout()
+    first = stdout.post(Post().with_title("a"))
+    second = stdout.post(Post().with_text("b").reply_to(first))
+    assert first != second

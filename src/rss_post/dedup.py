@@ -13,15 +13,23 @@ link and whether its title says it is cancelled, so "Board Meeting" and later
 Meetings are posted the day before and again on the day, so a meeting post is
 keyed by its agenda link and the (Eastern) day it was posted: it goes out at
 most once a day, however many runs see it.
+
+Follow-ups (a meeting's reminder, later its recording or minutes) are replies
+threaded under the post they follow up. A reply is keyed by the post it
+replies to (its thread root's URI) and its kind, e.g. ``reminder``. Later runs
+tell a reply's kind from its text, which starts with that kind's fixed prefix
+(``REPLY_PREFIXES``). The history also maps each key to the post's ``uri``/``cid``
+(``PostRef``), so a later run can find the post to reply to.
 """
 
 import re
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
+from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from zoneinfo import ZoneInfo
 
-from atproto import Client
+from atproto import Client, models
 
 from rss_post.logging_config import get_logger
 
@@ -37,6 +45,25 @@ PUBLIC_APPVIEW = "https://public.api.bsky.app/xrpc"
 EASTERN = ZoneInfo("America/New_York")
 
 CANCELLED = re.compile(r"\bcancell?ed\b", re.IGNORECASE)
+
+# The text each kind of reply starts with, so later runs can tell a reply's
+# kind from its text alone. A new kind of follow-up registers its prefix here
+# (e.g. "minutes": "Minutes posted", "summary": "AI summary",
+# "recording": "Recording"), and its posts' text must start with it.
+REPLY_PREFIXES: dict[str, str] = {
+    "reminder": "Starting at",
+}
+
+
+@dataclass(frozen=True)
+class PostRef:
+    """A post on Bluesky: what a reply needs to point at it."""
+
+    uri: str
+    cid: str
+
+    def strong_ref(self) -> models.ComAtprotoRepoStrongRef.Main:
+        return models.ComAtprotoRepoStrongRef.Main(uri=self.uri, cid=self.cid)
 
 
 def normalize_link(url: str) -> str:
@@ -70,13 +97,34 @@ def daily_key(key: str, day: date) -> str:
     return f"{key} on {day.isoformat()}"
 
 
+def reply_key(root_uri: str, kind: str) -> str:
+    """Key of the ``kind`` follow-up (e.g. ``reminder``) to the thread at ``root_uri``."""
+    return f"{root_uri} {kind}"
+
+
+def reply_kind(text: str) -> str | None:
+    """The kind of follow-up a reply's text is, by its prefix (``REPLY_PREFIXES``)."""
+    for kind, prefix in REPLY_PREFIXES.items():
+        if text.startswith(prefix):
+            return kind
+    return None
+
+
 def keys_in_record(record, posted: datetime | None = None) -> set[str]:
     """Keys of what a post record points at: its link card and any links in its text.
 
     Each link also gets a daily key for the Eastern day the record was posted
     (``posted``), using the card's title, or for links in the text the text,
     to tell whether it is a cancellation.
+
+    A reply is keyed only by its thread and kind (see ``reply_key``); replies
+    whose text doesn't start with a known prefix (written by hand) have no
+    keys.
     """
+    reply = getattr(record, "reply", None)
+    if reply is not None:
+        kind = reply_kind(record.text or "")
+        return {reply_key(reply.root.uri, kind)} if kind is not None else set()
     keys = set()
     day = posted.astimezone(EASTERN).date() if posted is not None else None
     external = getattr(getattr(record, "embed", None), "external", None)
@@ -95,21 +143,22 @@ def keys_in_record(record, posted: datetime | None = None) -> set[str]:
     return keys
 
 
-def published_keys(
+def published_posts(
     client: Client, actor: str, since: datetime | None = None
-) -> set[str]:
-    """Keys of what ``actor`` has posted since ``since`` (default: 30 days ago).
+) -> dict[str, PostRef]:
+    """Keys of what ``actor`` has posted since ``since`` (default: 30 days ago),
+    each mapped to the most recent post with that key.
 
     Raises whatever the client raises: without the history the run can't tell
     what is new, so callers should not post.
     """
     since = since or datetime.now(UTC) - HISTORY
-    keys: set[str] = set()
+    keys: dict[str, PostRef] = {}
     cursor = None
     posts = 0
     for _ in range(MAX_PAGES):
         response = client.get_author_feed(
-            actor=actor, cursor=cursor, filter="posts_no_replies", limit=PAGE_SIZE
+            actor=actor, cursor=cursor, filter="posts_with_replies", limit=PAGE_SIZE
         )
         reached_since = False
         for item in response.feed:
@@ -123,7 +172,10 @@ def published_keys(
                 reached_since = True
                 continue
             posts += 1
-            keys.update(keys_in_record(record, created_at))
+            ref = PostRef(item.post.uri, item.post.cid)
+            # The feed is newest first: keep the latest post for each key.
+            for key in keys_in_record(record, created_at):
+                keys.setdefault(key, ref)
         cursor = response.cursor
         if reached_since or not cursor or not response.feed:
             break
@@ -133,19 +185,37 @@ def published_keys(
     return keys
 
 
-def public_published_keys(actor: str, since: datetime | None = None) -> set[str]:
-    """``published_keys`` read from the public AppView, without logging in."""
-    return published_keys(Client(base_url=PUBLIC_APPVIEW), actor, since)
+def published_keys(
+    client: Client, actor: str, since: datetime | None = None
+) -> set[str]:
+    """Just the keys of ``published_posts``."""
+    return set(published_posts(client, actor, since))
+
+
+def public_published_posts(
+    actor: str, since: datetime | None = None
+) -> dict[str, PostRef]:
+    """``published_posts`` read from the public AppView, without logging in."""
+    return published_posts(Client(base_url=PUBLIC_APPVIEW), actor, since)
 
 
 class SeenPosts:
-    """Keys (see ``post_key``) of posts already made, by the account or in this run."""
+    """Keys (see ``post_key``) of posts already made, by the account or in this run.
 
-    def __init__(self, keys: Iterable[str] = ()) -> None:
+    Built from ``published_posts``, it also knows which post each key refers
+    to, so replies can find the post they follow up (``ref``).
+    """
+
+    def __init__(self, keys: Iterable[str] | Mapping[str, PostRef] = ()) -> None:
+        self.refs: dict[str, PostRef] = dict(keys) if isinstance(keys, Mapping) else {}
         self.keys = set(keys)
 
     @staticmethod
     def key(post) -> str | None:
+        kind = getattr(post, "reply_kind", None)
+        if kind is not None:
+            reply = getattr(post, "reply", None)
+            return reply_key(reply.root.uri, kind) if reply is not None else None
         link = getattr(post, "link", None)
         if link is None:
             return None
@@ -158,11 +228,35 @@ class SeenPosts:
         day = getattr(post, "day", None)
         return daily_key(key, day) if day is not None else key
 
+    def ref(self, target) -> PostRef | None:
+        """The post made for ``target``: a key, or a ``Post`` sent earlier."""
+        key = target if isinstance(target, str) else self.key(target)
+        return self.refs.get(key) if key is not None else None
+
+    def resolve_reply(self, post) -> bool:
+        """Point a reply at the posts it names by key (``Post.replying_to``).
+
+        Returns False if a post it replies to can't be found, e.g. the
+        morning's meeting post failed or is older than the history.
+        """
+        root_target = getattr(post, "reply_root", None)
+        if root_target is None or getattr(post, "reply", None) is not None:
+            return True
+        root = self.ref(root_target)
+        parent_target = getattr(post, "reply_parent", None)
+        parent = root if parent_target is None else self.ref(parent_target)
+        if root is None or parent is None:
+            return False
+        post.reply_to(root, parent)
+        return True
+
     def is_new(self, post) -> bool:
         key = self.key(post)
         return key is None or key not in self.keys
 
-    def add(self, post) -> None:
+    def add(self, post, ref: PostRef | None = None) -> None:
         key = self.key(post)
         if key is not None:
             self.keys.add(key)
+            if ref is not None:
+                self.refs[key] = ref

@@ -8,7 +8,7 @@ import httpx
 from atproto import models
 
 from rss_post import norwalk_civic_clerk
-from rss_post.dedup import SeenPosts, keys_in_record
+from rss_post.dedup import PostRef, SeenPosts, keys_in_record
 from rss_post.norwalk_feeds import CITY_SEAL, NorwalkFeeds, publish
 from rss_post.read_rss import read_rss_items
 from tests.conftest import FIXTURES
@@ -201,40 +201,55 @@ class MeetingRuns:
 
     def __init__(self):
         self.events = EVENTS
-        self.history: set[str] = set()
+        self.history: dict[str, PostRef] = {}
+        self.sent: list = []
 
-    def run(self, now: datetime, civic_clerk_up: bool = True) -> list[str]:
+    def run(
+        self, now: datetime, civic_clerk_up: bool = True, reminders: bool = False
+    ) -> list[str]:
         def handler(request):
             if not civic_clerk_up:
                 return httpx.Response(503)
             return httpx.Response(200, json=self.events)
 
+        def send(post):
+            ref = PostRef(f"at://p/{len(self.sent) + 1}", "c")
+            self.sent.append((post, ref))
+            return ref
+
         client = MagicMock()
+        client.post.side_effect = send
+        already_sent = len(self.sent)
         feeds = NorwalkFeeds(timedelta(hours=1))
+        sources = [("meetings", lambda: feeds.get_todays_norwalk_meetings(now))]
+        if reminders:
+            sources.append(("reminders", lambda: feeds.get_meeting_reminders(now)))
         with (
             patch.object(
                 norwalk_civic_clerk,
                 "CivicClerkClient",
-                return_value=fake_client(handler),
+                side_effect=lambda _tenant: fake_client(handler),
             ),
             patch.object(norwalk_civic_clerk.time, "sleep"),
         ):
-            publish(
-                client,
-                [("meetings", lambda: feeds.get_todays_norwalk_meetings(now))],
-                SeenPosts(self.history),
-            )
-        posts = [c.args[0] for c in client.post.call_args_list]
-        for post in posts:
+            publish(client, sources, SeenPosts(self.history))
+        sent = self.sent[already_sent:]
+        for post, ref in sent:
             builder = post.build()
             record = models.AppBskyFeedPost.Record(
                 text=builder.build_text(),
                 facets=builder.build_facets(),
                 embed=post.embed,
                 created_at=now.astimezone(UTC).isoformat(),
+                reply=post.reply,
             )
-            self.history |= keys_in_record(record, now)
-        return [card(post).title for post in posts]
+            for key in keys_in_record(record, now):
+                self.history[key] = ref
+        # A meeting by its card's title; a reply (reminder) by its text.
+        return [
+            card(post).title if post.embed else post.build().build_text()
+            for post, _ in sent
+        ]
 
 
 # The saved meetings, all in the evening: four on Nov 11 (6:00-7:00 PM), two
@@ -294,4 +309,115 @@ def test_meetings_that_have_started_are_not_posted():
     assert (
         runs.run(datetime(2026, 11, 11, 18, 30, tzinfo=EASTERN))
         == NOV_11_MEETINGS[2:] + NOV_12_MEETINGS
+    )
+
+
+FINANCE_REMINDER = "Starting at 7:00 PM — Zoom: norwalkct-org.zoom.us/j/83292194046"
+LIBRARY_REMINDER = "Starting at 7:00 PM — Zoom: norwalkct-org.zoom.us/j/84110778128"
+
+
+def test_reminder_replies_to_the_mornings_meeting_post_once():
+    runs = MeetingRuns()
+    assert runs.run(datetime(2026, 11, 12, 7, 5, tzinfo=EASTERN), reminders=True) == (
+        NOV_12_MEETINGS
+    )
+    # Hourly runs: nothing until the first within 75 minutes of the 7 PM start.
+    for hour in range(8, 18):
+        assert (
+            runs.run(datetime(2026, 11, 12, hour, 5, tzinfo=EASTERN), True, True) == []
+        )
+    assert runs.run(datetime(2026, 11, 12, 18, 5, tzinfo=EASTERN), True, True) == [
+        FINANCE_REMINDER,
+        LIBRARY_REMINDER,
+    ]
+    assert runs.run(datetime(2026, 11, 12, 18, 55, tzinfo=EASTERN), True, True) == []
+
+    roots = {card(post).title: ref for post, ref in runs.sent if post.reply is None}
+    reminders = [post for post, _ in runs.sent if post.reply is not None]
+    assert [r.reply.root.uri for r in reminders] == [
+        roots["Finance & Claims Committee"].uri,
+        roots["Library Board of Directors"].uri,
+    ]
+    assert all(r.reply.parent.uri == r.reply.root.uri for r in reminders)
+
+
+def test_reminder_window_tolerates_a_late_hourly_run():
+    """Runs at 5:58 and 7:02 PM: the 5:58 run is the only one before 7 PM."""
+    runs = MeetingRuns()
+    runs.run(datetime(2026, 11, 12, 7, tzinfo=EASTERN))
+    assert runs.run(datetime(2026, 11, 12, 17, 58, tzinfo=EASTERN), True, True) == [
+        FINANCE_REMINDER,
+        LIBRARY_REMINDER,
+    ]
+
+
+def test_reminder_replies_to_a_meeting_post_made_in_the_same_run():
+    # The 7 AM post was missed; the meeting post and its reminder go out together.
+    runs = MeetingRuns()
+    assert runs.run(datetime(2026, 11, 12, 18, 5, tzinfo=EASTERN), True, True) == [
+        *NOV_12_MEETINGS,
+        FINANCE_REMINDER,
+        LIBRARY_REMINDER,
+    ]
+    [(_, finance), _, (reminder, _), _] = runs.sent
+    assert reminder.reply.root.uri == finance.uri
+
+
+def test_reminder_is_skipped_without_todays_meeting_post():
+    # Only yesterday's post of the meeting exists.
+    runs = MeetingRuns()
+    runs.run(datetime(2026, 11, 11, 7, tzinfo=EASTERN))
+    client = MagicMock()
+    meeting = {
+        "title": "Finance & Claims Committee",
+        "agenda": "https://norwalkct.portal.civicclerk.com/event/984/files",
+        "when": "Nov 12, 2026 at 7:00 PM EST",
+        "starts_at": datetime(2026, 11, 12, 19, tzinfo=EASTERN),
+        "location": None,
+        "zoom": None,
+    }
+    feeds = NorwalkFeeds(timedelta(hours=1))
+    now = datetime(2026, 11, 12, 18, 5, tzinfo=EASTERN)
+    with patch(
+        "rss_post.norwalk_feeds.norwalk_civic_clerk.get_todays_meetings",
+        return_value=[meeting],
+    ):
+        result = publish(
+            client,
+            [("reminders", lambda: feeds.get_meeting_reminders(now))],
+            SeenPosts(runs.history),
+        )
+
+    assert result == (0, 0)
+    client.post.assert_not_called()
+
+
+def test_no_reminders_for_cancelled_or_started_meetings():
+    runs = MeetingRuns()
+    runs.run(datetime(2026, 11, 11, 7, tzinfo=EASTERN))
+    # Nov 11's meetings are all cancelled; at 6:30 PM two have also started.
+    assert runs.run(datetime(2026, 11, 11, 18, 30, tzinfo=EASTERN), True, True) == []
+
+
+def test_reminder_without_zoom_link_gives_the_time():
+    meeting = {
+        "title": "Board",
+        "agenda": "https://norwalkct.portal.civicclerk.com/event/1/files",
+        "when": "Nov 12, 2026 at 9:30 AM EST",
+        "starts_at": datetime(2026, 11, 12, 9, 30, tzinfo=EASTERN),
+        "location": None,
+        "zoom": None,
+    }
+    with patch(
+        "rss_post.norwalk_feeds.norwalk_civic_clerk.get_todays_meetings",
+        return_value=[meeting],
+    ):
+        [post] = NorwalkFeeds(timedelta(hours=1)).get_meeting_reminders(
+            datetime(2026, 11, 12, 8, 30, tzinfo=EASTERN)
+        )
+
+    assert post.build().build_text() == "Starting at 9:30 AM"
+    assert post.reply_kind == "reminder"
+    assert post.reply_root == (
+        "https://norwalkct.portal.civicclerk.com/event/1/files on 2026-11-12"
     )
