@@ -1,3 +1,4 @@
+import re
 from datetime import date
 
 from atproto import client_utils, models
@@ -11,11 +12,21 @@ logger = get_logger(__name__)
 class Post:
     MAX_POST_LENGTH = 250
     LINK_LENGTH = 23
+    # Bluesky clients clamp card descriptions to a few lines; anything past
+    # this is never seen, so cut it cleanly instead of mid-word.
+    MAX_CARD_DESCRIPTION_LENGTH = 300
+
+    # WordPress feed boilerplate that is noise on a card.
+    _FEED_FOOTER = re.compile(r"\s*The post .+? appeared first on .+?\.?\s*$")
+    _READ_MORE = re.compile(r"\s*(\[(…|\.\.\.|&hellip;)\]|…|\.\.\.)\s*$")
 
     def __init__(self):
         self.text_builder = client_utils.TextBuilder()
         self.post_length = 0
         self.embed = None
+        # Image the feed supplied for the card; adapters fall back to the
+        # linked page's og:image when this is None.
+        self.thumb_url: str | None = None
         # The item this post is about, used to skip items already posted.
         self.link: str | None = None
         self.title: str | None = None
@@ -31,6 +42,18 @@ class Post:
         self.title = item_title
         self.text_builder.text(item_title + "\n")
         self.post_length += len(item_title) + 1
+        return self
+
+    def with_headline(self, headline: str):
+        """Post text that is just the headline, for posts carried by a card.
+
+        Gives card-only posts searchable, screen-reader-friendly text.
+        """
+        headline = self.remove_html_formatting(headline)
+        if len(headline) > self.MAX_POST_LENGTH:
+            headline = headline[: self.MAX_POST_LENGTH - 1].rsplit(" ", 1)[0] + "…"
+        self.text_builder.text(headline)
+        self.post_length += len(headline)
         return self
 
     def with_description(self, item_description, num_links: int = 0):
@@ -65,17 +88,24 @@ class Post:
         self.text_builder.link(link_text, item_link)
         return self
 
-    def with_embed_card(self, url: str, title: str, description: str = ""):
+    def with_embed_card(
+        self,
+        url: str,
+        title: str,
+        description: str = "",
+        thumb_url: str | None = None,
+    ):
         """Add an embed card with external link to the post"""
         self.embed = models.AppBskyEmbedExternal.Main(
             external=models.AppBskyEmbedExternal.External(
                 uri=url,
                 title=self.remove_html_formatting(title),
-                description=self.remove_html_formatting(description),
+                description=self.card_description(description),
             )
         )
         self.link = url
-        logger.debug(f"Added embed card for URL: {url}")
+        self.thumb_url = thumb_url
+        logger.debug(f"Added embed card for URL: {url} (thumb: {thumb_url})")
         return self
 
     def keyed_by(self, link: str, day: date | None = None):
@@ -87,6 +117,19 @@ class Post:
         self.link = link
         self.day = day
         return self
+
+    @classmethod
+    def card_description(cls, description: str) -> str:
+        """Plain-text card description without feed boilerplate, length-capped."""
+        text = cls.remove_html_formatting(description)
+        text = cls._FEED_FOOTER.sub("", text)
+        text, read_more = cls._READ_MORE.subn("", text)
+        if len(text) > cls.MAX_CARD_DESCRIPTION_LENGTH:
+            text = text[: cls.MAX_CARD_DESCRIPTION_LENGTH - 1].rsplit(" ", 1)[0]
+            read_more = 1
+        if read_more and text:
+            text = text.rstrip(" ,;:-—") + "…"
+        return text
 
     def build(self):
         logger.debug(f"Built post with final length: {self.post_length}")
