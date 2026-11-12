@@ -1,3 +1,5 @@
+import time
+
 import feedparser
 from feedparser import FeedParserDict
 
@@ -35,5 +37,23 @@ def read_rss(url) -> FeedParserDict:
     return feed
 
 
+def read_rss_with_retries(
+    url, attempts: int = 3, backoff_seconds: float = 2.0
+) -> FeedParserDict:
+    """``read_rss`` with retries, since a missed fetch means missed posts."""
+    for attempt in range(1, attempts + 1):
+        try:
+            return read_rss(url)
+        except FeedUnavailableError as e:
+            if attempt == attempts:
+                raise
+            delay = backoff_seconds * attempt
+            logger.warning(
+                f"Attempt {attempt}/{attempts} failed ({e}); retrying in {delay}s"
+            )
+            time.sleep(delay)
+    raise AssertionError("unreachable")
+
+
 def read_rss_items(url) -> list[FeedParserDict]:
-    return read_rss(url).entries
+    return read_rss_with_retries(url).entries
