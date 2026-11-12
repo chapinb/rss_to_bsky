@@ -1,0 +1,53 @@
+<?xml version="1.0"?><rss version="2.0" xmlns:calendarEvent="https://www.norwalkct.gov/Calendar.aspx"><channel>
+	<title>City of Norwalk - Calendar - Main City Calendar</title>
+	<link>https://www.norwalkct.gov/Calendar.aspx</link>
+	<lastBuildDate>Thu, 12 Nov 2026 08:37:20 -0500</lastBuildDate>
+	<description>City of Norwalk - Get the latest events</description>
+	<language>en-us</language>
+	<item>
+		<title>Lockwood-Mathews Mansion Museum New Exhibit</title>
+		<link>https://www.norwalkct.gov/Calendar.aspx?EID=17092</link>
+		<pubDate>Wed, 23 Sep 2026 12:57:35 -0500</pubDate>
+		<description>&lt;strong&gt;Event dates:&lt;/strong&gt; October 7, 2026 - January 3, 2027&lt;br&gt;&lt;strong&gt;Event Time: &lt;/strong&gt;12:00 AM - 11:59 PM&lt;br&gt;&lt;strong&gt;Location:&lt;/strong&gt; &lt;br&gt;Lockwood-Mathews Mansion &lt;br&gt;Norwalk, CT 06851-5125</description>
+		<calendarEvent:EventDates>October 7, 2026 - January 3, 2027</calendarEvent:EventDates>
+		<calendarEvent:EventTimes>12:00 AM - 11:59 PM</calendarEvent:EventTimes>
+		<calendarEvent:Location>Lockwood-Mathews Mansion Norwalk, CT 06851-5125</calendarEvent:Location>
+		
+		<guid isPermaLink="false">https://www.norwalkct.gov/Calendar.aspx?EID=17092/639257650550000000</guid>
+	</item>
+	<item>
+		<title>World Day of Remembrance for Road Traffic Victims</title>
+		<link>https://www.norwalkct.gov/Calendar.aspx?EID=17268</link>
+		<pubDate>Wed, 04 Nov 2026 11:06:25 -0500</pubDate>
+		<description>&lt;strong&gt;Event date:&lt;/strong&gt; November 14, 2026 &lt;br&gt;&lt;strong&gt;Event Time: &lt;/strong&gt;01:00 PM - 02:30 PM&lt;br&gt;&lt;strong&gt;Location:&lt;/strong&gt; &lt;br&gt;Community Room&lt;br&gt;125 East Avenue&lt;br&gt;Norwalk, CT 06851-5125</description>
+		<calendarEvent:EventDates> November 14, 2026 </calendarEvent:EventDates>
+		<calendarEvent:EventTimes>01:00 PM - 02:30 PM</calendarEvent:EventTimes>
+		<calendarEvent:Location>Community Room&lt;br&gt;125 East AvenueNorwalk, CT 06851-5125</calendarEvent:Location>
+		
+		<guid isPermaLink="false">https://www.norwalkct.gov/Calendar.aspx?EID=17268/639293835850000000</guid>
+	</item>
+	<item>
+		<title>Enforcement Panel</title>
+		<link>https://www.norwalkct.gov/Calendar.aspx?EID=17271</link>
+		<pubDate>Wed, 04 Nov 2026 16:35:16 -0500</pubDate>
+		<description>&lt;strong&gt;Event date:&lt;/strong&gt; November 16, 2026 &lt;br&gt;&lt;strong&gt;Event Time: &lt;/strong&gt;06:00 PM - 07:30 PM&lt;br&gt;&lt;strong&gt;Location:&lt;/strong&gt; &lt;br&gt;Council Chambers&lt;br&gt;125 East Avenue&lt;br&gt;Norwalk, CT 06851-5125</description>
+		<calendarEvent:EventDates> November 16, 2026 </calendarEvent:EventDates>
+		<calendarEvent:EventTimes>06:00 PM - 07:30 PM</calendarEvent:EventTimes>
+		<calendarEvent:Location>Council Chambers&lt;br&gt;125 East AvenueNorwalk, CT 06851-5125</calendarEvent:Location>
+		
+		<guid isPermaLink="false">https://www.norwalkct.gov/Calendar.aspx?EID=17271/639294033160000000</guid>
+		<enclosure url="https://www.norwalkct.gov/DocumentCenter/View/43020" length="0" type="image/png" />
+	</item>
+	<item>
+		<title>Meet the Mayor at Odeens</title>
+		<link>https://www.norwalkct.gov/Calendar.aspx?EID=17269</link>
+		<pubDate>Wed, 04 Nov 2026 11:43:49 -0500</pubDate>
+		<description>&lt;strong&gt;Event date:&lt;/strong&gt; November 18, 2026 &lt;br&gt;&lt;strong&gt;Event Time: &lt;/strong&gt;05:00 PM - 06:00 PM&lt;br&gt;&lt;strong&gt;Location:&lt;/strong&gt; &lt;br&gt;Odeens at Oak Hills Park&lt;br&gt;165 Fillow Street&lt;br&gt;Norwalk, CT 06850</description>
+		<calendarEvent:EventDates> November 18, 2026 </calendarEvent:EventDates>
+		<calendarEvent:EventTimes>05:00 PM - 06:00 PM</calendarEvent:EventTimes>
+		<calendarEvent:Location>Odeens at Oak Hills Park&lt;br&gt;165 Fillow StreetNorwalk, CT 06850</calendarEvent:Location>
+		
+		<guid isPermaLink="false">https://www.norwalkct.gov/Calendar.aspx?EID=17269/639293858290000000</guid>
+		<enclosure url="https://www.norwalkct.gov/DocumentCenter/View/43014" length="0" type="image/png" />
+	</item>
+</channel></rss>

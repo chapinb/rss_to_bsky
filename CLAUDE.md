@@ -41,6 +41,7 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 - Board of Education meetings from the Norwalk Public Schools calendar's iCal feed
 - Norwalk Oyster newsletter issues and today's top-rated community events
 - Norwalk Public Library events (today's notable community and adult programs)
+- Today's community events from the city's Recreation & Parks and Main City calendars
 
 **Post Building**: `src/rss_post/post.py:Post` - Builder pattern for constructing social media posts with length constraints (250 chars), HTML stripping, and link formatting. A post can be a threaded follow-up: `replying_to(root, kind, parent=None)` names the post(s) it replies to by dedup key (from the account's history) or by a `Post` sent earlier in the run; `publish` resolves them to root/parent refs (`reply_to(root_ref, parent_ref)`) and skips the reply if they aren't found
 
@@ -60,6 +61,8 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **Norwalk Public Library**: `src/rss_post/norwalk_library.py` - Events from the library's LibraryCalendar JSON feed (`norwalkpl.librarycalendar.com/events/feed/json`, main library and South Norwalk branch). Filtered to community and adult programs: children-only age groups, storytimes/play groups, recurring series (title appearing more than 3 times in the feed), closures, cancellations and outside groups' room bookings (no program type, description or image) are skipped, repeat sessions of a program on one day collapse to one, and at most 3 a day are posted (featured first)
 
+**City community calendars**: `src/rss_post/norwalk_city_calendar.py` - The city's CivicPlus RSS feeds for the Recreation & Parks and Main City calendars, read for each event's date, times and place; posted on the day like Norwalk Oyster events, at most 2 a day per calendar (`CITY_EVENTS_PER_DAY`), skipping events Norwalk Oyster also posts that day (matched by name)
+
 **Deduplication**: `src/rss_post/dedup.py` - Reads the links the account posted (and its own replies) in the last 30 days from Bluesky at startup and skips items already posted (no local storage). `published_posts` maps each key to the latest post's `PostRef`, and `SeenPosts.ref(key_or_post)` looks a post up so later runs can reply to it. Replies are keyed by their thread root's URI and kind (`reply_key`), so each follow-up goes out once per thread; a reply's kind is read back from its text's fixed prefix (`REPLY_PREFIXES`, e.g. reminder = "Starting at"), and new kinds register theirs there
 
 **Logging**: `src/rss_post/logging_config.py` - Centralized logging configuration with structured output
@@ -77,7 +80,7 @@ Environment variables in `.env` file (template at `template.env`):
 - Link-based deduplication against the account's own recent posts; replies deduped by (thread root, kind)
 - Threaded follow-ups (meeting reminders; later recordings, minutes, summaries) found via the post history, not local storage
 - Content filtering (CT Mirror posts filtered for "norwalk" mentions)
-- Schedule-aware posting (meetings, Board of Education meetings, Norwalk Oyster events and library events posted once a day by the first successful run from 7 AM Eastern; ones that have started are skipped)
+- Schedule-aware posting (meetings, Board of Education meetings, Norwalk Oyster events, library events and city calendar events posted once a day by the first successful run from 7 AM Eastern; ones that have started are skipped)
 - Adapter pattern for output destinations (Bluesky vs console)
 - Comprehensive logging throughout all components with configurable levels
 - Per-source and per-post error isolation; the run exits 1 if anything failed
