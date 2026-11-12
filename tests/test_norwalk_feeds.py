@@ -411,11 +411,23 @@ def test_meeting_post_notes_public_comment_and_hearings():
             ],
         )
     )
+    # More than one hearing: a count, no topics.
     assert post.build().build_text() == (
         "Planning and Zoning Commission\nNov 18, 2026 at 6:00 PM EST\n"
         "🗣 Public comment on the agenda\n"
-        "Public hearings: Naming of the Police Headquarters Plaza in honor of "
-        "Retired Police Chief and… (+1 more)\n"
+        "🗣 Public hearings (2)\n"
+        "Join on Zoom"
+    )
+
+
+def test_long_hearing_topic_is_left_out_not_truncated():
+    topic = "Proposed disposition of City property abutting 18/20 Cleveland Terrace"
+    assert len(topic) > 60
+    post = note_post(Participation(comment=True, hearings=[topic]))
+    assert post.build().build_text() == (
+        "Planning and Zoning Commission\nNov 18, 2026 at 6:00 PM EST\n"
+        "🗣 Public comment on the agenda\n"
+        "🗣 Public hearing\n"
         "Join on Zoom"
     )
 
@@ -428,26 +440,26 @@ def test_meeting_post_without_participation_has_no_note():
         )
 
 
-def test_hearing_topic_is_shortened_then_dropped_to_fit():
-    hearings = ["Zoning regulation text amendment " * 10]
+def test_note_is_dropped_to_fit():
+    one = Participation(comment=True, hearings=["FYE 2028 OPERATING BUDGET"])
     for length in range(30, 200, 7):
         title = ("Special Meeting " * 20)[:length].strip()
-        post = note_post(Participation(comment=True, hearings=hearings), title)
-        text = post.build().build_text()
+        text = note_post(one, title).build().build_text()
         assert len(text) <= Post.MAX_POST_LENGTH
         assert text.startswith(f"{title}\nNov 18, 2026 at 6:00 PM EST")
         assert text.endswith("Join on Zoom")
-    # A short title leaves room for the topic; a long one for less.
-    assert "Public hearing: Zoning" in participation_note(
-        Participation(hearings=hearings), 200
+    assert participation_note(one, 200) == (
+        "🗣 Public comment on the agenda\n🗣 Public hearing: FYE 2028 OPERATING BUDGET"
     )
-    assert participation_note(Participation(comment=True, hearings=hearings), 60) == (
-        "🗣 Public comment on the agenda\nPublic hearing on the agenda"
+    # Without room for the topic, then the hearing line, then anything.
+    assert participation_note(one, 60) == (
+        "🗣 Public comment on the agenda\n🗣 Public hearing"
     )
-    assert participation_note(Participation(comment=True, hearings=hearings), 40) == (
-        "🗣 Public comment on the agenda"
-    )
+    assert participation_note(one, 40) == "🗣 Public comment on the agenda"
     assert participation_note(Participation(comment=True), 20) == ""
+    assert participation_note(Participation(hearings=["a", "b"]), 30) == (
+        "🗣 Public hearings (2)"
+    )
 
 
 FINANCE_REMINDER = "Starting at 7:00 PM — Zoom: norwalkct-org.zoom.us/j/83292194046"

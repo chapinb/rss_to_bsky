@@ -43,12 +43,12 @@ CITY_SEAL = Path(__file__).parent / "assets" / "city_seal.png"
 # late; a second run inside the window skips the reminder already sent.
 REMINDER_WINDOW = timedelta(minutes=75)
 ZOOM_LINK_TEXT = "\nJoin on Zoom"
-# Meeting posts note where the public can speak (see participation_note); a
-# hearing's topic is cut to at most MAX_HEARING_TOPIC characters, and left out
-# if fewer than MIN_HEARING_TOPIC fit.
+# Meeting posts note where the public can speak (see participation_note). A
+# lone hearing's topic is shown only if it is at most MAX_HEARING_TOPIC
+# characters; topics are never truncated.
 PUBLIC_COMMENT_NOTE = "🗣 Public comment on the agenda"
-MAX_HEARING_TOPIC = 80
-MIN_HEARING_TOPIC = 20
+PUBLIC_HEARING_NOTE = "🗣 Public hearing"
+MAX_HEARING_TOPIC = 60
 # At most this many events a day from each city calendar (#13 plans a weekly
 # look-ahead for the rest).
 CITY_EVENTS_PER_DAY = 2
@@ -85,38 +85,27 @@ def card_post(item) -> Post:
     )
 
 
-def shorten(text: str, length: int) -> str:
-    """``text`` cut at a word to at most ``length`` characters, with an ellipsis."""
-    if len(text) <= length:
-        return text
-    return text[: length - 1].rsplit(" ", 1)[0].rstrip(" ,;:-–—") + "…"
-
-
 def participation_note(
     participation: norwalk_civic_clerk.Participation | None, room: int
 ) -> str:
     """Lines saying where the public can speak, in at most ``room`` characters.
 
-    For example "🗣 Public comment on the agenda" and "Public hearing: <topic>"
-    (or "Public hearings: <first topic> (+2 more)"). The topic is shortened,
-    then dropped, to fit; empty if nothing fits or there's nothing to note.
+    "🗣 Public comment on the agenda" and/or a hearing line: "🗣 Public
+    hearing: <topic>" for one hearing with a short topic, else "🗣 Public
+    hearing" or "🗣 Public hearings (N)". Topics are never truncated: the
+    topic, then the hearing line, then everything is dropped to fit.
     """
     if participation is None:
         return ""
     comment = [PUBLIC_COMMENT_NOTE] if participation.comment else []
     hearings = participation.hearings
     candidates = []
-    if hearings:
-        label = "Public hearing" if len(hearings) == 1 else "Public hearings"
-        if not comment:
-            label = f"🗣 {label}"
-        more = f" (+{len(hearings) - 1} more)" if len(hearings) > 1 else ""
-        fixed = len("\n".join([*comment, f"{label}: {more}"]))
-        topic_room = min(MAX_HEARING_TOPIC, room - fixed)
-        if topic_room >= MIN_HEARING_TOPIC:
-            topic = shorten(hearings[0], topic_room)
-            candidates.append([*comment, f"{label}: {topic}{more}"])
-        candidates.append([*comment, f"{label} on the agenda"])
+    if len(hearings) == 1:
+        if len(hearings[0]) <= MAX_HEARING_TOPIC:
+            candidates.append([*comment, f"{PUBLIC_HEARING_NOTE}: {hearings[0]}"])
+        candidates.append([*comment, PUBLIC_HEARING_NOTE])
+    elif hearings:
+        candidates.append([*comment, f"{PUBLIC_HEARING_NOTE}s ({len(hearings)})"])
     candidates.append(comment)
     for lines in candidates:
         note = "\n".join(lines)
