@@ -2,13 +2,20 @@
 
 from datetime import UTC, datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
+from zoneinfo import ZoneInfo
 
-from rss_post.dedup import SeenPosts
+import httpx
+from atproto import models
+
+from rss_post import norwalk_civic_clerk
+from rss_post.dedup import SeenPosts, keys_in_record
 from rss_post.norwalk_feeds import NorwalkFeeds, publish
 from rss_post.read_rss import read_rss_items
 from tests.conftest import FIXTURES
+from tests.test_norwalk_civic_clerk import EVENTS, fake_client
 
 EST = timezone(timedelta(hours=-5))
+EASTERN = ZoneInfo("America/New_York")
 
 
 def feeds_from_fixture(name: str):
@@ -100,13 +107,16 @@ def test_meeting_posts_include_title_time_and_links():
         "title": "City Council",
         "agenda": "https://norwalkct.portal.civicclerk.com/event/1049/files",
         "when": "Nov 10, 2026 at 7:30 PM EST",
+        "starts_at": datetime(2026, 11, 10, 19, 30, tzinfo=EASTERN),
         "where": "https://norwalkct-org.zoom.us/j/89654026934",
     }
     with patch(
         "rss_post.norwalk_feeds.norwalk_civic_clerk.get_todays_meetings",
         return_value=[meeting],
     ):
-        posts = NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_meetings()
+        posts = NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_meetings(
+            datetime(2026, 11, 10, 7, tzinfo=EASTERN)
+        )
 
     builder = posts[0].build()
     text = builder.build_text()
@@ -121,14 +131,121 @@ def test_meeting_without_zoom_link_omits_it():
         "title": "Defined Contribution (CANCELLED)",
         "agenda": "https://norwalkct.portal.civicclerk.com/event/1387/files",
         "when": "Nov 11, 2026 at 6:45 PM EST",
+        "starts_at": datetime(2026, 11, 11, 18, 45, tzinfo=EASTERN),
         "where": None,
     }
     with patch(
         "rss_post.norwalk_feeds.norwalk_civic_clerk.get_todays_meetings",
         return_value=[meeting],
     ):
-        posts = NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_meetings()
+        posts = NorwalkFeeds(timedelta(hours=1)).get_todays_norwalk_meetings(
+            datetime(2026, 11, 11, 7, tzinfo=EASTERN)
+        )
 
     builder = posts[0].build()
     assert "Zoom Link" not in builder.build_text()
     assert [f.features[0].uri for f in builder.build_facets()] == [meeting["agenda"]]
+
+
+class MeetingRuns:
+    """Hourly runs of the meetings source against saved CivicClerk data.
+
+    What each run posts is turned back into Bluesky records and read the way
+    the next run reads the account's history, so the keys round-trip.
+    """
+
+    def __init__(self):
+        self.events = EVENTS
+        self.history: set[str] = set()
+
+    def run(self, now: datetime, civic_clerk_up: bool = True) -> list[str]:
+        def handler(request):
+            if not civic_clerk_up:
+                return httpx.Response(503)
+            return httpx.Response(200, json=self.events)
+
+        client = MagicMock()
+        feeds = NorwalkFeeds(timedelta(hours=1))
+        with (
+            patch.object(
+                norwalk_civic_clerk,
+                "CivicClerkClient",
+                return_value=fake_client(handler),
+            ),
+            patch.object(norwalk_civic_clerk.time, "sleep"),
+        ):
+            publish(
+                client,
+                [("meetings", lambda: feeds.get_todays_norwalk_meetings(now))],
+                SeenPosts(self.history),
+            )
+        posts = [c.args[0] for c in client.post.call_args_list]
+        for post in posts:
+            builder = post.build()
+            record = models.AppBskyFeedPost.Record(
+                text=builder.build_text(),
+                facets=builder.build_facets(),
+                created_at=now.astimezone(UTC).isoformat(),
+            )
+            self.history |= keys_in_record(record, now)
+        return [post.title for post in posts]
+
+
+# The saved meetings, all in the evening: four on Nov 11 (6:00-7:00 PM), two
+# on Nov 12.
+NOV_11_MEETINGS = [
+    "Pension Board of Trustees (CANCELLED)",
+    "Ad Hoc Sustainability and Resilience Committee (CANCELLED)",
+    "Defined Contribution (CANCELLED)",
+    "Recreation, Parks & Cultural Affairs Committee (CANCELLED)",
+]
+NOV_12_MEETINGS = ["Finance & Claims Committee", "Library Board of Directors"]
+
+
+def test_missed_7am_meetings_are_caught_up_once():
+    runs = MeetingRuns()
+
+    assert runs.run(datetime(2026, 11, 11, 7, tzinfo=EASTERN), False) == []
+    assert (
+        runs.run(datetime(2026, 11, 11, 8, tzinfo=EASTERN))
+        == NOV_11_MEETINGS + NOV_12_MEETINGS
+    )
+    assert runs.run(datetime(2026, 11, 11, 9, tzinfo=EASTERN)) == []
+    assert runs.run(datetime(2026, 11, 11, 17, tzinfo=EASTERN)) == []
+
+
+def test_tomorrows_meetings_are_posted_again_on_the_day():
+    runs = MeetingRuns()
+    runs.run(datetime(2026, 11, 11, 7, tzinfo=EASTERN))
+
+    # Nov 11's meetings have started; Nov 12's goes out again, once.
+    assert runs.run(datetime(2026, 11, 12, 7, tzinfo=EASTERN)) == NOV_12_MEETINGS
+    assert runs.run(datetime(2026, 11, 12, 8, tzinfo=EASTERN)) == []
+
+
+def test_meeting_cancelled_later_in_the_day_is_posted_again():
+    runs = MeetingRuns()
+    runs.run(datetime(2026, 11, 11, 7, tzinfo=EASTERN))
+
+    runs.events = {
+        **EVENTS,
+        "value": [
+            {**e, "eventName": e["eventName"] + " (CANCELLED)"}
+            if e["eventName"] == "Finance & Claims Committee"
+            else e
+            for e in EVENTS["value"]
+        ],
+    }
+    assert runs.run(datetime(2026, 11, 11, 12, tzinfo=EASTERN)) == [
+        "Finance & Claims Committee (CANCELLED)"
+    ]
+    assert runs.run(datetime(2026, 11, 11, 13, tzinfo=EASTERN)) == []
+
+
+def test_meetings_that_have_started_are_not_posted():
+    # At 6:30 PM the two 6:00 PM meetings have started.
+    runs = MeetingRuns()
+    assert (
+        runs.run(datetime(2026, 11, 11, 18, 30, tzinfo=EASTERN))
+        == NOV_11_MEETINGS[2:] + NOV_12_MEETINGS
+    )

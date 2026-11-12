@@ -1,3 +1,5 @@
+from datetime import date
+
 from atproto import client_utils, models
 from bs4 import BeautifulSoup
 
@@ -16,6 +18,9 @@ class Post:
         self.embed = None
         # The item this post is about, used to skip items already posted.
         self.link: str | None = None
+        self.title: str | None = None
+        # Set for posts that may go out once per day (see ``keyed_by``).
+        self.day: date | None = None
 
     def from_feed(self, feed_title):
         self.text_builder.text(feed_title + "\n")
@@ -23,6 +28,7 @@ class Post:
         return self
 
     def with_title(self, item_title):
+        self.title = item_title
         self.text_builder.text(item_title + "\n")
         self.post_length += len(item_title) + 1
         return self
@@ -70,6 +76,16 @@ class Post:
         )
         self.link = url
         logger.debug(f"Added embed card for URL: {url}")
+        return self
+
+    def keyed_by(self, link: str, day: date | None = None):
+        """Skip this post if ``link`` was already posted (on ``day``, if given).
+
+        Card posts are keyed by their card's link automatically; this is for
+        posts whose item is a link in the text, such as a meeting's agenda.
+        """
+        self.link = link
+        self.day = day
         return self
 
     def build(self):

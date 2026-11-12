@@ -15,7 +15,8 @@ from tests.conftest import FIXTURES
 # Response of GET https://norwalkct.api.civicclerk.com/v1/Events for
 # 2026-11-11..2026-11-12, captured 2026-11-12.
 EVENTS = json.loads((FIXTURES / "civicclerk_events.json").read_text("utf-8"))
-NOV_11_7AM = datetime(2026, 11, 11, 7, 0, tzinfo=ZoneInfo("America/New_York"))
+EASTERN = ZoneInfo("America/New_York")
+NOV_11_7AM = datetime(2026, 11, 11, 7, 0, tzinfo=EASTERN)
 
 
 def fake_client(handler) -> CivicClerkClient:
@@ -56,6 +57,7 @@ def test_parses_meetings():
         "title": "Pension Board of Trustees (CANCELLED)",
         "agenda": "https://norwalkct.portal.civicclerk.com/event/1122/files",
         "when": "Nov 11, 2026 at 6:00 PM EST",
+        "starts_at": datetime(2026, 11, 11, 18, 0, tzinfo=EASTERN),
         "where": None,
     }
     finance = next(m for m in meetings if m["title"] == "Finance & Claims Committee")

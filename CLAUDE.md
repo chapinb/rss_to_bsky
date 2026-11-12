@@ -65,7 +65,7 @@ Environment variables in `.env` file (template at `template.env`):
 - Time-based filtering (only posts from within specified hours)
 - Link-based deduplication against the account's own recent posts
 - Content filtering (CT Mirror posts filtered for "norwalk" mentions)
-- Schedule-aware posting (meetings only posted at 7 AM)
+- Schedule-aware posting (meetings posted once a day by the first successful run from 7 AM Eastern; meetings that have started are skipped)
 - Adapter pattern for output destinations (Bluesky vs console)
 - Comprehensive logging throughout all components with configurable levels
 - Per-source and per-post error isolation; the run exits 1 if anything failed

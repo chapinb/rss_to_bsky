@@ -51,6 +51,7 @@ def meeting_from_event(event: Event) -> dict:
         "title": (event.name or "Meeting").strip(),
         "agenda": f"{PORTAL_URL}/event/{event.id}/files",
         "when": format_when(event.starts_at),
+        "starts_at": event.starts_at.replace(tzinfo=EASTERN),
         "where": event.virtual_meeting_url,
     }
 
