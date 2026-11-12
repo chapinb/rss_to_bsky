@@ -1,7 +1,8 @@
 [project]
 name = "rss-post"
 version = "0.1.0"
-description = "Add your description here"
+description = "Posts City of Norwalk, CT meetings, news and local stories to Bluesky"
+readme = "README.md"
 authors = [
     { name = "Chapin Bryce", email = "mail@chapinb.com" }
 ]
