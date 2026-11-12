@@ -1,5 +1,6 @@
 """Characterization tests for feed -> post generation using saved real feeds."""
 
+from contextlib import ExitStack
 from datetime import UTC, datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 from zoneinfo import ZoneInfo
@@ -7,12 +8,13 @@ from zoneinfo import ZoneInfo
 import httpx
 from atproto import models
 
-from rss_post import norwalk_civic_clerk
+from rss_post import norwalk_civic_clerk, summarize
 from rss_post.dedup import PostRef, SeenPosts, keys_in_record
 from rss_post.norwalk_civic_clerk import Participation
 from rss_post.norwalk_feeds import (
     CITY_SEAL,
     NorwalkFeeds,
+    bullets,
     participation_note,
     publish,
 )
@@ -211,11 +213,24 @@ class MeetingRuns:
         # Agendas are served from the saved ones; set False to fail them.
         self.agendas_up = True
         self.agenda_requests: list[str] = []
+        # Agendas served instead of the saved ones, by id.
+        self.agendas: dict[str, dict] = {}
         self.history: dict[str, PostRef] = {}
         self.sent: list = []
+        # Stands in for the LLM (summarize.summarize) in runs with summaries,
+        # unless ``llm`` is set: then the real client runs with LLM_API_KEY set
+        # against ``llm``, an httpx handler for the provider's API.
+        self.summarizer = MagicMock(return_value="- Item one\n- Item two")
+        self.llm = None
+        # (posts sent, failures) of the last run's ``publish``.
+        self.result: tuple[int, int] | None = None
 
     def run(
-        self, now: datetime, civic_clerk_up: bool = True, reminders: bool = False
+        self,
+        now: datetime,
+        civic_clerk_up: bool = True,
+        reminders: bool = False,
+        summaries: bool = False,
     ) -> list[str]:
         def handler(request):
             if not civic_clerk_up:
@@ -225,7 +240,8 @@ class MeetingRuns:
                 self.agenda_requests.append(agenda_id)
                 if not self.agendas_up:
                     return httpx.Response(503)
-                return httpx.Response(200, json=saved_agenda(agenda_id))
+                agenda = self.agendas.get(agenda_id) or saved_agenda(agenda_id)
+                return httpx.Response(200, json=agenda)
             return httpx.Response(200, json=self.events)
 
         def send(post):
@@ -240,15 +256,38 @@ class MeetingRuns:
         sources = [("meetings", lambda: feeds.get_todays_norwalk_meetings(now))]
         if reminders:
             sources.append(("reminders", lambda: feeds.get_meeting_reminders(now)))
-        with (
-            patch.object(
-                norwalk_civic_clerk,
-                "CivicClerkClient",
-                side_effect=lambda _tenant: fake_client(handler),
-            ),
-            patch.object(norwalk_civic_clerk.time, "sleep"),
-        ):
-            publish(client, sources, SeenPosts(self.history))
+        seen = SeenPosts(self.history)
+        if summaries:
+            sources.append(("summaries", lambda: feeds.get_agenda_summaries(seen, now)))
+        if self.llm is None:
+            llm = [
+                patch.object(summarize, "configured", return_value=True),
+                patch.object(summarize, "enabled", return_value=True),
+                patch.object(summarize, "summarize", self.summarizer),
+            ]
+        else:
+            transport = httpx.MockTransport(self.llm)
+            llm = [
+                patch.dict("os.environ", {"LLM_API_KEY": "test-key"}),
+                patch.object(
+                    summarize,
+                    "_new_client",
+                    side_effect=lambda: httpx.Client(transport=transport),
+                ),
+            ]
+        summarize.reset()  # Each run is a new process.
+        with ExitStack() as stack:
+            stack.enter_context(
+                patch.object(
+                    norwalk_civic_clerk,
+                    "CivicClerkClient",
+                    side_effect=lambda _tenant: fake_client(handler),
+                )
+            )
+            stack.enter_context(patch.object(norwalk_civic_clerk.time, "sleep"))
+            for patcher in llm:
+                stack.enter_context(patcher)
+            self.result = publish(client, sources, seen)
         sent = self.sent[already_sent:]
         for post, ref in sent:
             builder = post.build()
@@ -261,7 +300,7 @@ class MeetingRuns:
             )
             for key in keys_in_record(record, now):
                 self.history[key] = ref
-        # A meeting by its card's title; a reply (reminder) by its text.
+        # A meeting by its card's title; a reply (reminder, summary) by its text.
         return [
             card(post).title if post.embed else post.build().build_text()
             for post, _ in sent
@@ -571,3 +610,244 @@ def test_reminder_without_zoom_link_gives_the_time():
     assert post.reply_root == (
         "https://norwalkct.portal.civicclerk.com/event/1/files on 2026-11-12"
     )
+
+
+SUMMARY = "AI summary of the agenda:\n• Item one\n• Item two"
+
+
+def summary_replies(runs):
+    return [(post, ref) for post, ref in runs.sent if post.reply_kind == "summary"]
+
+
+def test_agendas_are_summarized_once_under_the_day_before_post():
+    runs = MeetingRuns()
+    # The 7 AM run posts tomorrow's meetings and summarizes their agendas.
+    assert runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_11_MEETINGS,
+        *NOV_12_MEETINGS,
+        SUMMARY,
+        SUMMARY,
+    ]
+    assert runs.summarizer.call_count == 2
+    text, instructions, max_chars = runs.summarizer.call_args_list[0].args
+    assert "Authorize the Purchasing Agent to issue a purchase order" in text
+    assert "2 or 3 short bullet points" in instructions
+    assert len("AI summary of the agenda:\n") + max_chars <= 300
+
+    # Later runs that day post nothing new, so the LLM isn't asked again.
+    for hour in range(8, 23):
+        now = datetime(2026, 11, 11, hour, 5, tzinfo=EASTERN)
+        assert runs.run(now, reminders=True, summaries=True) == []
+    # On the day, the meetings are posted again, without a second summary.
+    assert (
+        runs.run(datetime(2026, 11, 12, 7, 5, tzinfo=EASTERN), summaries=True)
+        == NOV_12_MEETINGS
+    )
+    assert runs.summarizer.call_count == 2
+
+    roots = {
+        card(post).title: ref
+        for post, ref in runs.sent[: len(NOV_11_MEETINGS) + len(NOV_12_MEETINGS)]
+    }
+    replies = [post for post, _ in summary_replies(runs)]
+    assert [r.reply.root.uri for r in replies] == [
+        roots["Finance & Claims Committee"].uri,
+        roots["Library Board of Directors"].uri,
+    ]
+    assert all(r.reply.parent.uri == r.reply.root.uri for r in replies)
+
+
+def test_agenda_published_late_is_summarized_on_the_day():
+    runs = MeetingRuns()
+    # Not published yet (as the saved agenda 8835 isn't).
+    runs.agendas = {"8805": saved_agenda("8835")}
+    runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True)
+    assert runs.summarizer.call_count == 1  # The Library Board's agenda only.
+
+    runs.agendas = {}
+    assert runs.run(datetime(2026, 11, 12, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_12_MEETINGS,
+        SUMMARY,
+    ]
+    assert runs.summarizer.call_count == 2
+    [*_, (finance_today, finance_ref), _, (summary, _)] = runs.sent
+    assert card(finance_today).title == "Finance & Claims Committee"
+    assert summary.reply.root.uri == finance_ref.uri
+
+
+def test_failed_summary_is_retried_only_with_the_next_meeting_post():
+    runs = MeetingRuns()
+    runs.summarizer.return_value = None
+    assert runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_11_MEETINGS,
+        *NOV_12_MEETINGS,
+    ]
+    for hour in range(8, 23):
+        runs.run(datetime(2026, 11, 11, hour, 5, tzinfo=EASTERN), summaries=True)
+    assert runs.summarizer.call_count == 2
+
+    runs.summarizer.return_value = "• Item one\n• Item two"
+    assert runs.run(datetime(2026, 11, 12, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_12_MEETINGS,
+        SUMMARY,
+        SUMMARY,
+    ]
+    assert runs.summarizer.call_count == 4
+
+
+def test_unreadable_agenda_skips_the_summary_not_the_meeting():
+    runs = MeetingRuns()
+    runs.agendas_up = False
+    assert runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_11_MEETINGS,
+        *NOV_12_MEETINGS,
+    ]
+    runs.summarizer.assert_not_called()
+
+
+def test_summaries_reuse_the_agendas_read_for_the_meeting_posts():
+    runs = MeetingRuns()
+    runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True)
+    # Each upcoming meeting's agenda is read once, for both its post and summary.
+    assert sorted(runs.agenda_requests) == ["8805", "8841"]
+    assert runs.summarizer.call_count == 2
+
+
+def test_no_summaries_when_no_meeting_was_posted():
+    runs = MeetingRuns()
+    runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN))
+    assert runs.run(datetime(2026, 11, 11, 8, 5, tzinfo=EASTERN), summaries=True) == []
+    runs.summarizer.assert_not_called()
+
+
+def test_without_an_llm_key_agendas_are_only_logged(caplog):
+    runs = MeetingRuns()
+    with patch.object(summarize, "configured", return_value=False):
+        seen = SeenPosts()
+        feeds = NorwalkFeeds(timedelta(hours=1))
+        now = datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN)
+        with (
+            patch.object(
+                norwalk_civic_clerk,
+                "CivicClerkClient",
+                side_effect=lambda _tenant: fake_client(
+                    lambda request: httpx.Response(
+                        200,
+                        json=saved_agenda(request.url.path.rsplit("/", 1)[1])
+                        if "/Meetings/" in request.url.path
+                        else runs.events,
+                    )
+                ),
+            ),
+            patch.object(summarize, "summarize") as llm,
+            caplog.at_level("INFO"),
+        ):
+            sent = publish(
+                MagicMock(),
+                [
+                    ("meetings", lambda: feeds.get_todays_norwalk_meetings(now)),
+                    ("summaries", lambda: feeds.get_agenda_summaries(seen, now)),
+                ],
+                seen,
+            )
+    assert sent == (len(NOV_11_MEETINGS) + len(NOV_12_MEETINGS), 0)
+    llm.assert_not_called()
+    assert "LLM_API_KEY not set; would summarize" in caplog.text
+    assert "Finance & Claims Committee" in caplog.text
+
+
+def test_summary_bullets_are_normalized():
+    assert bullets("- One\n\n* Two\n  • Three  ") == "• One\n• Two\n• Three"
+
+
+def llm_answer(content="• Item one\n• Item two"):
+    return {
+        "id": "chatcmpl-1",
+        "object": "chat.completion",
+        "choices": [
+            {
+                "index": 0,
+                "message": {"role": "assistant", "content": content},
+                "finish_reason": "stop",
+            }
+        ],
+    }
+
+
+class LLM:
+    """An OpenAI-compatible API answering with ``responses`` in turn (an
+    ``httpx.Response``, or an exception to raise), repeating the last one."""
+
+    def __init__(self, *responses):
+        self.responses = list(responses)
+        self.requests: list[httpx.Request] = []
+
+    def __call__(self, request):
+        self.requests.append(request)
+        response = (
+            self.responses.pop(0) if len(self.responses) > 1 else self.responses[0]
+        )
+        if isinstance(response, Exception):
+            raise response
+        return response
+
+
+def test_real_llm_client_summarizes_under_the_meeting_posts():
+    runs = MeetingRuns()
+    runs.llm = LLM(httpx.Response(200, json=llm_answer()))
+    assert runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_11_MEETINGS,
+        *NOV_12_MEETINGS,
+        SUMMARY,
+        SUMMARY,
+    ]
+    assert runs.result == (8, 0)
+    assert len(runs.llm.requests) == 2
+
+
+def test_bad_llm_key_turns_summaries_off_without_failing_the_run():
+    runs = MeetingRuns()
+    runs.llm = LLM(httpx.Response(401, json={"error": {"message": "bad key"}}))
+    assert runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_11_MEETINGS,
+        *NOV_12_MEETINGS,
+    ]
+    # The meetings went out, nothing failed, and after the rejected request
+    # the LLM wasn't asked again (for the Library Board's agenda).
+    assert runs.result == (6, 0)
+    assert len(runs.llm.requests) == 1
+
+
+def test_unreachable_llm_turns_summaries_off_without_failing_the_run():
+    runs = MeetingRuns()
+    runs.llm = LLM(httpx.ConnectTimeout("timed out"))
+    assert runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_11_MEETINGS,
+        *NOV_12_MEETINGS,
+    ]
+    assert runs.result == (6, 0)
+    assert len(runs.llm.requests) == 1
+
+
+def test_llm_failure_after_a_success_skips_only_that_summary():
+    runs = MeetingRuns()
+    runs.llm = LLM(
+        httpx.Response(200, json=llm_answer()), httpx.ReadTimeout("timed out")
+    )
+    assert runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_11_MEETINGS,
+        *NOV_12_MEETINGS,
+        SUMMARY,
+    ]
+    assert runs.result == (7, 0)
+    assert len(runs.llm.requests) == 2
+
+
+def test_unexpected_error_in_summaries_is_not_a_run_failure():
+    runs = MeetingRuns()
+    runs.summarizer.side_effect = RuntimeError("bug")
+    assert runs.run(datetime(2026, 11, 11, 7, 5, tzinfo=EASTERN), summaries=True) == [
+        *NOV_11_MEETINGS,
+        *NOV_12_MEETINGS,
+    ]
+    assert runs.result == (6, 0)

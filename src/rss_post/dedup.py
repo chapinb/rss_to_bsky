@@ -50,11 +50,13 @@ CANCELLED = re.compile(r"\bcancell?ed\b", re.IGNORECASE)
 
 # The text each kind of reply starts with, so later runs can tell a reply's
 # kind from its text alone. A new kind of follow-up registers its prefix here
-# (e.g. "summary": "AI summary"), and its posts' text must start with it.
+# (e.g. "summary": "AI summary of the agenda"), and its posts' text must start
+# with it.
 REPLY_PREFIXES: dict[str, str] = {
     "reminder": "Starting at",
     "minutes": "Minutes posted",
     "recording": "Recording",
+    "summary": "AI summary of the agenda",
 }
 
 
@@ -217,6 +219,8 @@ class SeenPosts:
     def __init__(self, keys: Iterable[str] | Mapping[str, PostRef] = ()) -> None:
         self.refs: dict[str, PostRef] = dict(keys) if isinstance(keys, Mapping) else {}
         self.keys = set(keys)
+        # Keys of the posts sent this run (see ``add``).
+        self.added: set[str] = set()
 
     @staticmethod
     def key(post) -> str | None:
@@ -258,6 +262,10 @@ class SeenPosts:
         post.reply_to(root, parent)
         return True
 
+    def added_this_run(self, key: str) -> bool:
+        """Whether the post with ``key`` was sent this run (not just in the history)."""
+        return key in self.added
+
     def is_new(self, post) -> bool:
         key = self.key(post)
         return key is None or key not in self.keys
@@ -266,5 +274,6 @@ class SeenPosts:
         key = self.key(post)
         if key is not None:
             self.keys.add(key)
+            self.added.add(key)
             if ref is not None:
                 self.refs[key] = ref

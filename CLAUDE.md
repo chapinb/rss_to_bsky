@@ -67,6 +67,10 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 
 **City community calendars**: `src/rss_post/norwalk_city_calendar.py` - The city's CivicPlus RSS feeds for the Recreation & Parks and Main City calendars, read for each event's date, times and place; posted on the day like Norwalk Oyster events, at most 2 a day per calendar (`CITY_EVENTS_PER_DAY`), skipping events Norwalk Oyster also posts that day (matched by name)
 
+**LLM client**: `src/rss_post/summarize.py` - `summarize(text, instructions, max_chars)` over any OpenAI-compatible Chat Completions API (plain httpx), for AI features to share. Returns None on any failure and never raises. The first request of a run doubles as the check that the key works: if it is rejected (4xx other than 429), times out or can't connect, the LLM is off for the rest of the run (one warning, no more calls); after a success, a timeout/5xx/refusal/empty or overlong answer skips only that summary. 20 s timeouts and 60 s of LLM time per run at most. LLM problems never count as run failures
+
+**Agenda summaries**: `NorwalkFeeds.get_agenda_summaries` - an "AI summary of the agenda:" reply (2–3 bullets) under a city meeting's post, only for meeting posts made in the same run, so the LLM is asked once per meeting post (normally once per meeting, under the day-before post; again under the on-the-day post only if the day-before one has no summary). The agenda text is `meeting["agenda_outline"]` (`norwalk_civic_clerk.agenda_outline`), built from the same agenda read that finds public comment (`get_todays_meetings(read_agendas=True)`), so summaries make no CivicClerk requests of their own; unpublished or boilerplate-only agendas get no outline and no call. The source catches everything itself, so it never adds to the run's failures
+
 **Deduplication**: `src/rss_post/dedup.py` - Reads the links the account posted (and its own replies) in the last 30 days from Bluesky at startup and skips items already posted (no local storage). `published_posts` maps each key to the latest post's `PostRef`, and `SeenPosts.ref(key_or_post)` looks a post up so later runs can reply to it. Replies are keyed by their thread root's URI and kind (`reply_key`), so each follow-up goes out once per thread; a reply's kind is read back from its text's fixed prefix (`REPLY_PREFIXES`, e.g. reminder = "Starting at"), and new kinds register theirs there. A reply with a link card is also keyed by the card's link, so its item isn't later posted standalone
 
 **Logging**: `src/rss_post/logging_config.py` - Centralized logging configuration with structured output
@@ -76,6 +80,9 @@ This is a Python application that monitors RSS feeds for Norwalk, CT municipal c
 Environment variables in `.env` file (template at `template.env`):
 - `BSKY_USERNAME` - Bluesky username
 - `BSKY_PASSWORD` - Bluesky password
+- `LLM_API_KEY` - API key for AI agenda summaries; unset turns them off (nothing else changes). Never log it
+- `LLM_BASE_URL` - OpenAI-compatible API base URL (default Gemini's `https://generativelanguage.googleapis.com/v1beta/openai/`)
+- `LLM_MODEL` - model name (default `gemini-3.5-flash-lite`)
 
 ### Key Patterns
 
