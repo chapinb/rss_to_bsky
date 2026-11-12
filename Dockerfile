@@ -1,29 +1,24 @@
-FROM python:3.11-slim AS build
+FROM python:3.11-slim
 
-# Install Firefox and geckodriver dependencies
-RUN apt-get update && apt-get install -y \
-    firefox-esr \
-    libdbus-glib-1-2 \
-    libgtk-3-0 \
-    wget \
-    xvfb \
-    && rm -rf /var/lib/apt/lists/* \
-    && wget -q https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.36.0-linux64.tar.gz \
-    && tar -xvzf geckodriver-v0.36.0-linux64.tar.gz -C /usr/local/bin \
-    && rm geckodriver-v0.36.0-linux64.tar.gz
+COPY --from=ghcr.io/astral-sh/uv:0.11.32 /uv /uvx /bin/
 
-# Set environment variables for Selenium
-ENV MOZ_HEADLESS=1
-ENV PATH="/usr/local/bin:$PATH"
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_NO_DEV=1 \
+    PATH="/app/.venv/bin:$PATH"
 
-# Install build dependencies
-RUN pip install uv
-
-# Install dependencies
 WORKDIR /app
-COPY pyproject.toml /app
-RUN pip install .
 
-# Install package
-COPY . /app/
-RUN pip install .
+# Install locked dependencies first so they are cached across source changes.
+COPY pyproject.toml uv.lock /app/
+RUN uv sync --locked --no-install-project
+
+# Install the application itself.
+COPY src /app/src
+RUN uv sync --locked
+
+RUN useradd --system --no-create-home app
+USER app
+
+# Override with the desired arguments, e.g. `docker run IMAGE norwalk 1`.
+CMD ["norwalk", "1"]
