@@ -11,7 +11,7 @@ one or more small PRs that can ship and be rolled back independently.
 - **Tests before changes.** Anything that changes what gets posted needs a test
   built from real, saved source data (`tests/fixtures/`) that fails before the
   fix and passes after.
-- **CI must be green** (`pre-commit` + `pytest` on the locked dependencies)
+- **CI must be green** (`prek` hooks + `pytest` on the locked dependencies)
   before merging.
 - **Dry-run before deploy.** Any PR that changes posting behaviour gets a
   `uv run norwalk 24 --dry-run` comparison against the previous build before the

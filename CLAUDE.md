@@ -11,6 +11,8 @@ This project uses `uv` as the package manager and build tool.
 - `uv run pytest` - Run tests
 - `uv run pytest tests/test_specific.py` - Run a single test file
 - `uv run pytest-watcher` - Run tests continuously during development
+- `uvx prek run --all-files` - Run lint/format hooks (prek, a drop-in pre-commit replacement using `.pre-commit-config.yaml`)
+- `uvx prek install` - Install the git hook so they run on commit
 
 ### Running the Application
 - `uv run norwalk <hours>` - Run the main application (hours = posting frequency)

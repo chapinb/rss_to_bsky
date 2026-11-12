@@ -54,7 +54,7 @@ The image installs exactly the versions in `uv.lock`. Pushes to `main` publish
 ```sh
 uv run pytest               # tests
 uv run pytest-watcher .     # re-run tests on change
-uvx pre-commit run --all-files
+uvx prek run --all-files    # lint/format hooks (prek install to run on commit)
 ```
 
 Tests run against saved copies of the real feeds and API responses in
