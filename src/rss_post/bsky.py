@@ -19,6 +19,10 @@ logger = get_logger(__name__)
 
 T = TypeVar("T")
 
+# Every post is in English. Declaring it lets Bluesky's language filters,
+# feeds and translation handle the posts.
+POST_LANGS = ["en"]
+
 # Waits between attempts at the login and the history read, which the whole
 # run depends on: a brief outage (a 503 for a few seconds) shouldn't cost the
 # run, and the hour's news with it. About a minute in all, well inside the
@@ -120,7 +124,10 @@ class Bluesky:
             logger.debug(f"Posting to Bluesky: {post_text[:50]}...")
 
             response = self.client.send_post(
-                text_builder, embed=embed, reply_to=getattr(post_obj, "reply", None)
+                text_builder,
+                embed=embed,
+                reply_to=getattr(post_obj, "reply", None),
+                langs=POST_LANGS,
             )
             logger.info(f"Successfully posted to Bluesky: {response.uri}")
             return PostRef(response.uri, response.cid)

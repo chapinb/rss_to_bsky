@@ -60,6 +60,7 @@ def test_bluesky_logs_in_and_sends_post_with_embed(mock_client_cls, _config):
     args, kwargs = client.send_post.call_args
     assert args[0] is post.text_builder
     assert kwargs["embed"].external.uri == "https://example.com/a"
+    assert kwargs["langs"] == ["en"]
 
 
 @patch("rss_post.bsky.config", return_value="x")
