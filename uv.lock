@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.11.5'",
@@ -30,7 +30,7 @@ wheels = [
 
 [[package]]
 name = "atproto"
-version = "0.0.73"
+version = "0.0.75"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -42,11 +42,11 @@ dependencies = [
     { name = "tlds" },
     { name = "typing-extensions" },
     { name = "websockets" },
-    { name = "zstandard" },
+    { name = "zstandard", marker = "python_full_version < '3.14'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1a/1b/02577f6d5eaa62d7d7fd922ccf6905c77a3f1cf619286690b5fca5da637f/atproto-0.0.73.tar.gz", hash = "sha256:0dc0e7f60ce99113b3371528d368e47566b44344812c7b0047229eda8b07eb13", size = 325800, upload-time = "2026-10-17T19:15:16.461Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6a/8a/451b6fda93d1e23a33406b9ffcb65b0288c208adb15dbcd6d6bb3ddbc246/atproto-0.0.75.tar.gz", hash = "sha256:73d297c620170c48cc3bb8c1ac2ab22073d1e8ac69ef3cb2828e1f5bc3a25573", size = 389230, upload-time = "2026-11-14T00:30:43.852Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/98/0f/f2289686a9e0cbadfe268116c9d81886e76354c7d748bb94aa9669a40ed1/atproto-0.0.73-py3-none-any.whl", hash = "sha256:772dbef364788385724b1724434a42c56b9aeeec0e480c70f6b7edd7f65f1e77", size = 675072, upload-time = "2026-10-17T19:15:14.573Z" },
+    { url = "https://files.pythonhosted.org/packages/52/7a/950b53aaacfb300bf77f65121506fcf9a2a03363e4b9f36a13ff3b4dcfee/atproto-0.0.75-py3-none-any.whl", hash = "sha256:e00d8c176f18264611bba9e6a4c8f545e6b009d121a2795b9e965a987de0855d", size = 769940, upload-time = "2026-11-14T00:30:42.308Z" },
 ]
 
 [[package]]
