@@ -114,6 +114,19 @@ def test_feeds_after_the_sites_move_to_m_paths_are_read():
     ]
 
 
+def test_a_feed_with_items_but_none_readable_is_an_error():
+    # So a change in the feed's format fails the run (and Healthchecks)
+    # instead of quietly posting nothing.
+    xml = b"<rss><channel><item><title>A</title><link>https://x/1</link></item></channel></rss>"
+
+    with pytest.raises(ValueError, match="none of its 1 items"):
+        city.events_from_feed(xml)
+
+
+def test_a_feed_with_no_items_is_not_an_error():
+    assert city.events_from_feed(b"<rss><channel></channel></rss>") == []
+
+
 @pytest.mark.parametrize(
     ("text", "expected"),
     [

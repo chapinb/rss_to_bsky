@@ -111,8 +111,16 @@ def place_from_description(html: str) -> str:
 
 
 def events_from_feed(xml: bytes) -> list[Event]:
+    """The feed's events.
+
+    Raises:
+        ValueError: if the feed has items but none can be read, which means
+            its format has changed: an error, so the run fails rather than
+            quietly posting nothing.
+    """
     events = []
-    for item in ET.fromstring(xml).iter("item"):
+    items = list(ET.fromstring(xml).iter("item"))
+    for item in items:
         name = (item.findtext("title") or "").strip()
         url = (item.findtext("link") or "").strip()
         dates = item.findtext(EVENT_DATES, "")
@@ -135,6 +143,11 @@ def events_from_feed(xml: bytes) -> list[Event]:
                 place=place_from_description(item.findtext("description") or ""),
                 image=image,
             )
+        )
+    if items and not events:
+        raise ValueError(
+            f"City calendar feed unreadable: none of its {len(items)} items "
+            "has a name, link and date; has the feed's format changed?"
         )
     return events
 
