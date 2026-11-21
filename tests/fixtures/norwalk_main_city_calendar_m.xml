@@ -1,0 +1,40 @@
+<?xml version="1.0"?><rss version="2.0" xmlns:calendarEvent="https://www.norwalkct.gov/m/calendar"><channel>
+	<title>City of Norwalk - Calendar - Main City Calendar</title>
+	<link>https://www.norwalkct.gov/m/calendar</link>
+	<lastBuildDate>Sat, 21 Nov 2026 07:56:02 -0500</lastBuildDate>
+	<description>City of Norwalk - Get the latest events</description>
+	<language>en-us</language>
+	<item>
+		<title>Lockwood-Mathews Mansion Museum New Exhibit</title>
+		<link>https://www.norwalkct.gov/m/calendar/event/detail/17092</link>
+		<pubDate>Wed, 23 Sep 2026 12:57:35 -0500</pubDate>
+		<description>&lt;strong&gt;Event dates:&lt;/strong&gt; October 7, 2026 - January 3, 2027&lt;br&gt;&lt;strong&gt;Event Time: &lt;/strong&gt;12:00 AM - 11:59 PM&lt;br&gt;&lt;strong&gt;Location:&lt;/strong&gt; &lt;br&gt;Lockwood-Mathews Mansion &lt;br&gt;Norwalk, CT 06851-5125</description>
+		<calendarEvent:EventDates>October 7, 2026 - January 3, 2027</calendarEvent:EventDates>
+		<calendarEvent:EventTimes>12:00 AM - 11:59 PM</calendarEvent:EventTimes>
+		<calendarEvent:Location>Lockwood-Mathews Mansion Norwalk, CT 06851-5125</calendarEvent:Location>
+		
+		<guid isPermaLink="false">https://www.norwalkct.gov/m/calendar/event/detail/17092/639257650550000000</guid>
+	</item>
+	<item>
+		<title>Holiday Window Painting </title>
+		<link>https://www.norwalkct.gov/m/calendar/event/detail/17298</link>
+		<pubDate>Tue, 17 Nov 2026 15:11:00 -0500</pubDate>
+		<description>&lt;strong&gt;Event date:&lt;/strong&gt; November 21, 2026 &lt;br&gt;&lt;strong&gt;Event Time: &lt;/strong&gt;12:00 AM - 11:59 PM&lt;br&gt;&lt;strong&gt;Location:&lt;/strong&gt; &lt;br&gt;The SoNo Collection&lt;br&gt;100 N Water Street&lt;br&gt;Norwalk, CT 06851-5125</description>
+		<calendarEvent:EventDates> November 21, 2026 </calendarEvent:EventDates>
+		<calendarEvent:EventTimes>12:00 AM - 11:59 PM</calendarEvent:EventTimes>
+		<calendarEvent:Location>The SoNo Collection&lt;br&gt;100 N Water StreetNorwalk, CT 06851-5125</calendarEvent:Location>
+		
+		<guid isPermaLink="false">https://www.norwalkct.gov/m/calendar/event/detail/17298/639305214600000000</guid>
+	</item>
+	<item>
+		<title>NHRL 2026 Robot Fighting World Championships</title>
+		<link>https://www.norwalkct.gov/m/calendar/event/detail/17109</link>
+		<pubDate>Thu, 01 Oct 2026 17:48:43 -0500</pubDate>
+		<description>&lt;strong&gt;Event date:&lt;/strong&gt; December 5, 2026 &lt;br&gt;&lt;strong&gt;Event Time: &lt;/strong&gt;10:00 AM - 10:30 PM&lt;br&gt;&lt;strong&gt;Location:&lt;/strong&gt; &lt;br&gt;165 Water Street&lt;br&gt;Norwalk, CT 06854</description>
+		<calendarEvent:EventDates> December 5, 2026 </calendarEvent:EventDates>
+		<calendarEvent:EventTimes>10:00 AM - 10:30 PM</calendarEvent:EventTimes>
+		<calendarEvent:Location>165 Water StreetNorwalk, CT 06854</calendarEvent:Location>
+		
+		<guid isPermaLink="false">https://www.norwalkct.gov/m/calendar/event/detail/17109/639264737230000000</guid>
+	</item>
+</channel></rss>

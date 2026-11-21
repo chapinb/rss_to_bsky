@@ -3,6 +3,8 @@
 ``norwalk_rec_parks_calendar.xml`` and ``norwalk_main_city_calendar.xml`` are
 the Recreation & Parks and Main City Calendar feeds; ``norwalk_all_calendars``
 is the all-categories feed, which has many events on one day.
+``norwalk_main_city_calendar_m.xml`` is the Main City Calendar feed after the
+site moved to ``/m/`` paths (2026-11-21), with a different namespace.
 """
 
 from datetime import date, datetime, time, timedelta, timezone
@@ -20,6 +22,7 @@ EST = timezone(timedelta(hours=-5))
 
 REC_PARKS = FIXTURES / "norwalk_rec_parks_calendar.xml"
 MAIN_CITY = FIXTURES / "norwalk_main_city_calendar.xml"
+MAIN_CITY_M = FIXTURES / "norwalk_main_city_calendar_m.xml"
 ALL_CALENDARS = FIXTURES / "norwalk_all_calendars.xml"
 ALL_CALENDARS_URL = city.FEED_URL.format("All-calendar.xml")
 
@@ -92,6 +95,23 @@ def test_date_ranges_start_on_their_first_day_and_all_day_has_no_time():
     assert exhibit.day == date(2026, 10, 7)
     assert (exhibit.start, exhibit.end, exhibit.when) == (None, None, "")
     assert exhibit.starts_at is None
+
+
+def test_feeds_after_the_sites_move_to_m_paths_are_read():
+    # From 2026-11-18 the feed's calendarEvent namespace is .../m/calendar,
+    # not .../Calendar.aspx; the elements are matched whatever it is.
+    events = city.events_from_feed(MAIN_CITY_M.read_bytes())
+
+    assert [(e.name, e.day, e.start, e.end) for e in events] == [
+        ("Lockwood-Mathews Mansion Museum New Exhibit", date(2026, 10, 7), None, None),
+        ("Holiday Window Painting", date(2026, 11, 21), None, None),
+        (
+            "NHRL 2026 Robot Fighting World Championships",
+            date(2026, 12, 5),
+            time(10, 0),
+            time(22, 30),
+        ),
+    ]
 
 
 @pytest.mark.parametrize(

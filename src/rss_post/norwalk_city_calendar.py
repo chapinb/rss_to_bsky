@@ -28,7 +28,10 @@ FEED_URL = "https://www.norwalkct.gov/RSSFeed.aspx?ModID=58&CID={}"
 REC_PARKS_URL = FEED_URL.format("Recreation-Parks-40")
 MAIN_CITY_URL = FEED_URL.format("Main-City-Calendar-14")
 
-NS = {"cal": "https://www.norwalkct.gov/Calendar.aspx"}
+# The calendarEvent elements are matched in any namespace: the feed's changed
+# from .../Calendar.aspx to .../m/calendar when the site moved (2026-11-18).
+EVENT_DATES = "{*}EventDates"
+EVENT_TIMES = "{*}EventTimes"
 
 # The calendar marks "no end time" as 11:59 PM and "all day" as 12:00 AM - 11:59 PM.
 END_OF_DAY = time(23, 59)
@@ -112,12 +115,12 @@ def events_from_feed(xml: bytes) -> list[Event]:
     for item in ET.fromstring(xml).iter("item"):
         name = (item.findtext("title") or "").strip()
         url = (item.findtext("link") or "").strip()
-        dates = item.findtext("cal:EventDates", "", NS)
+        dates = item.findtext(EVENT_DATES, "")
         day = parse_start_day(dates)
         if not (name and url) or day is None:
             logger.warning(f"Skipping city calendar item with no date {dates!r}: {url}")
             continue
-        start, end = parse_times(item.findtext("cal:EventTimes", "", NS))
+        start, end = parse_times(item.findtext(EVENT_TIMES, ""))
         enclosure = item.find("enclosure")
         image = None
         if enclosure is not None and enclosure.get("type", "").startswith("image/"):
