@@ -2,6 +2,7 @@
 
 import gzip
 import tracemalloc
+import zlib
 from unittest.mock import patch
 
 import httpx
@@ -67,6 +68,54 @@ def test_compressed_body_is_never_inflated_past_the_cap():
     finally:
         tracemalloc.stop()
     assert peak < 10_000_000
+
+
+def test_raw_deflate_is_accepted_as_deflate():
+    # Many servers send "deflate" without the zlib header the RFC asks for.
+    compressor = zlib.compressobj(wbits=-zlib.MAX_WBITS)
+    body = compressor.compress(b"<rss/>") + compressor.flush()
+
+    def handler(request):
+        return httpx.Response(
+            200, content=streamed(body), headers={"Content-Encoding": "deflate"}
+        )
+
+    assert get(handler=handler).content == b"<rss/>"
+
+
+def test_corrupt_compressed_body_is_refused():
+    def handler(request):
+        return httpx.Response(
+            200,
+            content=streamed(b"not gzip at all"),
+            headers={"Content-Encoding": "gzip"},
+        )
+
+    with pytest.raises(http.FetchRefused, match="compressed"):
+        get(handler=handler)
+
+
+def test_truncated_compressed_body_is_refused():
+    body = gzip.compress(b"<rss>" + b"x" * 5000 + b"</rss>")[:-20]
+
+    def handler(request):
+        return httpx.Response(
+            200, content=streamed(body), headers={"Content-Encoding": "gzip"}
+        )
+
+    with pytest.raises(http.FetchRefused, match="cut off"):
+        get(handler=handler, max_bytes=100_000)
+
+
+def test_malformed_redirect_is_an_http_error_for_callers():
+    # Callers catch httpx.HTTPError; httpx's own InvalidURL isn't one.
+    def handler(request):
+        if request.url.path == "/feed":
+            return httpx.Response(302, headers={"Location": "http://[::1"})
+        return httpx.Response(200, content=streamed(b"ok"))
+
+    with pytest.raises(httpx.HTTPError):
+        get(handler=handler)
 
 
 def test_bytes_after_the_compressed_body_are_refused():

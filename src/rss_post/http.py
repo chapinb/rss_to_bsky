@@ -30,11 +30,24 @@ USER_AGENT = "rss-post (Norwalk CT Bluesky bot)"
 # The encodings ``get`` can inflate within its byte cap (zlib's ``max_length``);
 # brotli and zstd aren't asked for, and are refused if sent anyway.
 ACCEPT_ENCODING = "gzip, deflate"
+
+
+def _deflate(first: bytes):
+    """ "deflate" as sent: zlib-wrapped as the RFC says, or (commonly) raw."""
+    zlib_header = (
+        len(first) >= 2
+        and first[0] & 0x0F == 8
+        and ((first[0] << 8) | first[1]) % 31 == 0
+    )
+    return zlib.decompressobj(zlib.MAX_WBITS if zlib_header else -zlib.MAX_WBITS)
+
+
+# Each encoding's inflater, made from the body's first bytes (None: as is).
 _DECOMPRESSORS = {
-    "identity": lambda: None,
-    "gzip": lambda: zlib.decompressobj(16 + zlib.MAX_WBITS),
-    "x-gzip": lambda: zlib.decompressobj(16 + zlib.MAX_WBITS),
-    "deflate": lambda: zlib.decompressobj(),
+    "identity": lambda first: None,
+    "gzip": lambda first: zlib.decompressobj(16 + zlib.MAX_WBITS),
+    "x-gzip": lambda first: zlib.decompressobj(16 + zlib.MAX_WBITS),
+    "deflate": _deflate,
 }
 
 
@@ -215,10 +228,15 @@ def _read_bounded(
     encoding = response.headers.get("Content-Encoding", "identity").lower().strip()
     if encoding not in _DECOMPRESSORS:
         raise FetchRefused(f"{response.url} has an unsupported encoding {encoding!r}")
-    inflater = _DECOMPRESSORS[encoding]()
+    make_inflater = _DECOMPRESSORS[encoding]
+    inflater = None
     body = bytearray()
     received = 0
     for raw in response.iter_raw():
+        if not raw:
+            continue
+        if received == 0:
+            inflater = make_inflater(raw)
         # Compressed or not, what arrives is capped too.
         received += len(raw)
         if received > max_bytes:
@@ -233,7 +251,12 @@ def _read_bounded(
                     raise FetchRefused(f"{response.url} has data after its body")
                 # At most one byte past the cap, so going over is detected
                 # without inflating any further.
-                piece = inflater.decompress(data, max_bytes - len(body) + 1)
+                try:
+                    piece = inflater.decompress(data, max_bytes - len(body) + 1)
+                except zlib.error as e:
+                    raise FetchRefused(
+                        f"{response.url} has a corrupt compressed body ({e})"
+                    ) from e
                 data = inflater.unconsumed_tail
                 if inflater.unused_data:
                     raise FetchRefused(f"{response.url} has data after its body")
@@ -241,6 +264,8 @@ def _read_bounded(
             if len(body) > max_bytes:
                 raise too_large
         _remaining(deadline, timeout, response.url)
+    if inflater is not None and not inflater.eof:
+        raise FetchRefused(f"{response.url} was cut off mid-body")
     # The body is decoded already, so it must not be decoded again.
     headers = [
         (name, value)
