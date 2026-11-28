@@ -207,6 +207,7 @@ def test_public_https_refuses_hosts_that_bypass_the_egress_proxy(monkeypatch, ur
         ("[2606:4700::1111]", "https://[2606:4700::1111]/x.png"),
         # Entries written as URLs, with ports, or with trailing dots.
         ("https://cams.example.com", "https://cams.example.com/x.png"),
+        ("https://u:p@cams.example.com:8443", "https://cams.example.com/x.png"),
         ("cams.example.com:8443", "https://cams.example.com/x.png"),
         ("lan.example.", "https://grafana.lan.example/x.png"),
         ("*.lan.example", "https://grafana.lan.example/x.png"),

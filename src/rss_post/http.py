@@ -128,8 +128,12 @@ class ProxyBypass:
                 everything = True
                 continue
             if "://" in entry:
-                entry = urlsplit(entry).netloc
-            host = _without_port(entry)
+                # The host alone: no userinfo, port or IPv6 brackets.
+                host = urlsplit(entry).hostname or ""
+            else:
+                host = _without_port(entry)
+            if not host:
+                continue
             try:
                 networks.append(ipaddress.ip_network(host, strict=False))
             except ValueError:
