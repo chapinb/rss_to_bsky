@@ -157,11 +157,37 @@ def test_public_https_allows_public_https_urls(url):
         "https://2130706433/a.jpg",  # 127.0.0.1 as one number.
         "https://0x7f000001/a.jpg",
         "https://intranet/a.jpg",  # No public TLD.
+        "https://loki.loki.svc.cluster.local/a.jpg",
+        "https://grafana.monitoring.svc/a.jpg",
+        "https://nas.local/a.jpg",
+        "https://router.lan/a.jpg",
+        "https://db.internal/a.jpg",
+        "https://printer.home.arpa/a.jpg",
+        "https://example.com:10443/a.jpg",  # Only the default https port.
     ],
 )
 def test_public_https_refuses_other_urls(url):
     with pytest.raises(http.FetchRefused):
         http.public_https(httpx.URL(url))
+
+
+@pytest.mark.parametrize(
+    "url",
+    ["https://grafana.lan.example/x.png", "https://lan.example/x.png"],
+)
+def test_public_https_refuses_hosts_that_bypass_the_egress_proxy(monkeypatch, url):
+    # What the pod sends around the proxy (NO_PROXY) is internal by definition.
+    monkeypatch.setenv("NO_PROXY", "localhost,10.0.0.0/8,.svc,.lan.example")
+    with pytest.raises(http.FetchRefused):
+        http.public_https(httpx.URL(url))
+    http.public_https(httpx.URL("https://example.com/x.png"))  # Others pass.
+
+
+def test_public_https_reads_lowercase_no_proxy_too(monkeypatch):
+    monkeypatch.delenv("NO_PROXY", raising=False)
+    monkeypatch.setenv("no_proxy", ".lan.example")
+    with pytest.raises(http.FetchRefused):
+        http.public_https(httpx.URL("https://grafana.lan.example/x.png"))
 
 
 def test_redirect_targets_are_checked_too():

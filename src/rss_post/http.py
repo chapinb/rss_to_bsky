@@ -7,6 +7,7 @@ after it. ``get`` caps both the total time and the bytes read.
 """
 
 import ipaddress
+import os
 import re
 import time
 import zlib
@@ -42,31 +43,75 @@ class FetchRefused(httpx.HTTPError):
 # A top-level domain: letters (or an IDNA ``xn--`` label), never all digits,
 # so a host like ``2130706433`` or ``0x7f000001`` (127.0.0.1) isn't a name.
 TLD = re.compile(r"(?:[a-z]{2,63}|xn--[a-z0-9-]{1,59})")
+# Suffixes used for private names (Kubernetes services, mDNS, home and
+# corporate networks, RFC 6761/8375 special-use names): never public.
+PRIVATE_SUFFIXES = (
+    "localhost",
+    "local",
+    "svc",
+    "cluster.local",
+    "internal",
+    "intranet",
+    "lan",
+    "home",
+    "corp",
+    "private",
+    "arpa",
+    "test",
+    "invalid",
+    "onion",
+)
 
 
 def public_https(url: httpx.URL) -> None:
-    """Refuse (``FetchRefused``) anything but ``https`` to a public host.
+    """Refuse (``FetchRefused``) anything but ``https`` on port 443 to a public host.
 
     For URLs taken from feeds or the pages they link (thumbnails), so a feed
-    can't point the bot at the cluster or the LAN. This judges the URL only:
-    a public name that resolves to a private address has to be stopped where
-    names are resolved (the egress proxy).
+    can't point the bot at the cluster or the LAN. Refused: IP literals that
+    aren't global, names without a public-looking TLD, ``PRIVATE_SUFFIXES``,
+    and names the environment sends around the egress proxy (``NO_PROXY``),
+    which are internal by the operator's own definition. This judges the URL
+    only: a public name that resolves to a private address has to be stopped
+    where names are resolved (the egress proxy).
     """
     if url.scheme != "https":
         raise FetchRefused(f"Not an https URL: {url}")
+    if url.port not in (None, 443):
+        raise FetchRefused(f"Not the https port: {url}")
     host = url.host.lower().rstrip(".")
-    if host == "localhost" or host.endswith(".localhost"):
-        raise FetchRefused(f"Not a public host: {url}")
     try:
         address = ipaddress.ip_address(host)
     except ValueError:
-        if not TLD.fullmatch(host.rsplit(".", 1)[-1]) or "." not in host:
+        if (
+            "." not in host
+            or not TLD.fullmatch(host.rsplit(".", 1)[-1])
+            or _under(host, PRIVATE_SUFFIXES)
+            or _under(host, _proxy_bypass_suffixes())
+        ):
             raise FetchRefused(f"Not a public host: {url}") from None
         return
     if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped:
         address = address.ipv4_mapped
     if not address.is_global:
         raise FetchRefused(f"Not a public host: {url}")
+
+
+def _under(host: str, suffixes) -> bool:
+    """Whether ``host`` is one of ``suffixes`` or a name under one."""
+    return any(host == s or host.endswith(f".{s}") for s in suffixes)
+
+
+def _proxy_bypass_suffixes() -> list[str]:
+    """The domain names in ``NO_PROXY``/``no_proxy`` (IPs and CIDRs are
+    covered by the address check; ``*`` is ignored)."""
+    entries = os.environ.get("NO_PROXY", "") + "," + os.environ.get("no_proxy", "")
+    suffixes = []
+    for entry in entries.split(","):
+        entry = entry.strip().lower().lstrip("*").lstrip(".")
+        if not entry or "/" in entry or entry.replace(".", "").isdigit():
+            continue
+        suffixes.append(entry.split(":")[0])
+    return suffixes
 
 
 def get(
