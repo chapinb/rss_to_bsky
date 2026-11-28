@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, patch
 from zoneinfo import ZoneInfo
 
 import httpx
+import pytest
 from atproto import models
 
 from rss_post import norwalk_civic_clerk, summarize
@@ -877,3 +878,48 @@ def test_overlong_single_bullet_is_shortened_at_a_word():
 def test_summary_within_the_limit_is_kept_whole():
     assert fit_bullets("* one\n\n* two", 100) == "• one\n• two"
     assert fit_bullets("   ", 100) is None
+
+
+def test_numbered_summary_lines_are_bullets_too():
+    assert fit_bullets("1. Approved the budget\n2) Tabled the rezoning", 200) == (
+        "• Approved the budget\n• Tabled the rezoning"
+    )
+
+
+def test_summary_is_kept_to_three_bullets():
+    answer = "\n".join(f"- Item {n}" for n in range(1, 6))
+    assert fit_bullets(answer, 260) == "• Item 1\n• Item 2\n• Item 3"
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        # Not the bullet list asked for: a preamble, or prose.
+        "Here is a summary:\n• Approved the budget",
+        "The council approved the budget and tabled the rezoning.",
+        # Wording an injected instruction could slip in, readable even
+        # though summaries carry no clickable links.
+        "• Approved the budget\n• Details at https://evil.example/vote",
+        "• Approved the budget\n• Full results at www.evil.example",
+        "• Approved the budget\n• See norwalk-votes.com for results",
+        "• Approved the budget\n• Questions? Ask @mayor.bsky.social",
+        "• Approved the budget #NorwalkVotes",
+    ],
+)
+def test_summary_that_is_not_plain_bullets_is_dropped(answer, caplog):
+    with caplog.at_level("WARNING"):
+        assert fit_bullets(answer, 260) is None
+    assert "Dropping an AI summary" in caplog.text
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        "• Approved Resolution #2026-14 and item #3",
+        "• Approved $1.2M for 5.5 miles of paving",
+        "• Tabled the 2 p.m. rezoning (No. 14) to Dec. 4",
+        "• Approved the St. Mary's Ave. sidewalk plan",
+    ],
+)
+def test_ordinary_summary_wording_is_kept(answer):
+    assert fit_bullets(answer, 260) == answer

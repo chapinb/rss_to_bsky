@@ -41,6 +41,7 @@ Fix the three findings the 2026-11-28 security review (Fable) ranked first, all 
 - 2026-11-28: `#` and `@` are rejected only as hashtag or handle shapes (`#` or `@` followed by a letter), not as bare characters: agendas and minutes are full of "Item #3" and "Resolution #2026-14". Summaries are plain text with no facets, so neither would be clickable or notify anyone anyway; the check is against readable injected wording.
 - 2026-11-28 (slice 1): `read_rss` is split into the bounded fetch and `parse_feed(content, url, headers)`, so tests (and `test_norwalk_feeds`'s fixtures) parse saved bytes instead of having feedparser open file paths. `parse_feed` defaults the content type to `application/xml`, since feedparser marks a feed given headers without one as malformed. Proxies still apply: httpx honors `HTTPS_PROXY` as urllib did.
 - 2026-11-28 (automated security review, after slice 2): two valid findings, both fixed in their own commits. (1) httpx's decoder inflates each received chunk whole, so a small gzip body could expand far past the cap before the size check; `get` now asks only for gzip/deflate, refuses other encodings, and inflates with zlib's `max_length`. (2) `public_https` let internal names through when their last label looked like a TLD (`*.svc.cluster.local`, `.local`, `.lan`), and the pod's `NO_PROXY` sends those, and the home domain, straight to the internal gateway that the NetworkPolicy allows; it now refuses well-known private suffixes, every name in `NO_PROXY` (so the home domain isn't written into this public repo), and any port but 443. DNS-resolve-and-pin was not added: HTTPS goes through the proxy, which resolves names itself (Deferred).
+- 2026-11-28 (slice 3): Numbered lines (`1.`, `2)`) count as bullets too. The domain pattern is generic (a word, a dot, 2+ letters) rather than a TLD list, so it also catches made-up domains; abbreviations like "p.m.", "St. Mary's" and "No. 14" pass. Checked against the account's 21 posted AI summaries: none would have been dropped.
 - 2026-11-28: `https` only for feed-supplied image and page URLs: every configured source and every image URL in the saved fixtures is already `https`.
 
 ## Deferred
@@ -58,6 +59,6 @@ Fix the three findings the 2026-11-28 security review (Fable) ranked first, all 
 
 - [x] 1. Tracer: `http.get_bounded` (byte cap, total deadline, `httpx.HTTPError` subclass) and `read_rss` fetching through it (tests in `tests/test_http.py`, `tests/test_read_rss.py`; `http.py`, `read_rss.py`).
 - [x] 2. Thumbnails: `https`/host checks on every hop, caps, and magic bytes (tests in `tests/test_media.py`, `tests/test_http.py`; `media.py`, `http.py`).
-- [ ] 3. Summary check: bullets only, at most 3, no URL/domain/handle/hashtag (tests in `tests/test_norwalk_feeds.py` or wherever `fit_bullets` is tested; `norwalk_feeds.py`).
+- [x] 3. Summary check: bullets only, at most 3, no URL/domain/handle/hashtag (tests in `tests/test_norwalk_feeds.py` or wherever `fit_bullets` is tested; `norwalk_feeds.py`).
 - [ ] 4. Docs: CLAUDE.md lines on fetching and summaries (`CLAUDE.md`).
 - [ ] 5. Deploy: push, pin the digest, sync, check the next run.

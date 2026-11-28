@@ -251,20 +251,52 @@ def recording_post(meeting: dict) -> Post:
 
 
 def bullets(summary: str) -> str:
-    """The summary's non-blank lines, with ``-``/``*`` bullets made ``•``."""
+    """The summary's non-blank lines, with ``-``/``*``/``1.`` bullets made ``•``."""
     lines = (line.strip() for line in summary.splitlines())
-    return "\n".join(re.sub(r"^[-*]\s+", "• ", line) for line in lines if line)
+    return "\n".join(
+        re.sub(r"^(?:[-*]|\d{1,2}[.)])\s+", "• ", line) for line in lines if line
+    )
+
+
+MAX_SUMMARY_BULLETS = 3
+# What an AI summary may not contain: wording an instruction injected into an
+# agenda or minutes could slip in. Summaries are plain text (no facets), so
+# none of it would be clickable, but it would be read on a civic account.
+UNSAFE_IN_SUMMARY = {
+    "a link": re.compile(r"https?://|www\.", re.IGNORECASE),
+    "a domain name": re.compile(r"\b[a-z0-9][a-z0-9-]*\.[a-z]{2,24}\b", re.IGNORECASE),
+    "a handle": re.compile(r"@[a-z0-9]", re.IGNORECASE),
+    "a hashtag": re.compile(r"#[a-z]", re.IGNORECASE),
+}
+
+
+def summary_problem(lines: list[str]) -> str | None:
+    """Why the summary ``lines`` (from ``bullets``) can't be posted, if so."""
+    if not all(line.startswith("• ") for line in lines):
+        return "a line that isn't a bullet"
+    for name, pattern in UNSAFE_IN_SUMMARY.items():
+        if any(pattern.search(line) for line in lines):
+            return name
+    return None
 
 
 def fit_bullets(summary: str, max_chars: int) -> str | None:
-    """``bullets(summary)`` cut to at most ``max_chars``, or None if empty.
+    """``bullets(summary)`` cut to at most ``max_chars``, or None if empty or
+    not fit to post.
 
-    Models don't always keep to a length limit, so instead of dropping an
-    overlong summary this keeps the leading bullets that fit (the prompt asks
-    for the most important first). If not even the first bullet fits, it is
-    shortened at a word boundary with "…".
+    The answer must be only bullets, with nothing ``UNSAFE_IN_SUMMARY``;
+    otherwise it is dropped (logged), since the model may be following
+    instructions hidden in the text it summarized. At most
+    ``MAX_SUMMARY_BULLETS`` are kept. Models don't always keep to a length
+    limit, so instead of dropping an overlong summary this keeps the leading
+    bullets that fit (the prompt asks for the most important first). If not
+    even the first bullet fits, it is shortened at a word boundary with "…".
     """
     lines = bullets(summary).splitlines()
+    if lines and (problem := summary_problem(lines)) is not None:
+        logger.warning(f"Dropping an AI summary with {problem}: {summary[:300]!r}")
+        return None
+    lines = lines[:MAX_SUMMARY_BULLETS]
     kept: list[str] = []
     for line in lines:
         if len("\n".join([*kept, line])) > max_chars:
