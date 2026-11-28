@@ -9,6 +9,7 @@ after it. ``get`` caps both the total time and the bytes read.
 import ipaddress
 import re
 import time
+import zlib
 from collections.abc import Callable
 
 import httpx
@@ -21,6 +22,17 @@ MAX_REDIRECTS = 5
 # Longest wait for any single connect or read, within the total budget.
 OPERATION_TIMEOUT = 10.0
 USER_AGENT = "rss-post (Norwalk CT Bluesky bot)"
+
+
+# The encodings ``get`` can inflate within its byte cap (zlib's ``max_length``);
+# brotli and zstd aren't asked for, and are refused if sent anyway.
+ACCEPT_ENCODING = "gzip, deflate"
+_DECOMPRESSORS = {
+    "identity": lambda: None,
+    "gzip": lambda: zlib.decompressobj(16 + zlib.MAX_WBITS),
+    "x-gzip": lambda: zlib.decompressobj(16 + zlib.MAX_WBITS),
+    "deflate": lambda: zlib.decompressobj(),
+}
 
 
 class FetchRefused(httpx.HTTPError):
@@ -87,7 +99,7 @@ def get(
             with client.stream(
                 "GET",
                 target,
-                headers={"User-Agent": user_agent},
+                headers={"User-Agent": user_agent, "Accept-Encoding": ACCEPT_ENCODING},
                 timeout=min(remaining, OPERATION_TIMEOUT),
                 follow_redirects=False,
             ) as response:
@@ -112,14 +124,31 @@ def _remaining(deadline: float, timeout: float, url: httpx.URL) -> float:
 def _read_bounded(
     response: httpx.Response, max_bytes: int, deadline: float, timeout: float
 ) -> httpx.Response:
+    """Read the body, inflating it ourselves so the cap holds for what is
+    decompressed: httpx's own decoding inflates each received chunk whole,
+    and a few kilobytes of gzip can inflate to gigabytes."""
+    too_large = FetchRefused(f"{response.url} is over the {max_bytes}-byte limit")
     declared = response.headers.get("Content-Length", "")
     if declared.isdigit() and int(declared) > max_bytes:
-        raise FetchRefused(f"{response.url} is over the {max_bytes}-byte limit")
+        raise too_large
+    encoding = response.headers.get("Content-Encoding", "identity").lower().strip()
+    if encoding not in _DECOMPRESSORS:
+        raise FetchRefused(f"{response.url} has an unsupported encoding {encoding!r}")
+    inflater = _DECOMPRESSORS[encoding]()
     body = bytearray()
-    for chunk in response.iter_bytes():
-        body += chunk
-        if len(body) > max_bytes:
-            raise FetchRefused(f"{response.url} is over the {max_bytes}-byte limit")
+    for raw in response.iter_raw():
+        data = raw
+        while data:
+            if inflater is None:
+                piece, data = data, b""
+            else:
+                # At most one byte past the cap, so going over is detected
+                # without inflating any further.
+                piece = inflater.decompress(data, max_bytes - len(body) + 1)
+                data = inflater.unconsumed_tail
+            body += piece
+            if len(body) > max_bytes:
+                raise too_large
         _remaining(deadline, timeout, response.url)
     # The body is decoded already, so it must not be decoded again.
     headers = [

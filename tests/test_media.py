@@ -165,7 +165,9 @@ def test_thumbnails_are_fetched_only_from_public_https_urls():
 
     def handler(request):
         requested.append(str(request.url))
-        return httpx.Response(200, content=JPEG, headers={"content-type": "image/jpeg"})
+        return httpx.Response(
+            200, content=iter([JPEG]), headers={"content-type": "image/jpeg"}
+        )
 
     with served(handler):
         assert media.download_thumbnail("http://example.com/a.jpg") is None

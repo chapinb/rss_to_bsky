@@ -1,6 +1,7 @@
 """Tests for the bounded GET used for feeds and thumbnails."""
 
 import gzip
+import tracemalloc
 from unittest.mock import patch
 
 import httpx
@@ -13,8 +14,14 @@ def client(handler) -> httpx.Client:
     return httpx.Client(transport=httpx.MockTransport(handler))
 
 
+def streamed(data: bytes, chunk: int = 65536):
+    """A body sent in chunks, as from a server. (httpx reads a ``bytes`` body
+    up front, so ``get`` couldn't stream it raw as it does from the network.)"""
+    return iter([data[i : i + chunk] for i in range(0, len(data), chunk)])
+
+
 def get(url="https://example.com/feed", handler=None, **kwargs):
-    handler = handler or (lambda request: httpx.Response(200, content=b"ok"))
+    handler = handler or (lambda request: httpx.Response(200, content=streamed(b"ok")))
     kwargs.setdefault("max_bytes", 100)
     kwargs.setdefault("timeout", 5.0)
     return http.get(url, client=client(handler), **kwargs)
@@ -24,7 +31,7 @@ def test_returns_the_body_and_final_url():
     def handler(request):
         if request.url.path == "/old":
             return httpx.Response(301, headers={"Location": "/new"})
-        return httpx.Response(200, content=b"hello")
+        return httpx.Response(200, content=streamed(b"hello"))
 
     response = get("https://example.com/old", handler)
 
@@ -36,11 +43,42 @@ def test_decompressed_body_is_returned_as_is():
     body = gzip.compress(b"<rss/>")
     response = get(
         handler=lambda request: httpx.Response(
-            200, content=body, headers={"Content-Encoding": "gzip"}
+            200, content=streamed(body), headers={"Content-Encoding": "gzip"}
         )
     )
     assert response.content == b"<rss/>"
     assert response.text == "<rss/>"
+
+
+def test_compressed_body_is_never_inflated_past_the_cap():
+    # 50 MB of zeros gzips to ~50 KB: a decompression bomb for a 1 MB cap.
+    bomb = gzip.compress(b"\x00" * 50_000_000)
+
+    def handler(request):
+        return httpx.Response(
+            200, content=streamed(bomb), headers={"Content-Encoding": "gzip"}
+        )
+
+    tracemalloc.start()
+    try:
+        with pytest.raises(http.FetchRefused, match="over the 1000000-byte limit"):
+            get(handler=handler, max_bytes=1_000_000)
+        _, peak = tracemalloc.get_traced_memory()
+    finally:
+        tracemalloc.stop()
+    assert peak < 10_000_000
+
+
+def test_only_encodings_it_can_bound_are_asked_for_or_accepted():
+    seen = []
+
+    def handler(request):
+        seen.append(request.headers["Accept-Encoding"])
+        return httpx.Response(200, content=b"x", headers={"Content-Encoding": "br"})
+
+    with pytest.raises(http.FetchRefused, match="encoding"):
+        get(handler=handler)
+    assert seen == ["gzip, deflate"]
 
 
 def test_body_over_the_cap_is_refused():
