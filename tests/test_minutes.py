@@ -399,10 +399,11 @@ def test_minutes_replying_to_the_meeting_post_are_summarized_in_its_thread():
     # The summaries are read back from the history as such.
     assert reply_key(meeting.uri, "minutes-summary") in runs.history
     # Later runs don't read or summarize minutes already summarized; only the
-    # ones still without text are read again.
+    # ones still without text (none saved for them) are read again.
+    without_text = set(runs.file_requests) - set(MINUTES_TEXTS)
     runs.file_requests.clear()
     assert runs.run(datetime(2026, 10, 30, 14, tzinfo=EASTERN), summaries=True) == []
-    assert len(runs.file_requests) == len(posts) - 4
+    assert without_text and set(runs.file_requests) == without_text
     assert runs.summarizer.call_count == 2
 
 
