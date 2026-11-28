@@ -4,11 +4,14 @@ import json
 import re
 from contextlib import ExitStack
 from datetime import UTC, date, datetime, timedelta
+from io import BytesIO
 from unittest.mock import MagicMock, patch
 from zoneinfo import ZoneInfo
 
 import httpx
+import pytest
 from atproto import models
+from pypdf import PdfWriter
 
 from rss_post import minutes_digest, norwalk_civic_clerk, summarize
 from rss_post.dedup import PostRef, SeenPosts, keys_in_record, reply_key
@@ -40,6 +43,10 @@ MINUTES_TEXTS = {
     for path in (FIXTURES / "civicclerk_minutes").glob("*.txt")
 }
 FILE_STREAM = re.compile(r"GetMeetingFileStream\(fileId=(\d+),plainText=true\)")
+PDF_STREAM = re.compile(r"GetMeetingFileStream\(fileId=(\d+),plainText=false\)")
+# Norwalk Ordinance Committee minutes (file 16478), as downloaded 2026-11-27:
+# it has a text layer, but the API's text for it was still empty then.
+ORDINANCE_PDF = (FIXTURES / "civicclerk_minutes_pdf" / "16478.pdf").read_bytes()
 
 
 def serve(
@@ -47,12 +54,25 @@ def serve(
     texts: dict[int, str] | None = None,
     file_requests: list | None = None,
     files_up: bool = True,
+    pdfs: dict[int, bytes] | None = None,
+    pdf_requests: list | None = None,
 ):
     """A client serving the saved events within each request's date range,
-    and the saved minutes texts (or ``texts``)."""
+    the saved minutes texts (or ``texts``), and the files in ``pdfs`` (an
+    empty body, the API's "unavailable", for others)."""
     texts = MINUTES_TEXTS if texts is None else texts
+    pdfs = pdfs or {}
 
     def handler(request: httpx.Request) -> httpx.Response:
+        if match := PDF_STREAM.search(request.url.path):
+            file_id = int(match[1])
+            if pdf_requests is not None:
+                pdf_requests.append(file_id)
+            return httpx.Response(
+                200,
+                content=pdfs.get(file_id, b""),
+                headers={"Content-Type": "application/pdf"},
+            )
         if match := FILE_STREAM.search(request.url.path):
             file_id = int(match[1])
             if file_requests is not None:
@@ -117,6 +137,9 @@ class Runs:
         self.texts: dict[int, str] | None = None
         self.files_up = True
         self.file_requests: list[int] = []
+        # Minutes files (PDFs) served, and the file ids downloaded.
+        self.pdfs: dict[int, bytes] = {}
+        self.pdf_requests: list[int] = []
         # Stands in for the LLM (summarize.summarize) in runs with summaries,
         # unless ``llm`` is set: then the real client runs with LLM_API_KEY set
         # against ``llm``, an httpx handler for the provider's API.
@@ -171,6 +194,8 @@ class Runs:
                         texts=self.texts,
                         file_requests=self.file_requests,
                         files_up=self.files_up,
+                        pdfs=self.pdfs,
+                        pdf_requests=self.pdf_requests,
                     ),
                 )
             )
@@ -396,9 +421,7 @@ def test_minutes_whose_text_comes_later_are_summarized_in_the_meeting_thread():
     assert runs.result == (2, 0)
     assert len(summaries(later)) == 2
     council_summary = next(
-        p
-        for p in summaries(later)
-        if p.reply.parent.uri == sent_ref(runs, council).uri
+        p for p in summaries(later) if p.reply.parent.uri == sent_ref(runs, council).uri
     )
     meeting = runs.meeting_post("City Council", date(2026, 10, 27))
     assert council_summary.reply.root.uri == meeting.uri
@@ -474,6 +497,53 @@ def test_unreadable_minutes_skip_the_summary_not_the_minutes():
     assert len(posts) == 2
     assert runs.result == (2, 0)
     runs.summarizer.assert_not_called()
+
+
+def blank_pdf() -> bytes:
+    """A valid PDF with no text layer, like a scan."""
+    writer = PdfWriter()
+    writer.add_blank_page(width=612, height=792)
+    out = BytesIO()
+    writer.write(out)
+    return out.getvalue()
+
+
+def test_minutes_without_api_text_are_read_from_the_pdf(caplog):
+    runs = Runs()
+    runs.texts = {16373: MINUTES_TEXTS[16373]}  # None from the API for 16369.
+    runs.pdfs = {16369: ORDINANCE_PDF}
+    with caplog.at_level("INFO"):
+        posts = runs.run(datetime(2026, 11, 6, 12, tzinfo=EASTERN), summaries=True)
+
+    assert len(summaries(posts)) == 2
+    assert runs.pdf_requests == [16369]  # Only where the API had no text.
+    from_pdf = runs.summarizer.call_args_list[1].args[0]
+    assert from_pdf.startswith("Norwalk Ordinance Committee\n")
+    assert "  " not in from_pdf
+    assert "Minutes 16369: 2809 chars of text (from the PDF)" in caplog.text
+
+
+@pytest.mark.parametrize("pdf", [b"%PDF-1.7 not really", blank_pdf()])
+def test_minutes_without_text_in_the_pdf_either_are_not_summarized(pdf):
+    runs = Runs()
+    runs.texts = {16373: MINUTES_TEXTS[16373]}
+    runs.pdfs = {16369: pdf}
+    posts = runs.run(datetime(2026, 11, 6, 12, tzinfo=EASTERN), summaries=True)
+    assert len(summaries(posts)) == 1
+    assert runs.result == (len(posts), 0)
+
+
+def test_oversized_minutes_pdf_is_not_read(caplog):
+    runs = Runs()
+    runs.texts = {16373: MINUTES_TEXTS[16373]}
+    runs.pdfs = {16369: ORDINANCE_PDF}
+    with (
+        patch.object(norwalk_civic_clerk, "MAX_PDF_BYTES", len(ORDINANCE_PDF) - 1),
+        caplog.at_level("INFO"),
+    ):
+        posts = runs.run(datetime(2026, 11, 6, 12, tzinfo=EASTERN), summaries=True)
+    assert len(summaries(posts)) == 1
+    assert "over the" in caplog.text
 
 
 def test_failed_minutes_summary_is_retried_by_the_next_run():

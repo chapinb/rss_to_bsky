@@ -40,6 +40,7 @@ Almost no minutes get an AI summary. The job asks CivicClerk for a minutes file'
 - 2026-11-27: Retry from the post history instead of only in the posting run, because the text appears hours after publishing; the history already holds the minutes post (card link key) and any summary (`reply_key(root, "minutes-summary")`), so no local state is needed.
 - 2026-11-27: Fall back to local extraction immediately when the API text is empty, rather than waiting some hours first: 36 of 37 PDFs have a text layer, and one small download beats a summary that comes hours late. The API text stays first because it costs no download.
 - 2026-11-27 (slice 1): Two tests encoded the old "asked once, never retried" requirement (`test_failed_minutes_summary_is_not_retried_by_later_runs`, and the end of the meeting-thread summary test); they were rewritten to the new requirement, not relaxed. A minutes post whose thread root can't be found is treated as summarized (skipped), since its reply couldn't be threaded anyway.
+- 2026-11-27 (slice 2): The PDF is read only when the API text is empty, not when it is merely short: every non-empty API text seen matched the PDF's (pypdf and the API agree to the char after `plain_text` on most of the 37 files), so a short one is a short file. pypdf took under 0.4 s per file.
 - 2026-11-27: No OCR, and no Paperless-ngx. Paperless would solve the scans with a dedicated, permission-limited user, but it adds an async upload-and-poll step to the hourly run and couples a public bot to the private archive, all for about one file in 37.
 
 ## Deferred
@@ -56,6 +57,6 @@ Almost no minutes get an AI summary. The job asks CivicClerk for a minutes file'
 ## Slices
 
 - [x] 1. Tracer: summarize fresh minutes posted on an earlier run, found via the history, skipping ones already summarized (tests in `tests/test_minutes.py`; `norwalk_feeds.py`).
-- [ ] 2. PDF fallback: when API text is empty or short, download and extract with pypdf, bounded by size and pages (tests in `tests/test_norwalk_civic_clerk.py`; `norwalk_civic_clerk.py`, `pyproject.toml`, `uv.lock`).
+- [x] 2. PDF fallback: when API text is empty or short, download and extract with pypdf, bounded by size and pages (tests in `tests/test_norwalk_civic_clerk.py`; `norwalk_civic_clerk.py`, `pyproject.toml`, `uv.lock`).
 - [ ] 3. Docs: CLAUDE.md minutes-summaries paragraph and the "scanned, or too short" log wording (`CLAUDE.md`, `norwalk_feeds.py`).
 - [ ] 4. Deploy: push, pin the image digest in the k8s repo, sync, and check the next run's logs.

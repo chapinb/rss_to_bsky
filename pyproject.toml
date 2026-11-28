@@ -13,6 +13,7 @@ dependencies = [
     "feedparser>=6.0.14",
     "httpx>=0.28.1",
     "libmuni>=0.1.0",
+    "pypdf>=7.2.0",
     "python-decouple>=3.8",
     "tzdata>=2026.6",
 ]

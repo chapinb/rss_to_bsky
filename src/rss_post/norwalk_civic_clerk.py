@@ -11,6 +11,8 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
+from io import BytesIO
+from itertools import islice
 from typing import TypeVar
 from zoneinfo import ZoneInfo
 
@@ -26,6 +28,7 @@ from libmuni.civicclerk import (
     NetworkError,
     PublishedFile,
 )
+from pypdf import PdfReader
 
 from rss_post.dedup import CANCELLED
 from rss_post.logging_config import get_logger
@@ -52,6 +55,10 @@ T = TypeVar("T")
 # and all but one (65 days) within 60. About 7 pages of events (1 request/s).
 MINUTES_LOOKBACK = timedelta(days=60)
 MINUTES_TYPE = "Minutes"
+# Bounds on reading a minutes PDF's own text (``read_pdf_text``); Norwalk's
+# are 0.1-1 MB and up to ~20 pages.
+MAX_PDF_BYTES = 20_000_000
+MAX_PDF_PAGES = 100
 
 # An agenda whose items (not counting section headings) total fewer characters
 # than this is boilerplate (call to order, minutes, adjournment): nothing to
@@ -454,9 +461,11 @@ def plain_text(text: str) -> str:
 def read_minutes_text(client: CivicClerkClient, minutes: Minutes) -> str | None:
     """The text of ``minutes`` (see ``plain_text``), or None if there is none.
 
-    The API extracts text best effort: scanned PDFs, and some others, come
-    back empty. Best effort like ``read_agenda``: None (logged) if the file
-    can't be read after retrying transient failures.
+    The API's text comes first. It is empty until CivicClerk has extracted
+    it, hours after publishing (and for some files, for good), so then the
+    PDF's own text layer is read instead (``read_pdf_text``); scans have none.
+    Best effort like ``read_agenda``: None (logged) if the file can't be read
+    after retrying transient failures.
     """
     try:
         text = with_retries(
@@ -466,9 +475,53 @@ def read_minutes_text(client: CivicClerkClient, minutes: Minutes) -> str | None:
     except CivicClerkError as e:
         logger.warning(f"Could not read minutes {minutes.file_id} ({e})")
         return None
-    text = plain_text(text or "")
-    logger.info(f"Minutes {minutes.file_id}: {len(text)} chars of text")
+    text, source = plain_text(text or ""), "API"
+    if not text:
+        text, source = plain_text(read_pdf_text(client, minutes.file_id) or ""), "PDF"
+    logger.info(
+        f"Minutes {minutes.file_id}: {len(text)} chars of text (from the {source})"
+    )
     return text or None
+
+
+def read_pdf_text(client: CivicClerkClient, file_id: int) -> str | None:
+    """The text layer of the PDF file ``file_id``, or None if it can't be read.
+
+    Reads at most ``MAX_PDF_BYTES`` of it and ``MAX_PDF_PAGES`` pages. Never
+    raises: a failed download, an oversized file or one pypdf can't parse is
+    logged and gives None.
+    """
+    try:
+        data = with_retries(
+            f"minutes {file_id} PDF", lambda: _download_bounded(client, file_id)
+        )
+    except CivicClerkError as e:
+        logger.warning(f"Could not download minutes {file_id} ({e})")
+        return None
+    if data is None:
+        logger.warning(f"Minutes {file_id} PDF is over the {MAX_PDF_BYTES}-byte limit")
+        return None
+    try:
+        pages = islice(PdfReader(BytesIO(data)).pages, MAX_PDF_PAGES)
+        return "\n".join(page.extract_text() or "" for page in pages)
+    except Exception as e:  # noqa: BLE001 - pypdf raises many types on bad input
+        logger.warning(
+            f"Could not read minutes {file_id} PDF ({type(e).__name__}: {e})"
+        )
+        return None
+
+
+def _download_bounded(client: CivicClerkClient, file_id: int) -> bytes | None:
+    """The file's bytes, or None if it is over ``MAX_PDF_BYTES``."""
+    with client.open_file(file_id) as stream:
+        if stream.size is not None and stream.size > MAX_PDF_BYTES:
+            return None
+        data = bytearray()
+        for chunk in stream.iter_bytes():
+            data += chunk
+            if len(data) > MAX_PDF_BYTES:
+                return None
+        return bytes(data)
 
 
 def get_recent_minutes(
