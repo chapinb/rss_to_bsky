@@ -479,15 +479,17 @@ class NorwalkFeeds:
         return posts
 
     def get_minutes_summaries(self, seen: SeenPosts) -> list[Post]:
-        """AI summaries of the minutes posted this run, as replies to them.
+        """AI summaries of fresh minutes, as replies to their minutes posts.
 
-        Only minutes ``get_meeting_minutes`` posted in this same run are
-        summarized, so the LLM is asked once per minutes post, never on every
-        hourly run, and runs that post no minutes make no requests (to
-        CivicClerk or the LLM). Each summary replies to the minutes post: in
-        the meeting post's thread if the minutes replied to it, else in the
-        minutes post's own thread. Minutes with little or no text (the API
-        extracts none from scanned PDFs) are skipped without asking.
+        Every run tries each set of minutes ``get_meeting_minutes`` found
+        (published in the last ``MINUTES_FRESHNESS``) whose minutes post is
+        out, this run or earlier, and that has no summary in the history yet.
+        So minutes whose text CivicClerk hasn't extracted yet (it returns none
+        for hours after publishing), or whose summary failed, are tried again
+        by the next run, and the LLM is never asked twice for a summary that
+        went out. Each summary replies to the minutes post: in the meeting
+        post's thread if the minutes replied to it, else in the minutes post's
+        own thread. Minutes with little or no text are skipped without asking.
 
         Best effort and never a run failure, like ``get_agenda_summaries``:
         whatever goes wrong costs only summaries, which are logged and
@@ -499,7 +501,8 @@ class NorwalkFeeds:
             posted = [
                 (minutes, sent)
                 for minutes, post in self._minutes
-                if (sent := self._variant_sent(post, seen)) is not None
+                if (sent := self._variant_posted(post, seen)) is not None
+                and not self._summarized(sent, seen)
             ]
             if posted:
                 client = norwalk_civic_clerk.CivicClerkClient(
@@ -521,15 +524,25 @@ class NorwalkFeeds:
         return posts
 
     @staticmethod
-    def _variant_sent(post: Post, seen: SeenPosts) -> Post | None:
-        """Which of ``post`` and its fallbacks was sent this run, if any."""
+    def _variant_posted(post: Post, seen: SeenPosts) -> Post | None:
+        """Which of ``post`` and its fallbacks is out (this run or before), if any.
+
+        ``publish`` has pointed the reply variants it could resolve at their
+        posts, so their keys are known; the others have none.
+        """
         variant: Post | None = post
         while variant is not None:
             key = seen.key(variant)
-            if key is not None and seen.added_this_run(key):
+            if key is not None and key in seen.keys:
                 return variant
             variant = variant.fallback
         return None
+
+    @staticmethod
+    def _summarized(sent: Post, seen: SeenPosts) -> bool:
+        """Whether the minutes post ``sent`` already has a summary in its thread."""
+        root = seen.ref(sent.reply_root if sent.reply_root is not None else sent)
+        return root is None or reply_key(root.uri, "minutes-summary") in seen.keys
 
     @staticmethod
     def _minutes_summary(

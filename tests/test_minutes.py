@@ -371,11 +371,70 @@ def test_minutes_replying_to_the_meeting_post_are_summarized_in_its_thread():
 
     # The summaries are read back from the history as such.
     assert reply_key(meeting.uri, "minutes-summary") in runs.history
-    # Later runs that post no minutes read no minutes and don't ask the LLM.
+    # Later runs don't read or summarize minutes already summarized; only the
+    # ones still without text are read again.
     runs.file_requests.clear()
     assert runs.run(datetime(2026, 10, 30, 14, tzinfo=EASTERN), summaries=True) == []
+    assert len(runs.file_requests) == len(posts) - 4
+    assert runs.summarizer.call_count == 2
+
+
+def test_minutes_whose_text_comes_later_are_summarized_in_the_meeting_thread():
+    # CivicClerk returns no text until it has extracted it, hours after the
+    # minutes are published.
+    runs = Runs()
+    runs.run(datetime(2026, 10, 27, 7, tzinfo=EASTERN), meetings=True)
+    runs.run(datetime(2026, 10, 28, 7, tzinfo=EASTERN), meetings=True)
+    runs.texts = {}
+    posts = runs.run(datetime(2026, 10, 30, 13, tzinfo=EASTERN), summaries=True)
+    assert summaries(posts) == []
+    council = next(p for p in posts if "City Council" in text(p))
+
+    runs.texts = None  # The saved texts, as extracted by now.
+    later = runs.run(datetime(2026, 10, 30, 14, tzinfo=EASTERN), summaries=True)
+
+    assert runs.result == (2, 0)
+    assert len(summaries(later)) == 2
+    council_summary = next(
+        p
+        for p in summaries(later)
+        if p.reply.parent.uri == sent_ref(runs, council).uri
+    )
+    meeting = runs.meeting_post("City Council", date(2026, 10, 27))
+    assert council_summary.reply.root.uri == meeting.uri
+
+
+def test_standalone_minutes_whose_text_comes_later_are_summarized():
+    runs = Runs()
+    runs.texts = {}
+    posted = runs.run(datetime(2026, 11, 6, 12, tzinfo=EASTERN), summaries=True)
+    assert len(posted) == 2
+    runs.summarizer.assert_not_called()
+
+    runs.texts = None
+    later = runs.run(datetime(2026, 11, 6, 13, tzinfo=EASTERN), summaries=True)
+
+    assert [r.reply.root.uri for r in later] == [
+        sent_ref(runs, posted[0]).uri,
+        sent_ref(runs, posted[1]).uri,
+    ]
+    assert [text(r) for r in later] == [SUMMARY, SUMMARY]
+    # Once summarized, they aren't read or summarized again.
+    runs.file_requests.clear()
+    assert runs.run(datetime(2026, 11, 6, 14, tzinfo=EASTERN), summaries=True) == []
     assert runs.file_requests == []
     assert runs.summarizer.call_count == 2
+
+
+def test_minutes_are_retried_only_while_fresh():
+    runs = Runs()
+    runs.texts = {}
+    runs.run(datetime(2026, 11, 6, 12, tzinfo=EASTERN), summaries=True)
+    runs.file_requests.clear()
+    runs.texts = None
+    # Four days on: past MINUTES_FRESHNESS (other minutes are fresh by then).
+    runs.run(datetime(2026, 11, 10, 12, tzinfo=EASTERN), summaries=True)
+    assert not {16369, 16373} & set(runs.file_requests)
 
 
 def test_standalone_minutes_are_summarized_in_their_own_thread():
@@ -417,13 +476,14 @@ def test_unreadable_minutes_skip_the_summary_not_the_minutes():
     runs.summarizer.assert_not_called()
 
 
-def test_failed_minutes_summary_is_not_retried_by_later_runs():
+def test_failed_minutes_summary_is_retried_by_the_next_run():
     runs = Runs()
     runs.summarizer.return_value = None
     assert len(runs.run(datetime(2026, 11, 6, 12, tzinfo=EASTERN), summaries=True)) == 2
     runs.summarizer.return_value = "• Item one"
-    assert runs.run(datetime(2026, 11, 6, 13, tzinfo=EASTERN), summaries=True) == []
-    assert runs.summarizer.call_count == 2
+    later = runs.run(datetime(2026, 11, 6, 13, tzinfo=EASTERN), summaries=True)
+    assert len(summaries(later)) == 2
+    assert runs.summarizer.call_count == 4
 
 
 def test_without_an_llm_key_minutes_are_only_logged(caplog):
