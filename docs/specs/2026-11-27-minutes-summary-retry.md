@@ -41,12 +41,17 @@ Almost no minutes get an AI summary. The job asks CivicClerk for a minutes file'
 - 2026-11-27: Fall back to local extraction immediately when the API text is empty, rather than waiting some hours first: 36 of 37 PDFs have a text layer, and one small download beats a summary that comes hours late. The API text stays first because it costs no download.
 - 2026-11-27 (slice 1): Two tests encoded the old "asked once, never retried" requirement (`test_failed_minutes_summary_is_not_retried_by_later_runs`, and the end of the meeting-thread summary test); they were rewritten to the new requirement, not relaxed. A minutes post whose thread root can't be found is treated as summarized (skipped), since its reply couldn't be threaded anyway.
 - 2026-11-27 (slice 2): The PDF is read only when the API text is empty, not when it is merely short: every non-empty API text seen matched the PDF's (pypdf and the API agree to the char after `plain_text` on most of the 37 files), so a short one is a short file. pypdf took under 0.4 s per file.
+- 2026-11-27 (review): Minutes that replied to a meeting post that then left the 30-day history match only their standalone variant; without a guard a retry posted a second summary in the wrong thread. `PostRef.is_reply` (set by `published_posts` and `SeenPosts.add`) lets `_summarized` skip them, since their real thread can't be resolved. Fixed.
+- 2026-11-27 (review): Decompression bombs are bounded by pypdf's own per-stream limit (`pypdf.filters.ZLIB_MAX_OUTPUT_LENGTH`, 75 MB) on top of `MAX_PDF_BYTES`/`MAX_PDF_PAGES`, and the source is the city's own API; no extra time budget added.
+- 2026-11-27 (review): Rejected the finding that a run with the LLM already off still reads one minutes text: `enabled()` is checked before each file, including the first.
 - 2026-11-27: No OCR, and no Paperless-ngx. Paperless would solve the scans with a dedicated, permission-limited user, but it adds an async upload-and-poll step to the hourly run and couples a public bot to the private archive, all for about one file in 37.
 
 ## Deferred
 
 - libmuni's `get_file_text` docstring should say an empty body often means the text isn't extracted yet.
 - If scans turn out more common than 1 in 37, revisit OCR.
+- A scan (no text layer) is downloaded and parsed every hourly run while fresh (~72 times, ~0.4 MB each). Cheap enough for now; remembering "no text layer" would need state or a history marker.
+- Replaced minutes (a meeting's first minutes file deleted and another published) would be treated as already posted via the thread's `minutes` reply key and summarized under the old file's post. Fixing it means keying replies sent this run by their card link too (`SeenPosts.add`), a wider dedup change; rare, and the summary is still of that meeting's minutes.
 
 ## Done criteria
 
@@ -57,6 +62,6 @@ Almost no minutes get an AI summary. The job asks CivicClerk for a minutes file'
 ## Slices
 
 - [x] 1. Tracer: summarize fresh minutes posted on an earlier run, found via the history, skipping ones already summarized (tests in `tests/test_minutes.py`; `norwalk_feeds.py`).
-- [x] 2. PDF fallback: when API text is empty or short, download and extract with pypdf, bounded by size and pages (tests in `tests/test_norwalk_civic_clerk.py`; `norwalk_civic_clerk.py`, `pyproject.toml`, `uv.lock`).
+- [x] 2. PDF fallback: when API text is empty, download and extract with pypdf, bounded by size and pages (tests in `tests/test_minutes.py`; `norwalk_civic_clerk.py`, `pyproject.toml`, `uv.lock`).
 - [x] 3. Docs: CLAUDE.md minutes-summaries paragraph and the "scanned, or too short" log wording (`CLAUDE.md`, `norwalk_feeds.py`).
 - [ ] 4. Deploy: push, pin the image digest in the k8s repo, sync, and check the next run's logs.
