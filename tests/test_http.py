@@ -196,6 +196,28 @@ def test_public_https_refuses_hosts_that_bypass_the_egress_proxy(monkeypatch, ur
     http.public_https(httpx.URL("https://example.com/x.png"))  # Others pass.
 
 
+@pytest.mark.parametrize(
+    "no_proxy, url",
+    [
+        # Everything goes around the proxy: nothing can be trusted to it.
+        ("*", "https://example.com/x.png"),
+        # IPs and networks that go direct, public or not.
+        ("93.184.215.0/24", "https://93.184.215.14/x.png"),
+        ("93.184.215.14", "https://93.184.215.14/x.png"),
+        ("[2606:4700::1111]", "https://[2606:4700::1111]/x.png"),
+        # Entries written as URLs, with ports, or with trailing dots.
+        ("https://cams.example.com", "https://cams.example.com/x.png"),
+        ("cams.example.com:8443", "https://cams.example.com/x.png"),
+        ("lan.example.", "https://grafana.lan.example/x.png"),
+        ("*.lan.example", "https://grafana.lan.example/x.png"),
+    ],
+)
+def test_public_https_parses_no_proxy_like_httpx(monkeypatch, no_proxy, url):
+    monkeypatch.setenv("NO_PROXY", no_proxy)
+    with pytest.raises(http.FetchRefused):
+        http.public_https(httpx.URL(url))
+
+
 def test_public_https_reads_lowercase_no_proxy_too(monkeypatch):
     monkeypatch.delenv("NO_PROXY", raising=False)
     monkeypatch.setenv("no_proxy", ".lan.example")

@@ -12,6 +12,8 @@ import re
 import time
 import zlib
 from collections.abc import Callable
+from dataclasses import dataclass
+from urllib.parse import urlsplit
 
 import httpx
 
@@ -79,6 +81,9 @@ def public_https(url: httpx.URL) -> None:
     if url.port not in (None, 443):
         raise FetchRefused(f"Not the https port: {url}")
     host = url.host.lower().rstrip(".")
+    bypass = ProxyBypass.from_environment()
+    if bypass.everything:
+        raise FetchRefused(f"NO_PROXY=* sends {url} around the egress proxy")
     try:
         address = ipaddress.ip_address(host)
     except ValueError:
@@ -86,13 +91,13 @@ def public_https(url: httpx.URL) -> None:
             "." not in host
             or not TLD.fullmatch(host.rsplit(".", 1)[-1])
             or _under(host, PRIVATE_SUFFIXES)
-            or _under(host, _proxy_bypass_suffixes())
+            or _under(host, bypass.names)
         ):
             raise FetchRefused(f"Not a public host: {url}") from None
         return
     if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped:
         address = address.ipv4_mapped
-    if not address.is_global:
+    if not address.is_global or any(address in n for n in bypass.networks):
         raise FetchRefused(f"Not a public host: {url}")
 
 
@@ -101,17 +106,44 @@ def _under(host: str, suffixes) -> bool:
     return any(host == s or host.endswith(f".{s}") for s in suffixes)
 
 
-def _proxy_bypass_suffixes() -> list[str]:
-    """The domain names in ``NO_PROXY``/``no_proxy`` (IPs and CIDRs are
-    covered by the address check; ``*`` is ignored)."""
-    entries = os.environ.get("NO_PROXY", "") + "," + os.environ.get("no_proxy", "")
-    suffixes = []
-    for entry in entries.split(","):
-        entry = entry.strip().lower().lstrip("*").lstrip(".")
-        if not entry or "/" in entry or entry.replace(".", "").isdigit():
-            continue
-        suffixes.append(entry.split(":")[0])
-    return suffixes
+@dataclass(frozen=True)
+class ProxyBypass:
+    """What ``NO_PROXY``/``no_proxy`` sends around the egress proxy, read the
+    way httpx reads it: ``*`` for everything, IPs and CIDR networks, and
+    names (optionally ``*.``/``.``-prefixed, as URLs, or with a port), each
+    covering the names under it."""
+
+    everything: bool = False
+    names: tuple[str, ...] = ()
+    networks: tuple[ipaddress.IPv4Network | ipaddress.IPv6Network, ...] = ()
+
+    @classmethod
+    def from_environment(cls) -> "ProxyBypass":
+        raw = os.environ.get("NO_PROXY", "") + "," + os.environ.get("no_proxy", "")
+        everything, names, networks = False, [], []
+        for entry in (e.strip().lower() for e in raw.split(",")):
+            if not entry:
+                continue
+            if entry == "*":
+                everything = True
+                continue
+            if "://" in entry:
+                entry = urlsplit(entry).netloc
+            host = _without_port(entry)
+            try:
+                networks.append(ipaddress.ip_network(host, strict=False))
+            except ValueError:
+                names.append(host.removeprefix("*").strip("."))
+        return cls(everything, tuple(n for n in names if n), tuple(networks))
+
+
+def _without_port(entry: str) -> str:
+    """``entry`` without a ``:port``, and without the brackets of an IPv6 host."""
+    if entry.startswith("["):
+        return entry[1 : entry.find("]")] if "]" in entry else entry[1:]
+    if entry.count(":") == 1:
+        return entry.split(":")[0]
+    return entry  # A bare IPv6 address or network, or no port.
 
 
 def get(
