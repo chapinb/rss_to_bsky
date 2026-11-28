@@ -30,6 +30,8 @@ USER_AGENT = "rss-post (Norwalk CT Bluesky bot)"
 # The encodings ``get`` can inflate within its byte cap (zlib's ``max_length``);
 # brotli and zstd aren't asked for, and are refused if sent anyway.
 ACCEPT_ENCODING = "gzip, deflate"
+# The well-known NAT64 prefix (RFC 6052), which Python counts as global.
+NAT64 = ipaddress.ip_network("64:ff9b::/96")
 
 
 def _deflate(first: bytes):
@@ -93,7 +95,8 @@ def public_https(url: httpx.URL) -> None:
         raise FetchRefused(f"Not an https URL: {url}")
     if url.port not in (None, 443):
         raise FetchRefused(f"Not the https port: {url}")
-    host = url.host.lower().rstrip(".")
+    # The ASCII (punycode) form, so internationalized TLDs match ``TLD``.
+    host = url.raw_host.decode("ascii").lower().rstrip(".")
     bypass = ProxyBypass.from_environment()
     if bypass.everything:
         raise FetchRefused(f"NO_PROXY=* sends {url} around the egress proxy")
@@ -108,8 +111,12 @@ def public_https(url: httpx.URL) -> None:
         ):
             raise FetchRefused(f"Not a public host: {url}") from None
         return
-    if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped:
-        address = address.ipv4_mapped
+    if isinstance(address, ipaddress.IPv6Address):
+        if address.ipv4_mapped:
+            address = address.ipv4_mapped
+        elif address in NAT64:
+            # Reaches the IPv4 address in its last 32 bits.
+            address = ipaddress.IPv4Address(int(address) & 0xFFFFFFFF)
     if not address.is_global or any(address in n for n in bypass.networks):
         raise FetchRefused(f"Not a public host: {url}")
 

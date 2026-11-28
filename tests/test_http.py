@@ -196,6 +196,7 @@ def test_refusals_are_http_errors_for_callers():
         "https://cdn.example.co.uk/a.jpg",
         "https://93.184.215.14/a.jpg",
         "https://xn--nrwalk-fya.example/a.jpg",
+        "https://пример.рф/a.jpg",  # A public internationalized TLD.
     ],
 )
 def test_public_https_allows_public_https_urls(url):
@@ -216,6 +217,8 @@ def test_public_https_allows_public_https_urls(url):
         "https://100.64.0.1/a.jpg",
         "https://[::1]/a.jpg",
         "https://[::ffff:10.0.0.1]/a.jpg",
+        "https://[64:ff9b::a00:1]/a.jpg",  # NAT64 for 10.0.0.1.
+        "https://[2002:a00:1::1]/a.jpg",  # 6to4 for 10.0.0.1.
         "https://2130706433/a.jpg",  # 127.0.0.1 as one number.
         "https://0x7f000001/a.jpg",
         "https://intranet/a.jpg",  # No public TLD.
