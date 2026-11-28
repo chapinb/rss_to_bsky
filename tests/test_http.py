@@ -87,3 +87,52 @@ def test_http_errors_raise():
 
 def test_refusals_are_http_errors_for_callers():
     assert issubclass(http.FetchRefused, httpx.HTTPError)
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://example.com/a.jpg",
+        "https://cdn.example.co.uk/a.jpg",
+        "https://93.184.215.14/a.jpg",
+        "https://xn--nrwalk-fya.example/a.jpg",
+    ],
+)
+def test_public_https_allows_public_https_urls(url):
+    http.public_https(httpx.URL(url))
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "http://example.com/a.jpg",
+        "file:///etc/passwd",
+        "https://localhost/a.jpg",
+        "https://printer.localhost/a.jpg",
+        "https://127.0.0.1/a.jpg",
+        "https://10.0.0.5/a.jpg",
+        "https://192.168.27.15/a.jpg",
+        "https://169.254.169.254/latest/meta-data",
+        "https://100.64.0.1/a.jpg",
+        "https://[::1]/a.jpg",
+        "https://[::ffff:10.0.0.1]/a.jpg",
+        "https://2130706433/a.jpg",  # 127.0.0.1 as one number.
+        "https://0x7f000001/a.jpg",
+        "https://intranet/a.jpg",  # No public TLD.
+    ],
+)
+def test_public_https_refuses_other_urls(url):
+    with pytest.raises(http.FetchRefused):
+        http.public_https(httpx.URL(url))
+
+
+def test_redirect_targets_are_checked_too():
+    requested = []
+
+    def handler(request):
+        requested.append(str(request.url))
+        return httpx.Response(302, headers={"Location": "https://10.0.0.5/admin"})
+
+    with pytest.raises(http.FetchRefused):
+        get("https://example.com/a.jpg", handler, check_url=http.public_https)
+    assert requested == ["https://example.com/a.jpg"]

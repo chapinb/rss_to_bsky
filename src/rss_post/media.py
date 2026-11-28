@@ -10,16 +10,32 @@ from urllib.parse import urljoin
 import httpx
 from bs4 import BeautifulSoup
 
+from rss_post import http
 from rss_post.logging_config import get_logger
 
 logger = get_logger(__name__)
 
 # Bluesky rejects blobs for app.bsky.embed.external thumbs above this size.
 MAX_THUMB_BYTES = 1_000_000
-REQUEST_TIMEOUT = 10.0
+# A page read for its og:image; the tag is in the <head>.
+MAX_PAGE_BYTES = 2_000_000
+# Total time for one page or image, redirects included.
+REQUEST_TIMEOUT = 15.0
 USER_AGENT = "rss-post (Bluesky link card fetcher)"
 
-_IMAGE_TYPES = ("image/jpeg", "image/png", "image/webp", "image/gif")
+
+def _is_webp(data: bytes) -> bool:
+    return data[:4] == b"RIFF" and data[8:12] == b"WEBP"
+
+
+# Each accepted thumb type, and how its files start: the header is only the
+# server's word, and anything uploaded becomes a blob on the account.
+_IMAGE_TYPES = {
+    "image/jpeg": lambda data: data.startswith(b"\xff\xd8\xff"),
+    "image/png": lambda data: data.startswith(b"\x89PNG\r\n\x1a\n"),
+    "image/gif": lambda data: data[:6] in (b"GIF87a", b"GIF89a"),
+    "image/webp": _is_webp,
+}
 
 
 def _is_image(media: dict) -> bool:
@@ -53,19 +69,22 @@ def image_from_item(item) -> str | None:
     return None
 
 
-def _get(url: str) -> httpx.Response:
-    return httpx.get(
+def _get(url: str, max_bytes: int) -> httpx.Response:
+    """A page or image from a feed-chosen URL: public ``https`` hosts only,
+    bounded in size and time (``http.get``)."""
+    return http.get(
         url,
-        follow_redirects=True,
+        max_bytes=max_bytes,
         timeout=REQUEST_TIMEOUT,
-        headers={"User-Agent": USER_AGENT},
+        check_url=http.public_https,
+        user_agent=USER_AGENT,
     )
 
 
 def og_image_from_page(page_url: str) -> str | None:
     """The page's ``og:image`` (or ``twitter:image``), as a site would show it."""
     try:
-        response = _get(page_url)
+        response = _get(page_url, MAX_PAGE_BYTES)
         response.raise_for_status()
     except httpx.HTTPError as e:
         logger.debug(f"Could not fetch {page_url} for og:image: {e}")
@@ -108,7 +127,7 @@ def download_thumbnail(image_url: str | Path) -> bytes | None:
         return image
 
     try:
-        response = _get(image_url)
+        response = _get(image_url, MAX_THUMB_BYTES)
         response.raise_for_status()
     except httpx.HTTPError as e:
         logger.warning(f"Could not download thumbnail {image_url}: {e}")
@@ -117,6 +136,9 @@ def download_thumbnail(image_url: str | Path) -> bytes | None:
     content_type = response.headers.get("content-type", "").split(";")[0].strip()
     if content_type not in _IMAGE_TYPES:
         logger.warning(f"Thumbnail {image_url} is not an image ({content_type!r})")
+        return None
+    if not _IMAGE_TYPES[content_type](response.content):
+        logger.warning(f"Thumbnail {image_url} isn't the {content_type} it claims")
         return None
     if len(response.content) > MAX_THUMB_BYTES:
         logger.warning(

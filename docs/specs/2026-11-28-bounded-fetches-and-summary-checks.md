@@ -56,7 +56,7 @@ Fix the three findings the 2026-11-28 security review (Fable) ranked first, all 
 ## Slices
 
 - [x] 1. Tracer: `http.get_bounded` (byte cap, total deadline, `httpx.HTTPError` subclass) and `read_rss` fetching through it (tests in `tests/test_http.py`, `tests/test_read_rss.py`; `http.py`, `read_rss.py`).
-- [ ] 2. Thumbnails: `https`/host checks on every hop, caps, and magic bytes (tests in `tests/test_media.py`, `tests/test_http.py`; `media.py`, `http.py`).
+- [x] 2. Thumbnails: `https`/host checks on every hop, caps, and magic bytes (tests in `tests/test_media.py`, `tests/test_http.py`; `media.py`, `http.py`).
 - [ ] 3. Summary check: bullets only, at most 3, no URL/domain/handle/hashtag (tests in `tests/test_norwalk_feeds.py` or wherever `fit_bullets` is tested; `norwalk_feeds.py`).
 - [ ] 4. Docs: CLAUDE.md lines on fetching and summaries (`CLAUDE.md`).
 - [ ] 5. Deploy: push, pin the digest, sync, check the next run.

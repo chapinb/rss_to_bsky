@@ -6,6 +6,8 @@ hold an hourly run until the pod's deadline kills it, losing every source
 after it. ``get`` caps both the total time and the bytes read.
 """
 
+import ipaddress
+import re
 import time
 from collections.abc import Callable
 
@@ -23,6 +25,36 @@ USER_AGENT = "rss-post (Norwalk CT Bluesky bot)"
 
 class FetchRefused(httpx.HTTPError):
     """The response was too large or too slow, or the URL isn't allowed."""
+
+
+# A top-level domain: letters (or an IDNA ``xn--`` label), never all digits,
+# so a host like ``2130706433`` or ``0x7f000001`` (127.0.0.1) isn't a name.
+TLD = re.compile(r"(?:[a-z]{2,63}|xn--[a-z0-9-]{1,59})")
+
+
+def public_https(url: httpx.URL) -> None:
+    """Refuse (``FetchRefused``) anything but ``https`` to a public host.
+
+    For URLs taken from feeds or the pages they link (thumbnails), so a feed
+    can't point the bot at the cluster or the LAN. This judges the URL only:
+    a public name that resolves to a private address has to be stopped where
+    names are resolved (the egress proxy).
+    """
+    if url.scheme != "https":
+        raise FetchRefused(f"Not an https URL: {url}")
+    host = url.host.lower().rstrip(".")
+    if host == "localhost" or host.endswith(".localhost"):
+        raise FetchRefused(f"Not a public host: {url}")
+    try:
+        address = ipaddress.ip_address(host)
+    except ValueError:
+        if not TLD.fullmatch(host.rsplit(".", 1)[-1]) or "." not in host:
+            raise FetchRefused(f"Not a public host: {url}") from None
+        return
+    if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped:
+        address = address.ipv4_mapped
+    if not address.is_global:
+        raise FetchRefused(f"Not a public host: {url}")
 
 
 def get(

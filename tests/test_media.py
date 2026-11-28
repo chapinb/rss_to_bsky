@@ -1,9 +1,11 @@
+from contextlib import contextmanager
 from unittest.mock import patch
 
 import feedparser
 import httpx
+import pytest
 
-from rss_post import media
+from rss_post import http, media
 from rss_post.post import Post
 from tests.conftest import FIXTURES
 
@@ -91,11 +93,26 @@ def test_find_thumbnail_prefers_feed_image():
     og.assert_not_called()
 
 
-def test_download_thumbnail_accepts_images():
+JPEG = b"\xff\xd8\xff\xe0\x00\x10JFIF\x00" + b"\x00" * 20
+PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 20
+GIF = b"GIF89a" + b"\x00" * 20
+WEBP = b"RIFF\x00\x00\x00\x00WEBPVP8 " + b"\x00" * 20
+
+
+@pytest.mark.parametrize(
+    "content_type, image",
+    [
+        ("image/jpeg", JPEG),
+        ("image/png", PNG),
+        ("image/gif", GIF),
+        ("image/webp", WEBP),
+    ],
+)
+def test_download_thumbnail_accepts_images(content_type, image):
     url = "https://example.com/a.jpg"
-    ok = response(url, content=b"jpeg", headers={"content-type": "image/jpeg"})
+    ok = response(url, content=image, headers={"content-type": content_type})
     with patch("rss_post.media._get", return_value=ok):
-        assert media.download_thumbnail(url) == b"jpeg"
+        assert media.download_thumbnail(url) == image
 
 
 def test_download_thumbnail_rejects_non_images_and_oversize():
@@ -103,13 +120,85 @@ def test_download_thumbnail_rejects_non_images_and_oversize():
     html = response(url, content=b"<html>", headers={"content-type": "text/html"})
     huge = response(
         url,
-        content=b"x" * (media.MAX_THUMB_BYTES + 1),
+        content=PNG + b"x" * media.MAX_THUMB_BYTES,
         headers={"content-type": "image/png"},
     )
     with patch("rss_post.media._get", return_value=html):
         assert media.download_thumbnail(url) is None
     with patch("rss_post.media._get", return_value=huge):
         assert media.download_thumbnail(url) is None
+
+
+def test_download_thumbnail_rejects_images_that_are_not_what_they_claim():
+    url = "https://example.com/a.jpg"
+    for content in (b"<html><script>", PNG):
+        fake = response(url, content=content, headers={"content-type": "image/jpeg"})
+        with patch("rss_post.media._get", return_value=fake):
+            assert media.download_thumbnail(url) is None
+
+
+# Before the autouse ``no_thumbnail_network`` fixture replaces it.
+REAL_MEDIA_GET = media._get
+
+
+@contextmanager
+def served(handler):
+    """Real fetching (``media._get``, ``http.get``) against ``handler``
+    instead of the network."""
+    transport = httpx.MockTransport(handler)
+    real_get = http.get
+    with (
+        patch.object(media, "_get", REAL_MEDIA_GET),
+        patch.object(
+            http,
+            "get",
+            side_effect=lambda url, **kw: real_get(
+                url, client=httpx.Client(transport=transport), **kw
+            ),
+        ),
+    ):
+        yield
+
+
+def test_thumbnails_are_fetched_only_from_public_https_urls():
+    requested = []
+
+    def handler(request):
+        requested.append(str(request.url))
+        return httpx.Response(200, content=JPEG, headers={"content-type": "image/jpeg"})
+
+    with served(handler):
+        assert media.download_thumbnail("http://example.com/a.jpg") is None
+        assert media.download_thumbnail("https://192.168.27.15/a.jpg") is None
+        assert media.og_image_from_page("https://localhost/news") is None
+        assert media.download_thumbnail("https://example.com/a.jpg") == JPEG
+    assert requested == ["https://example.com/a.jpg"]
+
+
+def test_thumbnail_download_stops_at_the_size_limit():
+    sent = []
+
+    def handler(request):
+        def body():
+            for _ in range(100):
+                sent.append(1)
+                yield b"\x00" * 100_000
+
+        return httpx.Response(
+            200, content=body(), headers={"content-type": "image/png"}
+        )
+
+    with served(handler):
+        assert media.download_thumbnail("https://example.com/huge.png") is None
+    assert len(sent) <= media.MAX_THUMB_BYTES // 100_000 + 2
+
+
+def test_page_read_for_its_og_image_is_size_limited():
+    def handler(request):
+        return httpx.Response(200, content=b"<html>" + b" " * media.MAX_PAGE_BYTES)
+
+    with served(handler):
+        assert media.og_image_from_page("https://example.com/news/1") is None
 
 
 def test_download_thumbnail_http_error_is_none():
