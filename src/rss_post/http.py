@@ -181,16 +181,26 @@ def _read_bounded(
         raise FetchRefused(f"{response.url} has an unsupported encoding {encoding!r}")
     inflater = _DECOMPRESSORS[encoding]()
     body = bytearray()
+    received = 0
     for raw in response.iter_raw():
+        # Compressed or not, what arrives is capped too.
+        received += len(raw)
+        if received > max_bytes:
+            raise too_large
         data = raw
         while data:
             if inflater is None:
                 piece, data = data, b""
             else:
+                if inflater.eof:
+                    # zlib would keep anything after the end, uncapped.
+                    raise FetchRefused(f"{response.url} has data after its body")
                 # At most one byte past the cap, so going over is detected
                 # without inflating any further.
                 piece = inflater.decompress(data, max_bytes - len(body) + 1)
                 data = inflater.unconsumed_tail
+                if inflater.unused_data:
+                    raise FetchRefused(f"{response.url} has data after its body")
             body += piece
             if len(body) > max_bytes:
                 raise too_large

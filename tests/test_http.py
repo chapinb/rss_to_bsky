@@ -69,6 +69,19 @@ def test_compressed_body_is_never_inflated_past_the_cap():
     assert peak < 10_000_000
 
 
+def test_bytes_after_the_compressed_body_are_refused():
+    # zlib keeps whatever follows the end of the stream, uncapped.
+    trailing = gzip.compress(b"<rss/>") + b"\x00" * 2_000_000
+
+    def handler(request):
+        return httpx.Response(
+            200, content=streamed(trailing), headers={"Content-Encoding": "gzip"}
+        )
+
+    with pytest.raises(http.FetchRefused):
+        get(handler=handler, max_bytes=1_000_000)
+
+
 def test_only_encodings_it_can_bound_are_asked_for_or_accepted():
     seen = []
 
