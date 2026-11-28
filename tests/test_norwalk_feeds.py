@@ -21,7 +21,7 @@ from rss_post.norwalk_feeds import (
     publish,
 )
 from rss_post.post import Post
-from rss_post.read_rss import read_rss_items
+from rss_post.read_rss import parse_feed
 from tests.conftest import FIXTURES
 from tests.test_norwalk_civic_clerk import EVENTS, fake_client, saved_agenda
 
@@ -33,7 +33,7 @@ def feeds_from_fixture(name: str):
     """Patch feed reading so any URL returns the named fixture's items."""
     return patch(
         "rss_post.norwalk_feeds.read_rss_items",
-        side_effect=lambda _url: read_rss_items(str(FIXTURES / name)),
+        side_effect=lambda url: parse_feed((FIXTURES / name).read_bytes(), url).entries,
     )
 
 

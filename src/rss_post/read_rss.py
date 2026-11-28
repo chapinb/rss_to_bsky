@@ -1,11 +1,18 @@
 import time
 
 import feedparser
+import httpx
 from feedparser import FeedParserDict
 
+from rss_post import http
 from rss_post.logging_config import get_logger
 
 logger = get_logger(__name__)
+
+# Bounds on fetching a feed (see ``http.get``): Norwalk's and CT Mirror's
+# feeds are well under 1 MB.
+FEED_MAX_BYTES = 10_000_000
+FEED_TIMEOUT = 30.0
 
 
 class FeedUnavailableError(Exception):
@@ -15,16 +22,29 @@ class FeedUnavailableError(Exception):
 def read_rss(url) -> FeedParserDict:
     """Fetch and parse a feed.
 
-    feedparser never raises on network or HTTP errors; it returns an empty
-    feed instead. Those cases are surfaced as ``FeedUnavailableError`` so a
-    broken source is reported rather than looking like "no new items".
+    The fetch is bounded in time and size (``http.get``); feedparser only
+    parses the bytes, so it never opens a connection of its own (it has no
+    timeout). Fetch failures and feeds with nothing parseable are raised as
+    ``FeedUnavailableError``, so a broken source is reported rather than
+    looking like "no new items".
     """
     logger.info(f"Fetching RSS feed from: {url}")
-    feed = feedparser.parse(url)
+    try:
+        response = http.get(url, max_bytes=FEED_MAX_BYTES, timeout=FEED_TIMEOUT)
+    except httpx.HTTPError as e:
+        raise FeedUnavailableError(f"Could not fetch {url}: {e}") from e
+    return parse_feed(response.content, str(response.url), response.headers)
 
-    status = feed.get("status")
-    if status is not None and status >= 400:
-        raise FeedUnavailableError(f"HTTP {status} from {url}")
+
+def parse_feed(
+    content: bytes, url: str, headers: httpx.Headers | None = None
+) -> FeedParserDict:
+    """Parse a fetched feed; ``url`` resolves its relative links."""
+    # feedparser calls a feed with headers but no content type malformed.
+    content_type = (headers or {}).get("content-type", "application/xml")
+    response_headers = {"content-location": url, "content-type": content_type}
+    feed = feedparser.parse(content, response_headers=response_headers)
+
     if feed.bozo and not feed.entries:
         raise FeedUnavailableError(f"Could not read {url}: {feed.bozo_exception}")
     if feed.bozo:
