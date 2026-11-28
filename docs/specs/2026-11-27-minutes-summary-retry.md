@@ -58,5 +58,5 @@ Almost no minutes get an AI summary. The job asks CivicClerk for a minutes file'
 
 - [x] 1. Tracer: summarize fresh minutes posted on an earlier run, found via the history, skipping ones already summarized (tests in `tests/test_minutes.py`; `norwalk_feeds.py`).
 - [x] 2. PDF fallback: when API text is empty or short, download and extract with pypdf, bounded by size and pages (tests in `tests/test_norwalk_civic_clerk.py`; `norwalk_civic_clerk.py`, `pyproject.toml`, `uv.lock`).
-- [ ] 3. Docs: CLAUDE.md minutes-summaries paragraph and the "scanned, or too short" log wording (`CLAUDE.md`, `norwalk_feeds.py`).
+- [x] 3. Docs: CLAUDE.md minutes-summaries paragraph and the "scanned, or too short" log wording (`CLAUDE.md`, `norwalk_feeds.py`).
 - [ ] 4. Deploy: push, pin the image digest in the k8s repo, sync, and check the next run's logs.

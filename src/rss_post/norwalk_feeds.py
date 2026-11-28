@@ -554,7 +554,8 @@ class NorwalkFeeds:
         if text is None or len(text) < MIN_MINUTES_CHARS:
             logger.info(
                 f"Not summarizing the minutes of {title}: "
-                f"{len(text or '')} chars of text (scanned, or too short)"
+                f"{len(text or '')} chars of text (not extracted yet, a scan, or "
+                "too short; tried again next run while fresh)"
             )
             return None
         if not summarize.configured():
