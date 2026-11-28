@@ -255,6 +255,38 @@ def test_published_posts_map_keys_to_the_latest_post():
     assert posts["https://a.example/1 on 2026-11-11"] == PostRef("at://p/old", "c")
 
 
+def test_published_posts_know_which_posts_are_replies():
+    reminder = reply_record("at://p/root", "Starting at 7:00 PM — Zoom: zoom.us/j/1")
+    page = SimpleNamespace(
+        feed=[
+            feed_item(reminder, "at://p/reply"),
+            feed_item(meeting_record(), "at://p/root"),
+        ],
+        cursor=None,
+    )
+
+    posts = published_posts(
+        client_returning(page), "did:plc:x", since=datetime(2026, 11, 1, tzinfo=UTC)
+    )
+
+    assert posts[reply_key("at://p/root", "reminder")].is_reply
+    assert not posts["https://a.example/1"].is_reply
+
+
+def test_posts_sent_this_run_know_whether_they_are_replies():
+    seen = SeenPosts()
+    meeting = Post().with_text("Agenda").keyed_by("https://a.example/1")
+    seen.add(meeting, PostRef("at://p/root", "c"))
+    reminder = (
+        Post().with_text("Starting").replying_to("https://a.example/1", "reminder")
+    )
+    seen.resolve_reply(reminder)
+    seen.add(reminder, PostRef("at://p/reply", "c"))
+
+    assert not seen.ref(meeting).is_reply
+    assert seen.ref(reminder).is_reply
+
+
 def test_published_posts_reads_replies_by_thread_and_kind():
     client = client_returning(SimpleNamespace(feed=[], cursor=None))
     published_posts(client, "did:plc:x")

@@ -213,8 +213,10 @@ class Runs:
                 created_at=now.astimezone(UTC).isoformat(),
                 reply=post.reply,
             )
+            # As ``published_posts`` reads it back.
+            read_back = PostRef(ref.uri, ref.cid, is_reply=post.reply is not None)
             for key in keys_in_record(record, now):
-                self.history[key] = ref
+                self.history[key] = read_back
         return [post for post, _ in sent]
 
     def meeting_post(self, title: str, day: date) -> PostRef:
@@ -425,6 +427,22 @@ def test_minutes_whose_text_comes_later_are_summarized_in_the_meeting_thread():
     )
     meeting = runs.meeting_post("City Council", date(2026, 10, 27))
     assert council_summary.reply.root.uri == meeting.uri
+
+
+def test_minutes_summarized_in_a_meeting_thread_are_not_summarized_again_once_it_is_gone():
+    runs = Runs()
+    runs.run(datetime(2026, 10, 27, 7, tzinfo=EASTERN), meetings=True)
+    runs.run(datetime(2026, 10, 28, 7, tzinfo=EASTERN), meetings=True)
+    posts = runs.run(datetime(2026, 10, 30, 13, tzinfo=EASTERN), summaries=True)
+    assert len(summaries(posts)) == 2
+    # The meeting posts leave the 30-day history while the minutes are fresh.
+    meeting_posts = {ref for p, ref in runs.sent if p.reply is None and p.day}
+    runs.history = {k: r for k, r in runs.history.items() if r not in meeting_posts}
+
+    later = runs.run(datetime(2026, 10, 30, 14, tzinfo=EASTERN), summaries=True)
+
+    assert summaries(later) == []
+    assert runs.summarizer.call_count == 2
 
 
 def test_standalone_minutes_whose_text_comes_later_are_summarized():

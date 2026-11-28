@@ -93,6 +93,8 @@ class PostRef:
 
     uri: str
     cid: str
+    # Whether the post is a reply (known for posts read from the history).
+    is_reply: bool = False
 
     def strong_ref(self) -> models.ComAtprotoRepoStrongRef.Main:
         return models.ComAtprotoRepoStrongRef.Main(uri=self.uri, cid=self.cid)
@@ -209,7 +211,9 @@ def published_posts(
                 reached_since = True
                 continue
             posts += 1
-            ref = PostRef(item.post.uri, item.post.cid)
+            ref = PostRef(
+                item.post.uri, item.post.cid, getattr(record, "reply", None) is not None
+            )
             # The feed is newest first: keep the latest post for each key.
             for key in keys_in_record(record, created_at):
                 keys.setdefault(key, ref)
@@ -303,4 +307,5 @@ class SeenPosts:
             self.keys.add(key)
             self.added.add(key)
             if ref is not None:
-                self.refs[key] = ref
+                is_reply = getattr(post, "reply", None) is not None
+                self.refs[key] = PostRef(ref.uri, ref.cid, is_reply)

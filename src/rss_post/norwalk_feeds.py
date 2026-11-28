@@ -540,8 +540,19 @@ class NorwalkFeeds:
 
     @staticmethod
     def _summarized(sent: Post, seen: SeenPosts) -> bool:
-        """Whether the minutes post ``sent`` already has a summary in its thread."""
-        root = seen.ref(sent.reply_root if sent.reply_root is not None else sent)
+        """Whether the minutes post ``sent`` already has a summary in its thread.
+
+        Also true when its thread can't be found: minutes that went out as a
+        reply to a meeting post that has since left the history match only
+        their standalone variant (by card link), and their summary, if any,
+        is in the meeting's thread.
+        """
+        if sent.reply_root is None:
+            root = seen.ref(sent)
+            if root is not None and root.is_reply:
+                return True
+        else:
+            root = seen.ref(sent.reply_root)
         return root is None or reply_key(root.uri, "minutes-summary") in seen.keys
 
     @staticmethod
