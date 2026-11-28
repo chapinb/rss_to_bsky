@@ -254,8 +254,28 @@ def bullets(summary: str) -> str:
     """The summary's non-blank lines, with ``-``/``*``/``1.`` bullets made ``•``."""
     lines = (line.strip() for line in summary.splitlines())
     return "\n".join(
-        re.sub(r"^(?:[-*]|\d{1,2}[.)])\s+", "• ", line) for line in lines if line
+        re.sub(r"^(?:(?:[-*]|\d{1,2}[.)])\s+|•\s*)", "• ", line)
+        for line in lines
+        if line
     )
+
+
+def bullet_items(lines: list[str]) -> list[str] | None:
+    """The bullets in ``lines`` (from ``bullets``), or None if the answer
+    isn't a bullet list. A lead-in line ending in ":" before the first bullet
+    is dropped, and a line starting in lower case after a bullet is taken as
+    that bullet wrapped and joined back on; any other unmarked line fails."""
+    items: list[str] = []
+    for line in lines:
+        if line.startswith("• "):
+            items.append(line)
+        elif items and line[0].islower():
+            items[-1] += " " + line
+        elif not items and line.endswith(":"):
+            continue
+        else:
+            return None
+    return items
 
 
 MAX_SUMMARY_BULLETS = 3
@@ -265,14 +285,15 @@ MAX_SUMMARY_BULLETS = 3
 UNSAFE_IN_SUMMARY = {
     "a link": re.compile(r"https?://|www\.", re.IGNORECASE),
     "a domain name": re.compile(r"\b[a-z0-9][a-z0-9-]*\.[a-z]{2,24}\b", re.IGNORECASE),
-    "a handle": re.compile(r"@[a-z0-9]", re.IGNORECASE),
+    "a handle": re.compile(r"@[a-z]", re.IGNORECASE),
     "a hashtag": re.compile(r"#[a-z]", re.IGNORECASE),
 }
 
 
 def summary_problem(lines: list[str]) -> str | None:
-    """Why the summary ``lines`` (from ``bullets``) can't be posted, if so."""
-    if not all(line.startswith("• ") for line in lines):
+    """Why the summary ``lines`` (from ``bullets``) can't be posted, if so.
+    The safety patterns cover every line, including any dropped lead-in."""
+    if bullet_items(lines) is None:
         return "a line that isn't a bullet"
     for name, pattern in UNSAFE_IN_SUMMARY.items():
         if any(pattern.search(line) for line in lines):
@@ -296,9 +317,9 @@ def fit_bullets(summary: str, max_chars: int) -> str | None:
     if lines and (problem := summary_problem(lines)) is not None:
         logger.warning(f"Dropping an AI summary with {problem}: {summary[:300]!r}")
         return None
-    lines = lines[:MAX_SUMMARY_BULLETS]
+    lines = bullet_items(lines) or []
     kept: list[str] = []
-    for line in lines:
+    for line in lines[:MAX_SUMMARY_BULLETS]:
         if len("\n".join([*kept, line])) > max_chars:
             break
         kept.append(line)

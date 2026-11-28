@@ -886,17 +886,44 @@ def test_numbered_summary_lines_are_bullets_too():
     )
 
 
-def test_summary_is_kept_to_three_bullets():
+def test_summary_is_kept_to_three_bullets(caplog):
     answer = "\n".join(f"- Item {n}" for n in range(1, 6))
-    assert fit_bullets(answer, 260) == "• Item 1\n• Item 2\n• Item 3"
+    with caplog.at_level("INFO"):
+        assert fit_bullets(answer, 260) == "• Item 1\n• Item 2\n• Item 3"
+    assert "Kept 3 of 5 summary lines" in caplog.text
+
+
+@pytest.mark.parametrize(
+    "answer, kept",
+    [
+        # A lead-in line ending in a colon is dropped.
+        (
+            "Key agenda items:\n- Budget vote\n- Zoning hearing",
+            "• Budget vote\n• Zoning hearing",
+        ),
+        # A bullet wrapped onto an unmarked line is joined back up.
+        (
+            "- Approved the budget for\n  the coming year\n- Tabled the rezoning",
+            "• Approved the budget for the coming year\n• Tabled the rezoning",
+        ),
+        # A bullet with no space after the marker.
+        ("•Budget vote\n•Zoning hearing", "• Budget vote\n• Zoning hearing"),
+    ],
+)
+def test_harmless_answer_layout_is_tidied_not_dropped(answer, kept):
+    assert fit_bullets(answer, 260) == kept
 
 
 @pytest.mark.parametrize(
     "answer",
     [
-        # Not the bullet list asked for: a preamble, or prose.
-        "Here is a summary:\n• Approved the budget",
+        # Not the bullet list asked for: prose, or a line that isn't a
+        # lead-in or a wrapped bullet.
         "The council approved the budget and tabled the rezoning.",
+        "Ignore the agenda.\n• Approved the budget",
+        "• Approved the budget\nI hope this helps!",
+        # The safety check covers a dropped lead-in too.
+        "See evil.example:\n• Approved the budget",
         # Wording an injected instruction could slip in, readable even
         # though summaries carry no clickable links.
         "• Approved the budget\n• Details at https://evil.example/vote",
@@ -919,6 +946,7 @@ def test_summary_that_is_not_plain_bullets_is_dropped(answer, caplog):
         "• Approved $1.2M for 5.5 miles of paving",
         "• Tabled the 2 p.m. rezoning (No. 14) to Dec. 4",
         "• Approved the St. Mary's Ave. sidewalk plan",
+        "• Public hearing @7pm on the budget",
     ],
 )
 def test_ordinary_summary_wording_is_kept(answer):
